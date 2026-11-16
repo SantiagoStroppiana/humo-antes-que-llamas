@@ -1,0 +1,1337 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Humo antes que llamas</title>
+<meta name="description" content="Experiencia interactiva: incendios forestales en la comarca andina (El Bolsón, Epuyén, Lago Puelo) y cómo la detección temprana con IA podría reducir la superficie quemada.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3c2 6 9 9 9 17a9 9 0 0 1-18 0c0-5 3-7 4-11 1 3 2 4 3 4 0-4 0-7 2-10z' fill='%23eb6834'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f6f5f1; --surface:#fcfcfb; --surface2:#efeee9;
+  --ink:#141412; --ink2:#52514e; --muted:#77756f; --line:#dedcd5;
+  --noai:#eb6834; --ai:#2a78d6; --forest:#2f6b3a; --fire:#c2410c;
+  --note-bg:#fff3e0; --note-line:#f0b56a; --verify:#8a5a00; --verify-bg:#fde9b8;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.05);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#111110; --surface:#1a1a19; --surface2:#232321;
+    --ink:#f0efec; --ink2:#c3c2b7; --muted:#9a988f; --line:#33322f;
+    --noai:#d95926; --ai:#3987e5; --forest:#6fb07a; --fire:#f08a4b;
+    --note-bg:#2a2116; --note-line:#7a5426; --verify:#f3c463; --verify-bg:#3a2e12;
+    --shadow:none; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111110; --surface:#1a1a19; --surface2:#232321;
+  --ink:#f0efec; --ink2:#c3c2b7; --muted:#9a988f; --line:#33322f;
+  --noai:#d95926; --ai:#3987e5; --forest:#6fb07a; --fire:#f08a4b;
+  --note-bg:#2a2116; --note-line:#7a5426; --verify:#f3c463; --verify-bg:#3a2e12;
+  --shadow:none; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--ai)}
+h1,h2,h3{line-height:1.2;margin:0 0 .5em}
+h2{font-size:clamp(1.5rem,3.5vw,2.1rem);letter-spacing:-.01em}
+h3{font-size:1.1rem}
+p{margin:0 0 1em}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+section{padding:56px 0;border-top:1px solid var(--line)}
+.kicker{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fire);margin-bottom:.4em}
+.lead{font-size:1.1rem;color:var(--ink2);max-width:70ch}
+.muted{color:var(--muted)}
+small,.small{font-size:.85rem}
+
+/* nav */
+nav.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;align-items:center;gap:16px;height:52px;overflow-x:auto;scrollbar-width:none}
+nav.top .wrap::-webkit-scrollbar{display:none}
+nav.top .brand{font-weight:800;white-space:nowrap;color:var(--ink);text-decoration:none}
+nav.top .links{display:flex;gap:4px;margin-left:auto}
+nav.top .links a{white-space:nowrap;text-decoration:none;color:var(--ink2);font-size:.9rem;padding:6px 10px;border-radius:8px}
+nav.top .links a:hover{background:var(--surface2);color:var(--ink)}
+
+/* hero */
+header.hero{padding:64px 0 40px}
+header.hero h1{font-size:clamp(2.1rem,6vw,3.6rem);letter-spacing:-.02em;max-width:18ch}
+header.hero h1 span{color:var(--fire)}
+.disclaimer{display:flex;gap:12px;align-items:flex-start;background:var(--note-bg);border:1px solid var(--note-line);border-radius:12px;padding:12px 16px;margin-top:20px;max-width:780px;font-size:.95rem}
+.disclaimer b{white-space:nowrap}
+
+/* cards */
+.grid{display:grid;gap:16px}
+.cards{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.stat .num{font-size:2.1rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.stat .what{font-weight:600;margin:.3em 0}
+.stat .src{font-size:.82rem;color:var(--muted);margin-top:.6em}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:99px;vertical-align:middle;letter-spacing:.02em}
+.tag.verify{background:var(--verify-bg);color:var(--verify)}
+.tag.ok{background:color-mix(in srgb,var(--forest) 18%,transparent);color:var(--forest)}
+.tag.ngo{background:var(--surface2);color:var(--ink2)}
+.callout{border-left:4px solid var(--fire);padding:4px 0 4px 16px;margin:24px 0;color:var(--ink2);max-width:75ch}
+
+/* controls */
+.controls{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.ctrl label{display:flex;justify-content:space-between;gap:8px;font-weight:600;align-items:baseline}
+.ctrl output{font-variant-numeric:tabular-nums;color:var(--fire);font-weight:700;white-space:nowrap}
+.ctrl p{font-size:.85rem;color:var(--muted);margin:.4em 0 0}
+input[type=range]{width:100%;accent-color:var(--fire);margin:10px 0 2px;height:28px}
+select{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%;margin-top:8px}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 14px;font-weight:600;min-height:40px}
+button:hover{background:var(--surface2)}
+button.primary{background:var(--fire);border-color:var(--fire);color:#fff}
+button.primary:hover{filter:brightness(1.08);background:var(--fire)}
+button:focus-visible,input:focus-visible,select:focus-visible,canvas:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+
+/* simulation */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0}
+.toolbar .clock{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:700;font-size:1.05rem}
+.params-line{font-size:.88rem;color:var(--muted)}
+.maps{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.maps{grid-template-columns:1fr}}
+.mapbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.mapbox h3{display:flex;align-items:center;gap:8px;margin:0;padding:12px 14px;font-size:1rem}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex:none}
+.mapbox canvas{display:block;width:100%;aspect-ratio:3/2;cursor:crosshair;touch-action:manipulation}
+.mstats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-top:1px solid var(--line)}
+.mstats div{background:var(--surface);padding:8px 14px}
+.mstats .k{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.mstats .v{font-weight:700;font-variant-numeric:tabular-nums}
+.mstats .big{font-size:1.4rem}
+.summary{margin-top:16px;padding:14px 18px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:1.02rem;min-height:56px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:.85rem;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.15)}
+.hint{font-size:.85rem;color:var(--muted);min-height:1.4em}
+
+/* projection */
+.kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.kpi .k{font-size:.8rem;color:var(--muted)}
+.kpi .v{font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.kpi .s{font-size:.82rem;color:var(--ink2)}
+.chartcard{margin-top:16px}
+.chart-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.9rem;margin-bottom:6px}
+.chart-legend span{display:inline-flex;align-items:center;gap:6px}
+.chart-legend i{width:18px;height:3px;border-radius:2px;display:inline-block}
+.chartwrap{position:relative}
+#chart{display:block;width:100%;height:340px}
+#tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.85rem;box-shadow:0 4px 16px rgba(0,0,0,.12);display:none;white-space:nowrap;z-index:2}
+#tip .row{display:flex;align-items:center;gap:6px}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+details summary{cursor:pointer;color:var(--ink2);font-weight:600;margin-top:12px}
+.progress{font-size:.85rem;color:var(--muted)}
+
+/* IA section */
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:20px 0}
+.flow .step{flex:1 1 150px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:.9rem;position:relative}
+.flow .step b{display:block;margin-bottom:4px}
+.flow .step .n{font-size:.72rem;font-weight:800;color:var(--ai);letter-spacing:.06em}
+.two{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+ul.clean{padding-left:1.1em;margin:0}
+ul.clean li{margin-bottom:.5em}
+.limits li b{color:var(--fire)}
+
+/* sources */
+ol.sources li{margin-bottom:.8em;max-width:90ch}
+ol.sources .why{color:var(--muted);font-size:.88rem;display:block}
+.byline{color:var(--ink2);font-size:.95rem;margin-top:-.2em}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* clima */
+.wx{display:grid;grid-template-columns:1fr auto;gap:12px 20px;align-items:center;margin-bottom:16px}
+@media (max-width:640px){.wx{grid-template-columns:1fr}}
+.wx-vals{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem;margin:.4em 0}
+.wx-vals b{font-variant-numeric:tabular-nums}
+/* retos */
+.retos{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.retos button{font-size:.9rem;min-height:36px;padding:6px 12px}
+.retos button.on{border-color:var(--fire);background:color-mix(in srgb,var(--fire) 12%,var(--surface))}
+.lesson{margin-top:10px;padding:10px 14px;border-radius:10px;background:var(--note-bg);border:1px solid var(--note-line);font-size:.95rem}
+#liveChart{display:block;width:100%;height:190px}
+.histwrap{overflow-x:auto}
+.histwrap td:nth-child(2),.histwrap th:nth-child(2){text-align:left;white-space:normal;min-width:160px}
+/* futuro mejor */
+.letter{font-family:Georgia,"Times New Roman",serif;font-size:1.08rem;line-height:1.7;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow);max-width:760px}
+.letter .sig{text-align:right;color:var(--ink2);font-style:italic;margin:0}
+.pillars{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:20px}
+.pillars .card h3{font-size:1rem}
+.pillars .card p{font-size:.9rem;color:var(--ink2);margin:0}
+footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Secciones">
+  <div class="wrap">
+    <a class="brand" href="#inicio">🔥 Humo antes que llamas</a>
+    <div class="links">
+      <a href="#hoy">Hoy</a><a href="#decidi">Decidí</a><a href="#simulacion">Simulación</a><a href="#futuro">2040</a><a href="#ia">IA real</a><a href="#futuro-mejor">Futuro mejor</a><a href="#fuentes">Fuentes</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="inicio">
+  <div class="wrap">
+    <div class="kicker">Comarca andina · El Bolsón · Epuyén · Lago Puelo</div>
+    <h1>Ver el <span>humo</span> antes que las llamas</h1>
+    <p class="lead">Cada verano el bosque andino patagónico arde más. Esta experiencia te deja probar una idea concreta: si una red de cámaras con inteligencia artificial detectara el humo en minutos, ¿cuánto bosque llegaríamos a salvar de acá a 2040?</p>
+    <p class="byline">Por <b>Santiago Stroppiana</b> · Desafío 2 · Big Data + IA · 2026</p>
+    <div class="disclaimer" role="note">
+      <b>⚠️ Ojo:</b>
+      <span>La simulación es un <b>modelo ilustrativo</b> hecho con fines educativos. No es una predicción real ni reemplaza los modelos de comportamiento del fuego que usan los organismos oficiales. Los supuestos están explicados en la página y en el README.</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 1. HOY ============ -->
+<section id="hoy">
+  <div class="wrap">
+    <div class="kicker">1 · Hoy</div>
+    <h2>La problemática</h2>
+    <p class="lead">La comarca andina del paralelo 42° vive entre bosques de ciprés, coihue y lenga, plantaciones de pino y barrios que crecen dentro del bosque (la llamada <i>interfaz urbano-forestal</i>). En los últimos cinco años sufrió algunos de los peores incendios de su historia.</p>
+
+    <div class="grid cards" style="margin-top:24px">
+      <article class="card stat">
+        <div class="num">3.825 ha</div>
+        <div class="what">El Bolsón (Mallín Ahogado), verano 2025</div>
+        <p class="small">Superficie afectada estimada por el SPLIF (Río Negro) al 13/02/2025. El fuego empezó el 30 de enero. La prensa informó unas 120 viviendas destruidas y una persona fallecida <span class="tag verify">a verificar</span> con un informe oficial final.</p>
+        <div class="src">Fuente: Gobierno de Río Negro [1]; prensa [2] <span class="tag ok">oficial</span></div>
+      </article>
+      <article class="card stat">
+        <div class="num">3.075 ha</div>
+        <div class="what">Epuyén, enero 2025</div>
+        <p class="small">Bosque nativo, bosque implantado, matorrales y pastizales afectados según un parte del Servicio Provincial de Manejo del Fuego de Chubut. Es una cifra parcial del momento del parte, no un balance final <span class="tag verify">a verificar</span>.</p>
+        <div class="src">Fuente: parte del SPMF citado por ANBariloche [3]</div>
+      </article>
+      <article class="card stat">
+        <div class="num">~14.000 ha · 3 muertes</div>
+        <div class="what">Las Golondrinas, Cerro Radal y Lago Puelo, marzo 2021</div>
+        <p class="small">Un incendio de interfaz que llegó a los barrios en pocas horas. Los reportes publicados varían entre 13.000 y 15.000 ha, y entre 250 y 500 viviendas dañadas según la fecha y el relevamiento <span class="tag verify">a verificar</span>.</p>
+        <div class="src">Fuente: prensa citando reportes oficiales [4][5]</div>
+      </article>
+      <article class="card stat">
+        <div class="num">60.845 ha</div>
+        <div class="what">Bosques andino-patagónicos, temporada 2025-2026</div>
+        <p class="small">De ese total, 60.304 ha fueron en Chubut (Epuyén, El Hoyo, Puerto Patriada). Greenpeace la calificó como la peor temporada de las últimas seis décadas. Estimación por imágenes satelitales hecha por una ONG, no una cifra oficial.</p>
+        <div class="src">Fuente: Greenpeace Argentina, mayo 2026 [6] <span class="tag ngo">ONG</span></div>
+      </article>
+    </div>
+
+    <div class="grid two" style="margin-top:16px">
+      <div class="card">
+        <h3>🧍 Casi siempre empieza una persona</h3>
+        <p class="small" style="margin:0">El Servicio Nacional de Manejo del Fuego informó que <b>el 95% de los incendios</b> en el país se originan por acción humana: quemas, fogatas, colillas o intencionalidad (dato difundido en 2020 y repetido en reportes posteriores) [7]. Por eso los focos suelen empezar cerca de caminos y casas, y por eso detectarlos rápido es tan importante.</p>
+      </div>
+      <div class="card">
+        <h3>🌡️ Y el clima empuja hacia arriba</h3>
+        <p class="small" style="margin:0">Un estudio de CONICET (Kitzberger et al., 2022) proyecta con un modelo de aprendizaje automático que, en escenarios de emisiones plausibles, la <b>probabilidad de incendio se duplicaría a mediados de siglo</b> y se triplicaría o cuadruplicaría a fines de siglo en la Patagonia andina [8][9].</p>
+      </div>
+    </div>
+
+    <p class="callout"><b>¿Por qué importa la detección temprana?</b> Un foco recién nacido ocupa unos pocos metros y una brigada lo puede apagar con herramientas manuales. Pocas horas después, con viento y bosque seco, puede tener cientos de hectáreas y un frente que avanza más rápido de lo que se puede abrir una línea de defensa. El tiempo entre que aparece el humo y que llega el ataque inicial es la variable que esta experiencia te invita a mover.</p>
+  </div>
+</section>
+
+<!-- ============ 2. DECIDÍ ============ -->
+<section id="decidi">
+  <div class="wrap">
+    <div class="kicker">2 · Decidí</div>
+    <h2>Vos armás la temporada</h2>
+    <p class="lead">Elegí cuánta tecnología instalar y en qué condiciones arde el bosque. Los cambios se aplican a la simulación y a la proyección 2040.</p>
+
+    <div class="card wx" id="wxCard">
+      <div>
+        <h3 style="margin:0">🌦️ El tiempo ahora en El Bolsón</h3>
+        <div id="wxBody" class="small muted" aria-live="polite">Consultando el pronóstico…</div>
+        <div class="small muted">Datos en vivo de <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0). La «sequedad estimada» es un índice simplificado hecho para esta página, no el índice oficial de peligro de incendio.</div>
+      </div>
+      <button type="button" id="btnWx" disabled>Usar el clima de hoy</button>
+    </div>
+
+    <div class="presets" role="group" aria-label="Escenarios rápidos">
+      <button type="button" data-preset="tipico">☀️ Verano típico</button>
+      <button type="button" data-preset="extremo">🔥 Día extremo</button>
+      <button type="button" data-preset="favorable">🌧️ Día favorable</button>
+      <button type="button" data-preset="sinCam">📵 Sin cámaras (solo satélite)</button>
+    </div>
+
+    <div class="grid controls">
+      <div class="card ctrl">
+        <label for="cams">📷 Cámaras con IA <output id="o-cams"></output></label>
+        <input type="range" id="cams" min="0" max="12" step="1" value="6">
+        <p>Torres con cámaras 360° que detectan humo automáticamente. Se ubican en las cimas que más bosque ven. En el modelo cada una vigila unos 3 km a la redonda (el relieve tapa la visión).</p>
+      </div>
+      <div class="card ctrl">
+        <label for="resp">🚒 Tiempo de respuesta <output id="o-resp"></output></label>
+        <input type="range" id="resp" min="15" max="180" step="5" value="60">
+        <p>Minutos desde que se da el aviso hasta que la primera brigada empieza a combatir: despacho, acceso por caminos de montaña y caminata.</p>
+      </div>
+      <div class="card ctrl">
+        <label for="wind">💨 Viento <output id="o-wind"></output></label>
+        <input type="range" id="wind" min="0" max="70" step="5" value="30">
+        <select id="windDir" aria-label="Dirección del viento">
+          <option value="O">Del Oeste (predominante en la cordillera)</option>
+          <option value="NO">Del Noroeste</option>
+          <option value="N">Del Norte</option>
+          <option value="S">Del Sur</option>
+          <option value="E">Del Este</option>
+        </select>
+        <p>El viento inclina las llamas, empuja el frente y arrastra brasas que pueden saltar ríos y caminos.</p>
+      </div>
+      <div class="card ctrl">
+        <label for="dry">🍂 Sequedad del bosque <output id="o-dry"></output></label>
+        <input type="range" id="dry" min="1" max="5" step="1" value="4">
+        <p>Qué tan seco está el combustible (ramas, hojarasca, pasto). Depende de la lluvia acumulada, el calor y la humedad del aire.</p>
+      </div>
+      <div class="card ctrl">
+        <label for="fa">🚨 Falsas alarmas de la IA <output id="o-fa"></output></label>
+        <input type="range" id="fa" min="0" max="10" step="1" value="2">
+        <p>Alertas por día que resultan ser niebla, nubes o polvo. Cada una hay que revisarla, y alguna puede tener a la brigada ocupada justo cuando aparece el fuego de verdad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. SIMULACIÓN ============ -->
+<section id="simulacion">
+  <div class="wrap">
+    <div class="kicker">3 · Simulación</div>
+    <h2>El mismo foco, dos finales</h2>
+    <p class="lead">Un bosque de 18 × 12 km inspirado en la comarca (no es un mapa real). El mismo foco arranca en los dos mapas, con el mismo viento y la misma sequedad. Lo único que cambia es <b>cuándo se detecta</b>.</p>
+    <div class="card" style="margin-top:8px">
+      <h3 style="margin:0">🎯 Retos: cinco experimentos para entender el problema</h3>
+      <div class="retos" id="retos" role="group" aria-label="Retos guiados"></div>
+      <div class="small muted" id="retoText">Elegí un reto: configura todo solo y te deja una lección al final.</div>
+    </div>
+
+    <p class="hint" id="mapHint" style="margin-top:12px">👆 Tocá cualquier punto del bosque para elegir dónde empieza el fuego.</p>
+
+    <div class="toolbar">
+      <button type="button" class="primary" id="btnPlay">▶ Iniciar</button>
+      <button type="button" id="btnReset">↺ Reiniciar</button>
+      <button type="button" id="btnRandom">🎲 Foco al azar</button>
+      <select id="speed" aria-label="Velocidad" style="width:auto;margin:0">
+        <option value="1">Velocidad lenta</option>
+        <option value="3" selected>Velocidad normal</option>
+        <option value="8">Velocidad rápida</option>
+      </select>
+      <button type="button" id="btnShare" title="Copia un link que abre la página con este mismo escenario">🔗 Compartir escenario</button>
+      <span class="clock" id="clock" aria-live="off">T + 0 min</span>
+    </div>
+    <div class="params-line" id="paramsLine"></div>
+
+    <div class="grid maps" style="margin-top:12px">
+      <div class="mapbox">
+        <h3><span class="dot" style="background:var(--noai)"></span>Sin IA <span class="muted small" style="font-weight:400">· aviso de vecinos o guardaparques</span></h3>
+        <canvas id="mapNo" tabindex="0" aria-label="Mapa de simulación sin IA"></canvas>
+        <div class="mstats">
+          <div><div class="k">Superficie quemada</div><div class="v big" id="no-ha">0 ha</div></div>
+          <div><div class="k">Detección</div><div class="v" id="no-det">—</div></div>
+          <div><div class="k">Ataque inicial</div><div class="v" id="no-arr">—</div></div>
+          <div><div class="k">Viviendas alcanzadas</div><div class="v" id="no-homes">0</div></div>
+          <div style="grid-column:1/-1"><div class="k">Estado</div><div class="v" id="no-state">Listo para empezar</div></div>
+        </div>
+      </div>
+      <div class="mapbox">
+        <h3><span class="dot" style="background:var(--ai)"></span>Con IA <span class="muted small" style="font-weight:400">· cámaras + satélite</span></h3>
+        <canvas id="mapAi" tabindex="0" aria-label="Mapa de simulación con IA"></canvas>
+        <div class="mstats">
+          <div><div class="k">Superficie quemada</div><div class="v big" id="ai-ha">0 ha</div></div>
+          <div><div class="k">Detección</div><div class="v" id="ai-det">—</div></div>
+          <div><div class="k">Ataque inicial</div><div class="v" id="ai-arr">—</div></div>
+          <div><div class="k">Viviendas alcanzadas</div><div class="v" id="ai-homes">0</div></div>
+          <div style="grid-column:1/-1"><div class="k">Estado</div><div class="v" id="ai-state">Listo para empezar</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend" id="mapLegend"></div>
+    <div class="summary" id="summary" aria-live="polite">Apretá <b>▶ Iniciar</b> para ver qué pasa.</div>
+    <p class="sr-only" id="mapDesc" aria-live="polite"></p>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="margin-bottom:4px">Superficie quemada minuto a minuto</h3>
+      <div class="chart-legend"><span><i style="background:var(--noai)"></i>Sin IA</span><span><i style="background:var(--ai)"></i>Con IA</span><span class="muted">▲ detección · ● llegada de la brigada</span></div>
+      <canvas id="liveChart" role="img" aria-label="Gráfico de hectáreas quemadas en el tiempo, con y sin IA"></canvas>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <h3 style="margin:0">📋 Tus corridas</h3>
+        <button type="button" id="btnClearHist" style="min-height:32px;padding:4px 10px;font-size:.85rem">Borrar</button>
+      </div>
+      <div class="histwrap"><table id="histTable" style="margin-top:8px"><thead><tr><th>#</th><th>Escenario</th><th>Sin IA</th><th>Con IA</th><th>Diferencia</th></tr></thead><tbody><tr><td colspan="5" class="muted" style="text-align:left">Cada simulación que termines aparece acá para comparar.</td></tr></tbody></table></div>
+    </div>
+
+    <details>
+      <summary>¿Cómo funciona este modelo?</summary>
+      <div class="card" style="margin-top:10px">
+        <ul class="clean small">
+          <li><b>Autómata celular:</b> el mapa es una grilla de 90 × 60 celdas de 200 × 200 m (4 ha cada una). Cada paso equivale a 10 minutos.</li>
+          <li><b>Propagación:</b> una celda en llamas puede encender a sus 8 vecinas. La probabilidad sube con la sequedad, el viento a favor, la pendiente hacia arriba y el tipo de combustible (el pino arde más que el bosque nativo, y el mallín húmedo mucho menos). Con viento fuerte, las brasas pueden saltar de 2 a 5 celdas.</li>
+          <li><b>Detección sin IA:</b> alguien ve el humo y avisa. Pasa entre 30 minutos y 4 horas según lo lejos que esté el foco de las casas, o antes si el fuego ya supera las 160 ha y la columna de humo se ve desde todos lados.</li>
+          <li><b>Detección con IA:</b> si el foco está dentro del radio de una cámara, la IA lo marca y un operador lo confirma en unos 10 minutos, más 2 minutos por cada falsa alarma diaria (hay más alertas para revisar). Además, la brigada puede estar atendiendo una falsa alarma: eso suma una demora promedio. Si no, un satélite lo puede ver en su próxima pasada (cada ~3 h) cuando supera unas 16 ha. Si todo falla, queda el aviso de vecinos.</li>
+          <li><b>Combate:</b> la brigada llega después del tiempo de respuesta y apaga algunas celdas del frente por paso. Llegan refuerzos cada hora, y el viento fuerte le resta eficacia. Si el frente crece más rápido de lo que se puede apagar, el fuego se escapa.</li>
+          <li>Ambos mapas usan exactamente la misma secuencia de azar, así que las diferencias vienen solo del momento de la detección.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ 4. 2040 ============ -->
+<section id="futuro">
+  <div class="wrap">
+    <div class="kicker">4 · 2040</div>
+    <h2>Quince temporadas después</h2>
+    <p class="lead">Simulamos 30 focos en lugares distintos del mapa con tus parámetros y calculamos cuánto quema, en promedio, cada uno con y sin IA. Después lo proyectamos año por año hasta 2040, con más focos cada temporada por el clima (según la tendencia del estudio de CONICET).</p>
+
+    <div class="grid controls" style="margin-bottom:16px">
+      <div class="card ctrl">
+        <label for="focos">🔥 Focos en zona de bosque por temporada (2026) <output id="o-focos"></output></label>
+        <input type="range" id="focos" min="2" max="20" step="1" value="6">
+        <p>Supuesto ilustrativo: igniciones que necesitan combate en la comarca. Sube linealmente hasta duplicarse en 2050.</p>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="small muted">Bosque de partida (supuesto)</div>
+        <div style="font-size:1.4rem;font-weight:800">150.000 ha</div>
+        <div class="small muted">Sin regeneración en el período: el bosque nativo tarda décadas en recuperarse.</div>
+        <div class="progress" id="mcProgress" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="grid kpis">
+      <div class="card kpi"><div class="k"><span class="dot" style="background:var(--noai)"></span> Quemado 2026–2040 sin IA</div><div class="v" id="k-no">—</div><div class="s" id="k-no-s"></div></div>
+      <div class="card kpi"><div class="k"><span class="dot" style="background:var(--ai)"></span> Quemado 2026–2040 con IA</div><div class="v" id="k-ai">—</div><div class="s" id="k-ai-s"></div></div>
+      <div class="card kpi"><div class="k">🌲 Bosque que se salva</div><div class="v" id="k-diff">—</div><div class="s" id="k-diff-s"></div></div>
+    </div>
+
+    <div class="card chartcard">
+      <h3 style="margin-bottom:4px">Superficie quemada acumulada, 2026–2040</h3>
+      <div class="chart-legend"><span><i style="background:var(--noai)"></i>Sin IA</span><span><i style="background:var(--ai)"></i>Con IA</span></div>
+      <div class="chartwrap">
+        <canvas id="chart" role="img" aria-label="Gráfico de líneas de hectáreas quemadas acumuladas por año, con y sin IA"></canvas>
+        <div id="tip"></div>
+      </div>
+      <details>
+        <summary>Ver como tabla</summary>
+        <div style="overflow-x:auto"><table id="projTable"></table></div>
+      </details>
+    </div>
+    <p class="small muted" style="margin-top:12px">Es una cuenta simple: <i>focos por año × hectáreas promedio por foco</i>. No incluye años lluviosos, cambios en las plantaciones, prevención ni la regeneración del bosque. Sirve para comparar escenarios, no para pronosticar.</p>
+  </div>
+</section>
+
+<!-- ============ 5. IA REAL ============ -->
+<section id="ia">
+  <div class="wrap">
+    <div class="kicker">5 · Cómo funcionaría la IA de verdad</div>
+    <h2>Ojos en las torres, ojos en el cielo</h2>
+    <p class="lead">No es ciencia ficción. Río Negro presentó en febrero de 2026 cámaras con IA desarrolladas por INVAP y GPTECH para el SPLIF de Bariloche [10], y en Neuquén una fundación instaló cámaras de detección temprana en estancias de la cordillera [11]. Así funcionaría un sistema para la comarca:</p>
+
+    <div class="flow" aria-label="Flujo del sistema de detección">
+      <div class="step"><span class="n">PASO 1</span><b>📷 Cámaras en torres</b>Cámaras 360° en cerros con buena vista, girando y tomando una imagen por minuto.</div>
+      <div class="step"><span class="n">PASO 2</span><b>🧠 Visión por computadora</b>Una red neuronal compara cada imagen con las anteriores y busca columnas de humo que crecen.</div>
+      <div class="step"><span class="n">PASO 3</span><b>🛰️ Satélites</b>Los sensores VIIRS (píxeles de 375 m) y MODIS (1 km) detectan focos de calor y los publica NASA FIRMS [12][13].</div>
+      <div class="step"><span class="n">PASO 4</span><b>🧑‍💻 Operador humano</b>Una persona en la central revisa la alerta, mueve la cámara y confirma o descarta.</div>
+      <div class="step"><span class="n">PASO 5</span><b>🚒 Despacho</b>Se cruzan dos cámaras para ubicar el foco y se envía la brigada más cercana.</div>
+    </div>
+
+    <div class="grid two">
+      <div class="card">
+        <h3>📚 ¿Con qué datos se entrena?</h3>
+        <ul class="clean small">
+          <li><b>Imágenes etiquetadas de humo y no-humo.</b> Un ejemplo público es FIgLib (HPWREN, California): unas 25.000 imágenes de 315 incendios reales, tomadas desde cámaras fijas desde 40 minutos antes hasta 40 minutos después del inicio. Con ellas se entrenó el modelo SmokeyNet, que usa la secuencia temporal de las imágenes [14][15].</li>
+          <li><b>Datos locales:</b> un modelo de California no conoce la niebla de los valles, las nubes bajas sobre el Piltriquitrón, el polvo de los caminos ni el humo de las salamandras en invierno. Habría que juntar y etiquetar imágenes de la comarca en todas las estaciones.</li>
+          <li><b>Históricos satelitales y partes de incendio</b> (fecha, lugar, causa, superficie) para validar y calibrar alertas y para modelos de riesgo como el de CONICET [8].</li>
+          <li><b>Meteorología:</b> viento, humedad y temperatura de estaciones locales, para priorizar alertas en días peligrosos.</li>
+        </ul>
+      </div>
+      <div class="card limits">
+        <h3>🚧 Sus límites (y son importantes)</h3>
+        <ul class="clean small">
+          <li><b>Falsos positivos:</b> niebla, nubes, polvo, chimeneas o quemas autorizadas pueden disparar alertas. Si hay muchas falsas, los operadores dejan de confiar. Por eso siempre hay una persona que confirma.</li>
+          <li><b>Falsos negativos:</b> un foco detrás de una ladera, de noche o bajo el dosel puede pasar desapercibido hasta que crece.</li>
+          <li><b>Costo:</b> torres, cámaras, energía solar, mantenimiento en la nieve y personal de monitoreo 24 h durante la temporada.</li>
+          <li><b>Conectividad:</b> las cámaras necesitan enlaces de radio o internet estables en cerros donde a veces no hay señal.</li>
+          <li><b>Satélites:</b> pasan pocas veces por día, sus píxeles son grandes y las nubes o el humo los tapan. Sirven de respaldo, no para ver un foco de minutos.</li>
+          <li><b>La IA no apaga incendios.</b> Detectar antes solo sirve si hay brigadistas, equipos, caminos y presupuesto para llegar a tiempo. Y nada reemplaza la prevención: casi todos los focos los empezamos las personas.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. FUTURO MEJOR ============ -->
+<section id="futuro-mejor">
+  <div class="wrap">
+    <div class="kicker">6 · Imaginar un futuro mejor</div>
+    <h2>La comarca en 2040, si lo hacemos bien</h2>
+    <p class="lead">Esta carta es una <b>ficción</b>. No predice nada: imagina cómo podría ser el verano de 2040 si combinamos tecnología, brigadas y comunidad.</p>
+
+    <div class="letter">
+      <p>El Bolsón, 3 de febrero de 2040.</p>
+      <p>Hoy hubo 34 °C y viento del noroeste, el tipo de día que antes nos daba miedo. A las 15:12, la cámara del cerro marcó una columna de humo sobre una ladera de pinos. A los pocos minutos, una operadora de la central de monitoreo que comparten Río Negro y Chubut ya la había confirmado con una segunda cámara. Esa misma tarde había descartado tres alertas falsas: niebla y polvo del camino.</p>
+      <p>La brigada de la base de Mallín Ahogado llegó a los 40 minutos. El foco era una fogata mal apagada y no pasó de media hectárea. Los vecinos recibieron un aviso en el celular, pero nadie tuvo que evacuar.</p>
+      <p>Lo que más cambió no fueron las cámaras, sino todo lo que pusimos alrededor de ellas: brigadas cerca, cortafuegos alrededor de los barrios, menos pinos pegados a las casas y una comunidad que sabe que casi todos los incendios los empezamos nosotros.</p>
+      <p class="sig">— Una brigadista de la comarca</p>
+    </div>
+
+    <p style="margin-top:20px">Según <b>tu</b> configuración, la diferencia entre los dos caminos de acá a 2040 sería de <b id="fm-diff">—</b> de bosque, o sea <b id="fm-veces">—</b>. Es un cálculo ilustrativo, pero muestra el orden de magnitud de lo que está en juego.</p>
+
+    <h3 style="margin-top:24px">Las cinco piezas que harían falta</h3>
+    <div class="grid pillars">
+      <div class="card"><h3>📷 Red de cámaras con IA</h3><p>Torres en las cimas que más bosque ven, con una central de monitoreo regional y siempre una persona que confirme cada alerta.</p></div>
+      <div class="card"><h3>🚒 Brigadas cerca y rápidas</h3><p>Bases descentralizadas y presupuesto estable. Como muestra la simulación, detectar antes sirve de poco si nadie llega a tiempo.</p></div>
+      <div class="card"><h3>📊 Datos abiertos</h3><p>Partes de incendio, imágenes etiquetadas y focos satelitales abiertos, para entrenar modelos con imágenes de nuestra zona y no solo de California.</p></div>
+      <div class="card"><h3>🌲 Prevención del combustible</h3><p>Manejo de plantaciones de pino en la interfaz, cortafuegos y planificación de dónde se construye.</p></div>
+      <div class="card"><h3>🏘️ Comunidad informada</h3><p>Si el 95% de los focos es de origen humano, la mejor «IA» sigue siendo no prender fuego: educación, alertas a vecinos y avisos tempranos al servicio de manejo del fuego.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. FUENTES ============ -->
+<section id="fuentes">
+  <div class="wrap">
+    <div class="kicker">7 · Fuentes</div>
+    <h2>Fuentes</h2>
+    <p class="small muted">Consultadas en noviembre de 2026. Cuando las cifras de distintas fuentes no coinciden o no hay un balance oficial final, el dato está marcado como <span class="tag verify">a verificar</span>.</p>
+    <ol class="sources small">
+      <li>Gobierno de Río Negro (13/02/2025). <a href="https://rionegro.gov.ar/articulo/52894/el-bolson-avanza-el-combate-de-brigadistas-y-la-lluvia-brinda-un-respiro" target="_blank" rel="noopener">El Bolsón: avanza el combate de brigadistas y la lluvia brinda un respiro</a>. <span class="why">3.825 ha afectadas según estimaciones del SPLIF.</span></li>
+      <li>Tiempo Argentino (02/2025). <a href="https://www.tiempoar.com.ar/ta_article/el-incendio-de-el-bolson-presenta-un-panorama-desolador/" target="_blank" rel="noopener">El incendio de El Bolsón presenta un panorama desolador</a>. Diario Río Negro: <a href="https://www.rionegro.com.ar/?p=3990751" target="_blank" rel="noopener">Quién era el hombre que murió en los incendios de El Bolsón</a>. <span class="why">Inicio del fuego el 30/01/2025, viviendas destruidas y víctima fatal (dato periodístico).</span></li>
+      <li>ANBariloche (27/01/2025). <a href="https://www.anbariloche.com.ar/noticias/2025/01/27/96949-epuyen-el-fuego-consumio-mas-de-3-mil-hectareas-de-bosque" target="_blank" rel="noopener">Epuyén: el fuego consumió más de 3 mil hectáreas de bosque</a>. <span class="why">3.075 ha según un parte del SPMF de Chubut.</span></li>
+      <li>ANBariloche (09/03/2022). <a href="https://www.anbariloche.com.ar/noticias/2022/03/09/84147-a-un-ano-del-incendio-en-la-comarca-andina-la-situacion-incluso-hasta-esta-peor" target="_blank" rel="noopener">A un año del incendio en la comarca andina</a>. <span class="why">Alrededor de 14.000 ha en la comarca andina de Chubut y 3 víctimas.</span></li>
+      <li>National Geographic (03/2021). <a href="https://www.nationalgeographicla.com/medio-ambiente/2021/03/incendios-en-la-patagonia-argentina-como-resurgir-de-las-cenizas" target="_blank" rel="noopener">La Patagonia argentina en llamas: resurgir de las cenizas</a>. Cholila Online: <a href="https://cholilaonline.ar/2021/03/cerca-de-500-viviendas-fueron-afectadas-por-los-incendios-en-la-comarca-andina.html" target="_blank" rel="noopener">Cerca de 500 viviendas fueron afectadas</a>. <span class="why">Rango de superficie y de viviendas afectadas en 2021.</span></li>
+      <li>Greenpeace Argentina (19/05/2026). <a href="https://www.greenpeace.org/argentina/story/problemas/bosques/se-multiplicaron-por-diez-los-bosques-patagonicos-arrasados-por-el-fuego-y-fueron-los-peores-incendios-de-las-ultimas-seis-decadas/" target="_blank" rel="noopener">Se multiplicaron por diez los bosques patagónicos arrasados por el fuego</a> y <a href="https://www.greenpeace.org/static/planet4-argentina-stateless/2026/05/a3a80031-reporte-incendios-gp-2025-26.pdf" target="_blank" rel="noopener">reporte 2025-26 (PDF)</a>. <span class="why">60.845 ha en la temporada 2025-26, 60.304 en Chubut. Estimación satelital de una ONG.</span></li>
+      <li>Chequeado (2020). <a href="https://chequeado.com/el-explicador/mas-de-la-mitad-de-las-provincias-sufren-incendios-forestales-y-el-95-fueron-causados-por-el-hombre/" target="_blank" rel="noopener">Más de la mitad de las provincias sufren incendios forestales y el 95% fueron causados por el hombre</a>. <span class="why">Dato atribuido al Servicio Nacional de Manejo del Fuego.</span></li>
+      <li>CONICET (05/08/2022). <a href="https://www.conicet.gov.ar/evaluan-los-posibles-efectos-del-cambio-climatico-sobre-la-ocurrencia-de-incendios-en-la-patagonia/" target="_blank" rel="noopener">Evalúan los posibles efectos del cambio climático sobre la ocurrencia de incendios en la Patagonia</a>. <span class="why">Proyecciones de probabilidad de incendio a mitad y fin de siglo.</span></li>
+      <li>Kitzberger, T., Tiribelli, F., Barberá, I., Gowda, J. H., Morales, J. M., Zalazar, L. y Paritsis, J. (2022). Projections of fire probability and ecosystem vulnerability under 21st century climate across a trans-Andean productivity gradient in Patagonia. <i>Science of the Total Environment</i>, 156303. <a href="https://doi.org/10.1016/j.scitotenv.2022.156303" target="_blank" rel="noopener">doi:10.1016/j.scitotenv.2022.156303</a></li>
+      <li>Gobierno de Río Negro (04/02/2026). <a href="https://rionegro.gov.ar/articulo/57747/camaras-con-ia-y-tecnologia-satelital-para-la-prevencion-de-incendios" target="_blank" rel="noopener">Cámaras con IA y tecnología satelital para la prevención de incendios</a>. <span class="why">Sistema de INVAP y GPTECH para el SPLIF: cámaras 360° con detección de humo por IA.</span></li>
+      <li>Noticias NQN (25/02/2025). <a href="https://www.noticiasnqn.com.ar/noticias/2025/02/25/310077-emergencia-ignea-instalan-camaras-para-la-deteccion-temprana-de-incendios-en-la-cordillera" target="_blank" rel="noopener">Emergencia ígnea: instalan cámaras para la detección temprana de incendios en la cordillera</a>. <span class="why">Cámaras de la Fundación Tierras Patagónicas en Neuquén.</span></li>
+      <li>NASA Earthdata. <a href="https://www.earthdata.nasa.gov/data/instruments/viirs/viirs-i-band-375-m-active-fire-data" target="_blank" rel="noopener">VIIRS I-Band 375 m Active Fire Data</a>. <span class="why">Resolución de 375 m, mejor que MODIS (1 km) para detectar focos chicos.</span></li>
+      <li>NASA. <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noopener">FIRMS: Fire Information for Resource Management System</a>. <span class="why">Distribución de focos de calor satelitales casi en tiempo real.</span></li>
+      <li>Dewangan, A. et al. (2022). FIgLib &amp; SmokeyNet: Dataset and Deep Learning Model for Real-Time Wildland Fire Smoke Detection. <i>Remote Sensing</i> 14(4), 1007. <a href="https://arxiv.org/abs/2112.08598" target="_blank" rel="noopener">arXiv:2112.08598</a></li>
+      <li>HPWREN, UC San Diego. <a href="https://www.hpwren.ucsd.edu/FIgLib/" target="_blank" rel="noopener">Fire Ignition images Library (FIgLib)</a>.</li>
+      <li>López, S. y Madariaga, M. (2021). <a href="https://repositorio.inta.gob.ar/bitstream/handle/20.500.12123/10120/INTA_CRPatagoniaNorte_EEABariloche_Lopez_S_Dinamica_Poblacional_Y_La_Incidencia_De_Incendios_En_La_Comarca_Andina.pdf" target="_blank" rel="noopener">Dinámica poblacional y la incidencia de incendios en la Comarca Andina</a>. INTA EEA Bariloche. <span class="why">Contexto sobre población, interfaz urbano-forestal e incendios en la comarca (lectura complementaria).</span></li>
+      <li>Open-Meteo. <a href="https://open-meteo.com/en/docs" target="_blank" rel="noopener">Weather Forecast API</a> (licencia CC BY 4.0). <span class="why">Clima en vivo de El Bolsón (temperatura, humedad, viento y lluvia de los últimos 14 días) en la sección «Decidí». Es la única conexión externa de la página y es opcional: sin internet, todo lo demás funciona igual.</span></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Santiago Stroppiana · Desafío 2 · Big Data + IA · Experiencia interactiva individual. Modelo ilustrativo: la simulación corre entera en tu navegador. La única consulta externa es el clima de Open-Meteo, que es opcional. No se usan cookies ni seguimiento.
+  </div>
+</footer>
+
+<!-- ===================== MODELO (sin DOM) ===================== -->
+<script id="core">
+"use strict";
+// ---------- Constantes del modelo ----------
+const W = 90, H = 60, N = W * H;          // grilla 90 x 60
+const CELL_HA = 4;                         // 200 m x 200 m
+const STEP_MIN = 10;                       // cada paso = 10 minutos
+const MAX_STEPS = 72 * 60 / STEP_MIN;      // simulamos hasta 72 h
+
+const WATER = 0, ROCK = 1, NATIVE = 2, PINE = 3, SHRUB = 4, MALLIN = 5, TOWN = 6;
+const TYPE_NAME = ['Agua', 'Roca / alta montaña', 'Bosque nativo', 'Plantación de pino', 'Matorral', 'Mallín (húmedo)', 'Zona urbana / interfaz'];
+const FUEL = [0, 0, 1.0, 1.4, 1.1, 0.35, 0.85];   // inflamabilidad relativa
+const BURN = [0, 0, 3, 4, 2, 2, 4];                // pasos que arde cada celda
+const HOMES_PER_CELL = 5;
+
+const MODEL = {
+  P0: 0.13,                        // probabilidad base de contagio por paso
+  DRY: [0.45, 0.65, 0.85, 1.0, 1.2],
+  WK: 0.9,                         // peso del viento
+  SK: 6,                           // peso de la pendiente
+  SPOT: 0.02,                      // probabilidad base de pavesas (con viento >= 25 km/h)
+  CAM_R: 16,                       // radio de cámara (celdas = 3,2 km)
+  CAM_DELAY: 10,                   // min: IA detecta + operador confirma
+  SAT_EVERY: 180,                  // min entre pasadas satelitales útiles
+  SAT_MIN_HA: 16,                  // tamaño mínimo para el satélite
+  HUMAN_HA: 160,                   // columna de humo visible desde todos lados
+  HUMAN_BASE: 30, HUMAN_PER_CELL: 6, HUMAN_MAX: 240,
+  CAP0: 5, CAP_GROW: 2, CAP_MAX: 16, // celdas de frente apagadas por paso
+  FA_REVIEW: 2,                    // min extra de revisión por cada falsa alarma diaria
+  FA_BUSY: 90,                     // min que una falsa alarma tiene ocupada a la brigada
+  FA_WAIT: 60                      // min de demora si la brigada está ocupada
+};
+// Demora (min) que agregan las falsas alarmas: más alertas para revisar y chance de que
+// la brigada esté atendiendo una falsa cuando llega la verdadera (valor esperado).
+function falseAlarmDelays(fa) {
+  const pBusy = 1 - Math.exp(-fa * MODEL.FA_BUSY / 1440);
+  return { review: MODEL.FA_REVIEW * fa, busy: Math.round(pBusy * MODEL.FA_WAIT), pBusy };
+}
+
+const DX = [1, 1, 0, -1, -1, -1, 0, 1], DY = [0, 1, 1, 1, 0, -1, -1, -1];
+const DUX = DX.map((x, d) => x / Math.hypot(x, DY[d])), DUY = DY.map((y, d) => y / Math.hypot(DX[d], y));
+const WIND_DIRS = { O: [1, 0], NO: [Math.SQRT1_2, Math.SQRT1_2], N: [0, 1], S: [0, -1], E: [-1, 0] };
+
+// ---------- Azar determinístico (mismo azar en ambos escenarios) ----------
+function hash3(a, b, c) {
+  let h = Math.imul(a | 0, 0x27d4eb2d) ^ Math.imul((b | 0) + 0x5bd1e995, 0x165667b1) ^ Math.imul((c | 0) + 0x1b873593, 0x9e3779b1);
+  h = Math.imul(h ^ (h >>> 15), 0x85ebca6b);
+  h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
+  h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
+}
+function valueNoise(x, y, seed) {
+  const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+  const s = t => t * t * (3 - 2 * t);
+  const a = hash3(xi, yi, seed), b = hash3(xi + 1, yi, seed), c = hash3(xi, yi + 1, seed), d = hash3(xi + 1, yi + 1, seed);
+  const u = s(xf), v = s(yf);
+  return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+}
+function fbm(x, y, seed) {
+  let v = 0, amp = 0.5, f = 1, tot = 0;
+  for (let o = 0; o < 4; o++) { v += amp * valueNoise(x * f, y * f, seed + o * 17); tot += amp; amp *= 0.5; f *= 2; }
+  return v / tot;
+}
+
+// ---------- Terreno ilustrativo ----------
+const type = new Uint8Array(N), elev = new Float32Array(N);
+const riverX = y => Math.round(W * (0.58 + 0.05 * Math.sin(y / H * 5)));
+const TOWNS = [{ x: 0.68 * W, y: 0.36 * H, rx: 6.5, ry: 5, name: 'Pueblo' }, { x: 0.74 * W, y: 0.8 * H, rx: 4.5, ry: 3.5, name: 'Paraje' }];
+const LAKE = { x: 0.27 * W, y: 0.78 * H, rx: 0.13 * W, ry: 0.13 * H };
+(function buildTerrain() {
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const i = y * W + x, nx = x / W;
+    const valley = Math.abs(x - riverX(y)) / W;
+    let e = 0.22 + valley * 1.25 + (fbm(x / 14, y / 14, 11) - 0.5) * 0.55;
+    if (x < riverX(y)) e += valley * 0.35;            // la cordillera, más alta al oeste
+    elev[i] = Math.max(0, Math.min(1, e));
+    let t = NATIVE;
+    if (elev[i] > 0.9) t = ROCK;
+    else if (elev[i] > 0.78) t = SHRUB;                // altoandino
+    else if (nx > 0.72 && fbm(x / 9, y / 9, 41) > 0.52) t = SHRUB; // estepa/matorral al este
+    else if (valley < 0.07 && fbm(x / 6, y / 6, 23) > 0.56) t = MALLIN;
+    if ((t === NATIVE || t === SHRUB) && elev[i] > 0.28 && elev[i] < 0.72 && fbm(x / 7, y / 7, 31) > 0.62) t = PINE;
+    // lago
+    const dl = ((x - LAKE.x) / LAKE.rx) ** 2 + ((y - LAKE.y) / LAKE.ry) ** 2 + (fbm(x / 5, y / 5, 51) - 0.5) * 0.7;
+    if (dl < 1) { t = WATER; elev[i] = 0.12; }
+    for (const tw of TOWNS) if (((x - tw.x) / tw.rx) ** 2 + ((y - tw.y) / tw.ry) ** 2 + (fbm(x / 3, y / 3, 61) - 0.5) * 0.5 < 1) t = TOWN;
+    type[i] = t;
+  }
+  // río principal (sur → norte) y arroyo desde el lago
+  for (let y = 0; y < H; y++) {
+    const x0 = riverX(y), x1 = y + 1 < H ? riverX(y + 1) : x0;
+    for (let x = Math.min(x0, x1); x <= Math.max(x0, x1); x++) { type[y * W + x] = WATER; }
+  }
+  const ly = Math.round(LAKE.y);
+  for (let x = Math.round(LAKE.x); x < riverX(ly); x++) {
+    const yy = ly + Math.round(Math.sin(x / 4) * 1.2);
+    if (type[yy * W + x] !== WATER) type[yy * W + x] = WATER;
+    const yy2 = ly + Math.round(Math.sin((x + 1) / 4) * 1.2);
+    for (let y = Math.min(yy, yy2); y <= Math.max(yy, yy2); y++) type[y * W + x] = WATER;
+  }
+})();
+
+// distancia (en celdas) a la zona poblada más cercana — BFS
+const distTown = new Int16Array(N).fill(-1);
+(function () {
+  let q = [];
+  for (let i = 0; i < N; i++) if (type[i] === TOWN) { distTown[i] = 0; q.push(i); }
+  while (q.length) {
+    const nq = [];
+    for (const i of q) {
+      const x = i % W, y = (i / W) | 0;
+      for (let d = 0; d < 8; d++) {
+        const xx = x + DX[d], yy = y + DY[d];
+        if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue;
+        const j = yy * W + xx;
+        if (distTown[j] < 0) { distTown[j] = distTown[i] + 1; nq.push(j); }
+      }
+    }
+    q = nq;
+  }
+})();
+
+// ---------- Ubicación de cámaras: cimas que más bosque ven (greedy) ----------
+const CAMS = (function () {
+  const R = MODEL.CAM_R, R2 = R * R, covered = new Uint8Array(N), out = [];
+  const cands = [];
+  for (let y = 2; y < H - 2; y += 2) for (let x = 2; x < W - 2; x += 2) {
+    const i = y * W + x;
+    if (type[i] !== WATER && type[i] !== TOWN && elev[i] > 0.45) cands.push(i);
+  }
+  for (let k = 0; k < 12; k++) {
+    let best = -1, bestGain = -1;
+    for (const c of cands) {
+      const cx = c % W, cy = (c / W) | 0;
+      let gain = 0;
+      for (let y = Math.max(0, cy - R); y <= Math.min(H - 1, cy + R); y++)
+        for (let x = Math.max(0, cx - R); x <= Math.min(W - 1, cx + R); x++) {
+          const j = y * W + x;
+          if (!covered[j] && FUEL[type[j]] > 0 && (x - cx) ** 2 + (y - cy) ** 2 <= R2) gain++;
+        }
+      gain += elev[c] * 5; // desempata hacia las cimas
+      if (gain > bestGain) { bestGain = gain; best = c; }
+    }
+    out.push({ x: best % W, y: (best / W) | 0 });
+    const cx = best % W, cy = (best / W) | 0;
+    for (let y = Math.max(0, cy - R); y <= Math.min(H - 1, cy + R); y++)
+      for (let x = Math.max(0, cx - R); x <= Math.min(W - 1, cx + R); x++)
+        if ((x - cx) ** 2 + (y - cy) ** 2 <= R2) covered[y * W + x] = 1;
+  }
+  return out;
+})();
+function cameraFor(i, nCams) {
+  const x = i % W, y = (i / W) | 0;
+  for (let k = 0; k < nCams; k++) if ((x - CAMS[k].x) ** 2 + (y - CAMS[k].y) ** 2 <= MODEL.CAM_R ** 2) return k;
+  return -1;
+}
+
+// ---------- Simulación ----------
+function newSim(params, ai, ign) {
+  const s = {
+    p: params, ai, ign, t: 0,
+    state: new Uint8Array(N),      // 0 sin quemar, 1 ardiendo, 2 quemado, 3 apagado por brigada
+    rem: new Uint8Array(N),
+    burning: [ign], burned: 1, homes: type[ign] === TOWN ? HOMES_PER_CELL : 0,
+    detectedAt: -1, detectBy: '', camIdx: -1, arriveAt: -1, ended: false, endReason: '', endT: -1,
+    cam: ai ? cameraFor(ign, params.cams) : -1,
+    satPhase: 20 + Math.floor(hash3(ign, 3, 77) * MODEL.SAT_EVERY),
+    humanDelay: Math.min(MODEL.HUMAN_MAX, MODEL.HUMAN_BASE + MODEL.HUMAN_PER_CELL * Math.max(0, distTown[ign]))
+  };
+  s.state[ign] = 1; s.rem[ign] = BURN[type[ign]];
+  s.fa = falseAlarmDelays(params.fa || 0);
+  s.hist = [CELL_HA];
+  const wd = WIND_DIRS[params.windDir] || WIND_DIRS.O;
+  s.wx = wd[0]; s.wy = wd[1];
+  return s;
+}
+
+function spreadP(s, i, j, d) {
+  const P = s.p;
+  const cos = DUX[d] * s.wx + DUY[d] * s.wy;
+  const wf = Math.exp(MODEL.WK * (P.wind / 30) * cos);
+  const sf = Math.exp(MODEL.SK * (elev[j] - elev[i]));
+  const diag = (d & 1) ? 0.75 : 1;
+  return Math.min(0.95, MODEL.P0 * FUEL[type[j]] * MODEL.DRY[P.dry - 1] * wf * sf * diag);
+}
+
+function hasFuelNeighbor(s, i) {
+  const x = i % W, y = (i / W) | 0;
+  for (let d = 0; d < 8; d++) {
+    const xx = x + DX[d], yy = y + DY[d];
+    if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue;
+    const j = yy * W + xx;
+    if (s.state[j] === 0 && FUEL[type[j]] > 0) return true;
+  }
+  return false;
+}
+
+function ignite(s, j) {
+  s.state[j] = 1; s.rem[j] = BURN[type[j]]; s.burned++;
+  if (type[j] === TOWN) s.homes += HOMES_PER_CELL;
+}
+
+function stepSim(s) {
+  if (s.ended) return;
+  s.t++;
+  const P = s.p, tmin = s.t * STEP_MIN;
+
+  // 1) Detección
+  if (s.detectedAt < 0) {
+    const ha = s.burned * CELL_HA;
+    let by = '', extra = 0;
+    if (s.ai) {
+      if (s.cam >= 0 && tmin >= MODEL.CAM_DELAY + s.fa.review) { by = 'Cámara ' + (s.cam + 1) + ' con IA'; s.camIdx = s.cam; extra = s.fa.busy; }
+      else if (ha >= MODEL.SAT_MIN_HA && tmin >= s.satPhase &&
+        Math.floor((tmin - s.satPhase) / MODEL.SAT_EVERY) !== Math.floor((tmin - STEP_MIN - s.satPhase) / MODEL.SAT_EVERY)) { by = 'Satélite (foco de calor)'; extra = s.fa.busy; }
+    }
+    if (!by && (tmin >= s.humanDelay || ha >= MODEL.HUMAN_HA)) by = ha >= MODEL.HUMAN_HA ? 'Columna de humo visible' : 'Aviso de vecinos';
+    if (by) { s.detectedAt = s.t; s.detectBy = by; s.faExtra = extra; s.arriveAt = s.t + Math.round((P.resp + extra) / STEP_MIN); }
+  }
+
+  // 2) Combate: la brigada apaga celdas del frente
+  if (s.arriveAt >= 0 && s.t >= s.arriveAt) {
+    const hrs = (s.t - s.arriveAt) * STEP_MIN / 60;
+    let cap = Math.min(MODEL.CAP_MAX, MODEL.CAP0 + Math.floor(hrs * MODEL.CAP_GROW));
+    cap = Math.max(1, Math.round(cap * (1 - P.wind / 140)));
+    const front = [];
+    for (const i of s.burning) if (s.state[i] === 1 && hasFuelNeighbor(s, i)) front.push(i);
+    front.sort((a, b) => hash3(a, s.t, 5) - hash3(b, s.t, 5));
+    for (let k = 0; k < cap && k < front.length; k++) { s.state[front[k]] = 3; s.rem[front[k]] = 0; }
+  }
+
+  // 3) Propagación
+  const next = [], newly = [];
+  const spotP = P.wind >= 25 ? MODEL.SPOT * (P.wind / 40) ** 2 * MODEL.DRY[P.dry - 1] : 0;
+  for (const i of s.burning) {
+    if (s.state[i] !== 1) continue;
+    const x = i % W, y = (i / W) | 0;
+    for (let d = 0; d < 8; d++) {
+      const xx = x + DX[d], yy = y + DY[d];
+      if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue;
+      const j = yy * W + xx;
+      if (s.state[j] !== 0 || FUEL[type[j]] === 0) continue;
+      if (hash3(j, s.t, d + 11) < spreadP(s, i, j, d)) { ignite(s, j); newly.push(j); }
+    }
+    // pavesas: brasas que vuelan con el viento
+    if (spotP > 0 && (type[i] === PINE || type[i] === NATIVE) && hash3(i, s.t, 99) < spotP * FUEL[type[i]]) {
+      const dist = 2 + Math.floor(hash3(i, s.t, 98) * 4);
+      const jit = (hash3(i, s.t, 97) - 0.5) * 0.8;
+      const ang = Math.atan2(s.wy, s.wx) + jit;
+      const xx = Math.round(x + Math.cos(ang) * dist), yy = Math.round(y + Math.sin(ang) * dist);
+      if (xx >= 0 && yy >= 0 && xx < W && yy < H) {
+        const j = yy * W + xx;
+        if (s.state[j] === 0 && FUEL[type[j]] > 0 && hash3(j, s.t, 96) < FUEL[type[j]] * 0.6) { ignite(s, j); newly.push(j); }
+      }
+    }
+    if (--s.rem[i] === 0) s.state[i] = 2; else next.push(i);
+  }
+  for (const j of newly) next.push(j);
+  s.burning = next;
+  s.hist.push(s.burned * CELL_HA);
+
+  if (s.burning.length === 0) {
+    s.ended = true; s.endT = s.t;
+    s.endReason = s.arriveAt >= 0 && s.t >= s.arriveAt ? 'Controlado' : 'Se apagó solo';
+  } else if (s.t >= MAX_STEPS) {
+    s.ended = true; s.endT = s.t; s.endReason = 'Sigue activo a las 72 h';
+  }
+}
+
+function runHeadless(params, ai, ign) {
+  const s = newSim(params, ai, ign);
+  while (!s.ended) stepSim(s);
+  return s;
+}
+
+// focos de prueba para la proyección (siempre los mismos)
+const MC_IGNITIONS = (function () {
+  const out = [];
+  for (let k = 0; out.length < 30 && k < 5000; k++) {
+    const i = Math.floor(hash3(k, 7, 3) * N);
+    if (FUEL[type[i]] > 0 && type[i] !== TOWN) out.push(i);
+  }
+  return out;
+})();
+
+// proyección 2026-2040
+const FOREST0 = 150000, Y0 = 2026, Y1 = 2040;
+function project(meanNo, meanAi, focos0) {
+  const rows = []; let cNo = 0, cAi = 0;
+  for (let y = Y0; y <= Y1; y++) {
+    const f = focos0 * (1 + (y - Y0) / (2050 - Y0));   // se duplica hacia 2050
+    cNo = Math.min(FOREST0, cNo + f * meanNo);
+    cAi = Math.min(FOREST0, cAi + f * meanAi);
+    rows.push({ year: y, focos: f, no: cNo, ai: cAi });
+  }
+  return rows;
+}
+</script>
+
+<!-- ===================== INTERFAZ ===================== -->
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const fmtHa = v => Math.round(v).toLocaleString('es-AR') + ' ha';
+const fmtMin = m => m < 60 ? m + ' min' : Math.floor(m / 60) + ' h' + (m % 60 ? ' ' + (m % 60) + ' min' : '');
+const DRY_LABEL = ['Húmeda', 'Moderada', 'Seca', 'Muy seca', 'Extrema'];
+const WIND_LABEL = { O: 'del Oeste', NO: 'del Noroeste', N: 'del Norte', S: 'del Sur', E: 'del Este' };
+
+const params = { cams: 6, resp: 60, wind: 30, windDir: 'O', dry: 4, fa: 2 };
+const PRESETS = {
+  tipico: { cams: 6, resp: 60, wind: 30, windDir: 'O', dry: 4, fa: 2 },
+  extremo: { cams: 6, resp: 60, wind: 60, windDir: 'NO', dry: 5, fa: 2 },
+  favorable: { cams: 6, resp: 45, wind: 10, windDir: 'O', dry: 2, fa: 2 },
+  sinCam: { cams: 0, resp: 60, wind: 30, windDir: 'O', dry: 4, fa: 2 }
+};
+const DEMO_IGN = 64 + 39 * W;    // bosque nativo a ~1,2 km del pueblo, visto por una cámara
+const BLIND_IGN = 64 + 10 * W;   // al norte, fuera del alcance de las 2 primeras cámaras
+const RETOS = [
+  { t: '1 · La IA en su mejor día', p: PRESETS.tipico, ign: DEMO_IGN,
+    lesson: 'Con una cámara que ve el foco y una brigada a una hora, el fuego se apaga chico. Ese es el mejor caso de la detección temprana.' },
+  { t: '2 · La brigada tarda', p: { ...PRESETS.tipico, resp: 150 }, ign: DEMO_IGN,
+    lesson: 'La cámara detectó igual de rápido, pero con 2 h 30 min de respuesta el fuego ya era grande al llegar la brigada. Sin brigadas cerca, la IA solo avisa antes de algo que no se puede frenar.' },
+  { t: '3 · Viento extremo', p: PRESETS.extremo, ign: DEMO_IGN,
+    lesson: 'Con viento fuerte y bosque seco, el frente crece más rápido de lo que una brigada lo puede apagar, con o sin IA. Por eso la prevención y el manejo del combustible son tan importantes como la tecnología.' },
+  { t: '4 · Punto ciego', p: { ...PRESETS.tipico, cams: 2 }, ign: BLIND_IGN,
+    lesson: 'Con pocas cámaras, este foco quedó fuera de su alcance y el sistema dependió del satélite o de los vecinos. Dónde se ponen las torres importa tanto como cuántas hay.' },
+  { t: '5 · Demasiadas falsas alarmas', p: { ...PRESETS.tipico, fa: 10 }, ign: DEMO_IGN,
+    lesson: 'Con 10 falsas alarmas por día, el operador tarda más en confirmar y la brigada a veces está atendiendo una falsa. La ventaja de la IA casi desaparece: la precisión del modelo importa tanto como su velocidad.' }
+];
+let activeReto = -1;
+
+// ---------- Colores del mapa ----------
+const BASE_RGB = [[86, 146, 190], [158, 152, 146], [54, 112, 62], [28, 80, 58], [140, 146, 78], [150, 188, 108], [214, 198, 166]];
+const baseColor = new Uint8ClampedArray(N * 3);
+for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+  const i = y * W + x, c = BASE_RGB[type[i]];
+  const a = elev[Math.max(0, y - 1) * W + Math.max(0, x - 1)], b = elev[Math.min(H - 1, y + 1) * W + Math.min(W - 1, x + 1)];
+  let shade = 1 + Math.max(-0.25, Math.min(0.25, (a - b) * 2.2));
+  if (type[i] === WATER) shade = 1;
+  let r = c[0] * shade, g = c[1] * shade, bl = c[2] * shade;
+  if (type[i] === TOWN && (x + y) % 2 === 0) { r = 176; g = 116; bl = 92; }   // techos
+  const n = (hash3(i, 1, 1) - 0.5) * 10;
+  baseColor[i * 3] = r + n; baseColor[i * 3 + 1] = g + n; baseColor[i * 3 + 2] = bl + n;
+}
+$('mapLegend').innerHTML = [
+  [BASE_RGB[NATIVE], 'Bosque nativo'], [BASE_RGB[PINE], 'Pino implantado'], [BASE_RGB[SHRUB], 'Matorral'], [BASE_RGB[MALLIN], 'Mallín'],
+  [BASE_RGB[TOWN], 'Casas (interfaz)'], [BASE_RGB[WATER], 'Agua'], [BASE_RGB[ROCK], 'Roca'],
+  [[255, 150, 30], 'Ardiendo'], [[48, 38, 34], 'Quemado'], [[96, 112, 150], 'Apagado por brigada']
+].map(([c, t]) => `<span><i style="background:rgb(${c})"></i>${t}</span>`).join('') +
+  '<span>📷 Cámara y su radio de visión (solo en «Con IA»)</span>';
+
+// ---------- Estado de la simulación visible ----------
+let ignition = 0, simNo, simAi, running = false, frameN = 0;
+function pickDefaultIgnition() {
+  // foco demostrativo elegido de antemano: bosque nativo a ~1,8 km de las casas, al alcance de una cámara
+  if (type[DEMO_IGN] === NATIVE || type[DEMO_IGN] === PINE) return DEMO_IGN;
+  let best = -1, bd = 1e9;
+  const tx = Math.round(TOWNS[0].x - 14), ty = Math.round(TOWNS[0].y + 3);
+  for (let i = 0; i < N; i++) {
+    if (type[i] !== NATIVE && type[i] !== PINE) continue;
+    const d = (i % W - tx) ** 2 + (((i / W) | 0) - ty) ** 2;
+    if (d < bd) { bd = d; best = i; }
+  }
+  return best;
+}
+function resetSims() {
+  simNo = newSim({ ...params }, false, ignition);
+  simAi = newSim({ ...params }, true, ignition);
+  running = false;
+  $('btnPlay').textContent = '▶ Iniciar';
+  $('summary').innerHTML = 'Apretá <b>▶ Iniciar</b> para ver qué pasa.';
+  logged = false;
+  drawAll(); updateStats(); drawLive();
+}
+let logged = false, runCount = 0;
+const runHistory = [];
+
+// ---------- Dibujo ----------
+const views = [
+  { cv: $('mapNo'), off: document.createElement('canvas'), ai: false },
+  { cv: $('mapAi'), off: document.createElement('canvas'), ai: true }
+];
+for (const v of views) { v.off.width = W; v.off.height = H; v.octx = v.off.getContext('2d'); v.img = v.octx.createImageData(W, H); }
+
+function sizeCanvas(cv) {
+  const dpr = Math.min(2, window.devicePixelRatio || 1), w = cv.clientWidth, h = Math.round(w * 2 / 3);
+  if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  return dpr;
+}
+function drawMap(v, s) {
+  const d = v.img.data;
+  for (let i = 0; i < N; i++) {
+    const st = s.state[i], o = i * 4;
+    if (st === 1) { const f = hash3(i, frameN >> 2, 1); d[o] = 255; d[o + 1] = 90 + f * 130; d[o + 2] = 20 + f * 30; }
+    else if (st === 2) { const n = hash3(i, 2, 2) * 14; d[o] = 44 + n; d[o + 1] = 35 + n; d[o + 2] = 31 + n; }
+    else if (st === 3) { d[o] = 96; d[o + 1] = 112; d[o + 2] = 150; }
+    else { d[o] = baseColor[i * 3]; d[o + 1] = baseColor[i * 3 + 1]; d[o + 2] = baseColor[i * 3 + 2]; }
+    d[o + 3] = 255;
+  }
+  v.octx.putImageData(v.img, 0, 0);
+  const dpr = sizeCanvas(v.cv), ctx = v.cv.getContext('2d'), cw = v.cv.width, ch = v.cv.height, sx = cw / W, sy = ch / H;
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(v.off, 0, 0, W, H, 0, 0, cw, ch);
+
+  // cámaras
+  if (v.ai) {
+    for (let k = 0; k < s.p.cams; k++) {
+      const c = CAMS[k], px = (c.x + 0.5) * sx, py = (c.y + 0.5) * sy;
+      ctx.beginPath(); ctx.arc(px, py, MODEL.CAM_R * sx, 0, Math.PI * 2);
+      ctx.fillStyle = k === s.camIdx ? 'rgba(57,135,229,0.22)' : 'rgba(57,135,229,0.08)'; ctx.fill();
+      ctx.setLineDash([4 * dpr, 4 * dpr]); ctx.lineWidth = 1 * dpr; ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.stroke(); ctx.setLineDash([]);
+    }
+    for (let k = 0; k < s.p.cams; k++) {
+      const c = CAMS[k], px = (c.x + 0.5) * sx, py = (c.y + 0.5) * sy, r = 6 * dpr;
+      ctx.beginPath(); ctx.moveTo(px, py - r); ctx.lineTo(px + r * 0.9, py + r * 0.6); ctx.lineTo(px - r * 0.9, py + r * 0.6); ctx.closePath();
+      ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 2 * dpr; ctx.strokeStyle = '#2a78d6'; ctx.stroke();
+    }
+  }
+  // foco inicial
+  const ix = (s.ign % W + 0.5) * sx, iy = (((s.ign / W) | 0) + 0.5) * sy;
+  ctx.beginPath(); ctx.arc(ix, iy, 7 * dpr, 0, Math.PI * 2); ctx.lineWidth = 2 * dpr; ctx.strokeStyle = '#fff'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(ix, iy, 9 * dpr, 0, Math.PI * 2); ctx.lineWidth = 1 * dpr; ctx.strokeStyle = 'rgba(0,0,0,.6)'; ctx.stroke();
+
+  // rótulos
+  ctx.font = `600 ${11 * dpr}px system-ui,sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const label = (t, x, y) => { ctx.lineWidth = 3 * dpr; ctx.strokeStyle = 'rgba(0,0,0,.55)'; ctx.strokeText(t, x, y); ctx.fillStyle = '#fff'; ctx.fillText(t, x, y); };
+  for (const tw of TOWNS) label(tw.name, tw.x * sx, (tw.y - tw.ry - 1.2) * sy);
+  label('Lago', LAKE.x * sx, LAKE.y * sy);
+
+  // viento
+  const bx = 10 * dpr, by = 10 * dpr, bw = 92 * dpr, bh = 30 * dpr;
+  ctx.fillStyle = 'rgba(0,0,0,.5)'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(bx, by, bw, bh, 6 * dpr) : ctx.rect(bx, by, bw, bh); ctx.fill();
+  const ax = bx + 16 * dpr, ay = by + bh / 2, L = 9 * dpr;
+  ctx.save(); ctx.translate(ax, ay); ctx.rotate(Math.atan2(s.wy, s.wx));
+  ctx.strokeStyle = '#fff'; ctx.fillStyle = '#fff'; ctx.lineWidth = 2 * dpr;
+  if (s.p.wind > 0) { ctx.beginPath(); ctx.moveTo(-L, 0); ctx.lineTo(L - 3 * dpr, 0); ctx.stroke(); ctx.beginPath(); ctx.moveTo(L, 0); ctx.lineTo(L - 6 * dpr, -4 * dpr); ctx.lineTo(L - 6 * dpr, 4 * dpr); ctx.closePath(); ctx.fill(); }
+  ctx.restore();
+  ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = `600 ${11 * dpr}px system-ui,sans-serif`;
+  ctx.fillText(s.p.wind > 0 ? s.p.wind + ' km/h' : 'calma', bx + 32 * dpr, ay);
+}
+function drawAll() { drawMap(views[0], simNo); drawMap(views[1], simAi); }
+
+function statText(s) {
+  const det = s.detectedAt >= 0 ? `${fmtMin(s.detectedAt * STEP_MIN)} · ${s.detectBy}` : (s.ended ? 'No llegó a verse' : s.t > 0 ? 'Todavía nadie lo vio…' : '—');
+  let arr = s.arriveAt >= 0 ? (s.t >= s.arriveAt ? 'Brigada combatiendo desde ' + fmtMin(s.arriveAt * STEP_MIN) : 'Llega a las ' + fmtMin(s.arriveAt * STEP_MIN)) : '—';
+  if (s.arriveAt >= 0 && s.faExtra > 0) arr += ` (+${s.faExtra} min: brigada atendiendo falsas alarmas)`;
+  let state = 'Listo para empezar';
+  if (s.ended) state = s.endReason + (s.endReason === 'Controlado' ? ' a las ' + fmtMin(s.endT * STEP_MIN) : '');
+  else if (s.t > 0) state = s.arriveAt >= 0 && s.t >= s.arriveAt ? 'En combate' : 'Avanzando sin control';
+  return { ha: fmtHa(s.burned * CELL_HA), det, arr, homes: s.homes.toLocaleString('es-AR'), state };
+}
+function updateStats() {
+  for (const [s, p] of [[simNo, 'no'], [simAi, 'ai']]) {
+    const t = statText(s);
+    $(p + '-ha').textContent = t.ha; $(p + '-det').textContent = t.det; $(p + '-arr').textContent = t.arr;
+    $(p + '-homes').textContent = t.homes; $(p + '-state').textContent = t.state;
+  }
+  $('clock').textContent = 'T + ' + fmtMin(Math.max(simNo.t, simAi.t) * STEP_MIN);
+  if (simNo.ended && simAi.ended && simNo.t > 0) {
+    const a = simNo.burned * CELL_HA, b = simAi.burned * CELL_HA, diff = a - b;
+    const dNo = simNo.detectedAt * STEP_MIN, dAi = simAi.detectedAt * STEP_MIN;
+    let msg;
+    if (simNo.endReason === 'Se apagó solo' && simAi.endReason === 'Se apagó solo') msg = '🍃 Este foco se apagó solo antes de crecer: cayó en un lugar con poco combustible o el azar no lo ayudó. Probá con otro punto o con más sequedad.';
+    else if (Math.abs(diff) < a * 0.05) msg = `😐 Casi el mismo resultado (diferencia de ${fmtHa(Math.abs(diff))}). ` + (simAi.cam < 0
+      ? 'El foco quedó fuera del alcance de las cámaras y el sistema dependió del satélite o de los vecinos.'
+      : 'En estas condiciones, detectar antes no alcanzó para frenar el fuego.');
+    else if (diff > 0) msg = `🌲 Con IA el foco se detectó en <b>${fmtMin(dAi)}</b> (contra ${fmtMin(dNo)} sin IA) y se quemaron <b>${fmtHa(diff)} menos</b> (−${Math.round(diff / a * 100)}%). Son ${Math.round(diff / 100).toLocaleString('es-AR')} km² de bosque en pie` + (simNo.homes > simAi.homes ? ` y ${(simNo.homes - simAi.homes).toLocaleString('es-AR')} viviendas menos alcanzadas.` : '.');
+    else if (diff === 0) msg = simAi.cam < 0 && simAi.detectBy.indexOf('Satélite') < 0
+      ? '😐 Mismo resultado: el foco quedó fuera del alcance de las cámaras. Probá sumar cámaras o elegir otro lugar.'
+      : '😐 Mismo resultado: en estas condiciones detectar antes no cambió el final.';
+    else msg = 'Con IA se quemó un poco más esta vez: en un modelo con azar, adelantar el combate no siempre gana. Probá otro foco.';
+    if (simAi.endReason.startsWith('Sigue')) msg += ' ⚠️ Aun con IA el fuego se escapó: con viento y sequía extremos, la detección temprana sola no alcanza.';
+    if (activeReto >= 0 && simNo.ign === RETOS[activeReto].ign) msg += `<div class="lesson">🎓 <b>Lección del reto ${activeReto + 1}:</b> ${RETOS[activeReto].lesson}</div>`;
+    $('summary').innerHTML = msg;
+    if (!logged) { logged = true; logRun(a, b); }
+    $('mapDesc').textContent = `Resultado. Sin IA: ${fmtHa(a)} quemadas, ${simNo.homes} viviendas alcanzadas, ${statText(simNo).state}. Con IA: ${fmtHa(b)} quemadas, ${simAi.homes} viviendas alcanzadas, ${statText(simAi).state}.`;
+  }
+  for (const [s, v] of [[simNo, views[0]], [simAi, views[1]]]) {
+    const t = statText(s);
+    v.cv.setAttribute('aria-label', `Mapa ${v.ai ? 'con' : 'sin'} IA. Superficie quemada ${t.ha}. Detección: ${t.det}. Estado: ${t.state}.`);
+  }
+}
+
+function logRun(a, b) {
+  runCount++;
+  const where = activeReto >= 0 && simNo.ign === RETOS[activeReto].ign ? 'Reto ' + (activeReto + 1) : 'Foco en ' + TYPE_NAME[type[simNo.ign]].toLowerCase();
+  const p = simNo.p;
+  runHistory.unshift({ n: runCount, desc: `${where} · ${p.cams} cám. · resp. ${fmtMin(p.resp)} · viento ${p.wind} km/h · ${DRY_LABEL[p.dry - 1].toLowerCase()} · ${p.fa} falsas/día`, a, b });
+  if (runHistory.length > 12) runHistory.pop();
+  $('histTable').tBodies[0].innerHTML = runHistory.map(h => `<tr><td>${h.n}</td><td>${h.desc}</td><td>${fmtHa(h.a)}</td><td>${fmtHa(h.b)}</td><td>${Math.abs(h.a - h.b) < h.a * 0.01 ? '≈ igual' : h.a > h.b ? '−' + Math.round((h.a - h.b) / h.a * 100) + '%' : '+' + fmtHa(h.b - h.a)}</td></tr>`).join('');
+}
+$('btnClearHist').addEventListener('click', () => {
+  runHistory.length = 0;
+  $('histTable').tBodies[0].innerHTML = '<tr><td colspan="5" class="muted" style="text-align:left">Cada simulación que termines aparece acá para comparar.</td></tr>';
+});
+
+// ---------- Gráfico en vivo (ha vs tiempo) ----------
+function drawLive() {
+  const cv = $('liveChart'); if (!cv || !simNo) return;
+  const dpr = Math.min(2, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight;
+  if (!w) return;
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+  const muted = cssVar('--muted'), line = cssVar('--line'), ink2 = cssVar('--ink2'), surf = cssVar('--surface');
+  const series = [[simNo, cssVar('--noai'), 'Sin IA'], [simAi, cssVar('--ai'), 'Con IA']];
+  const n = Math.max(simNo.hist.length, simAi.hist.length, 13);   // al menos 2 h de eje
+  const max = niceMax(Math.max(40, ...simNo.hist, ...simAi.hist) * 1.05);
+  const l = 64, r = w < 480 ? 12 : 60, t = 10, b = 26, pw = w - l - r, ph = h - t - b;
+  const X = i => l + i / (n - 1) * pw, Y = v => t + ph - v / max * ph;
+  ctx.font = '12px system-ui,sans-serif'; ctx.textBaseline = 'middle';
+  const lead = max / 10 ** Math.floor(Math.log10(max)), ticks = (lead === 2.5 || lead === 5) ? 5 : 4;
+  for (let k = 0; k <= ticks; k++) {
+    const v = max * k / ticks, y = Math.round(Y(v)) + 0.5;
+    ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(l, y); ctx.lineTo(w - r, y); ctx.stroke();
+    ctx.fillStyle = muted; ctx.textAlign = 'right'; ctx.fillText(Math.round(v).toLocaleString('es-AR') + ' ha', l - 8, y);
+  }
+  const hours = (n - 1) * STEP_MIN / 60, every = hours <= 6 ? 1 : hours <= 24 ? 4 : 12;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  for (let hr = 0; hr <= hours; hr += every) { ctx.fillStyle = muted; ctx.fillText(hr + ' h', X(hr * 60 / STEP_MIN), h - b + 8); }
+  for (const [s, col] of series) {
+    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.beginPath();
+    s.hist.forEach((v, i) => i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v))); ctx.stroke();
+    const mark = (i, tri) => {
+      if (i < 0 || i >= s.hist.length) return;
+      const x = X(i), y = Y(s.hist[i]);
+      ctx.beginPath();
+      if (tri) { ctx.moveTo(x, y - 6); ctx.lineTo(x + 5, y + 3); ctx.lineTo(x - 5, y + 3); ctx.closePath(); } else ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = surf; ctx.stroke();
+    };
+    mark(s.detectedAt, true); mark(s.arriveAt, false);
+  }
+  if (r >= 50) {
+    let y1 = Y(simNo.hist[simNo.hist.length - 1]), y2 = Y(simAi.hist[simAi.hist.length - 1]);
+    if (Math.abs(y1 - y2) < 15) { const m = (y1 + y2) / 2; y1 = m - 8; y2 = m + 8; }
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = ink2; ctx.font = '600 12px system-ui,sans-serif';
+    ctx.fillText('Sin IA', w - r + 8, y1); ctx.fillText('Con IA', w - r + 8, y2);
+  }
+}
+
+function loop() {
+  frameN++;
+  if (running) {
+    const k = +$('speed').value;
+    for (let i = 0; i < k; i++) { stepSim(simNo); stepSim(simAi); }
+    if (simNo.ended && simAi.ended) { running = false; $('btnPlay').textContent = '▶ Repetir'; }
+    updateStats(); drawLive();
+  }
+  if (running || frameN % 6 === 0) drawAll();
+  requestAnimationFrame(loop);
+}
+
+// ---------- Controles ----------
+function syncOutputs() {
+  $('o-cams').textContent = params.cams;
+  $('o-resp').textContent = fmtMin(params.resp);
+  $('o-wind').textContent = params.wind + ' km/h';
+  $('o-dry').textContent = params.dry + ' · ' + DRY_LABEL[params.dry - 1];
+  $('o-fa').textContent = params.fa + ' por día';
+  $('paramsLine').textContent = `Parámetros: ${params.cams} cámaras · respuesta ${fmtMin(params.resp)} · viento ${params.wind} km/h ${WIND_LABEL[params.windDir]} · sequedad ${DRY_LABEL[params.dry - 1].toLowerCase()} · ${params.fa} falsas alarmas/día`;
+}
+function setControls() {
+  $('cams').value = params.cams; $('resp').value = params.resp; $('wind').value = params.wind; $('windDir').value = params.windDir; $('dry').value = params.dry; $('fa').value = params.fa;
+}
+function setReto(k) {
+  activeReto = k;
+  document.querySelectorAll('#retos button').forEach((b, j) => { b.classList.toggle('on', j === k); b.setAttribute('aria-pressed', j === k); });
+  $('retoText').textContent = k >= 0 ? 'Reto activo: ' + RETOS[k].t.replace(/^\d · /, '') + '. Mirá qué pasa en los dos mapas y leé la lección al final.' : 'Elegí un reto: configura todo solo y te deja una lección al final.';
+}
+function onParamsChange() { setReto(-1); syncOutputs(); resetSims(); scheduleProjection(); }
+for (const id of ['cams', 'resp', 'wind', 'dry', 'fa']) $(id).addEventListener('input', e => { params[id] = +e.target.value; onParamsChange(); });
+$('windDir').addEventListener('change', e => { params.windDir = e.target.value; onParamsChange(); });
+document.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => {
+  Object.assign(params, PRESETS[b.dataset.preset]); setControls(); onParamsChange();
+  document.getElementById('simulacion').scrollIntoView();
+}));
+
+// ---------- Retos guiados ----------
+$('retos').innerHTML = RETOS.map((r, k) => `<button type="button" data-reto="${k}" aria-pressed="false">${r.t}</button>`).join('');
+document.querySelectorAll('#retos button').forEach(b => b.addEventListener('click', () => {
+  const k = +b.dataset.reto, r = RETOS[k];
+  Object.assign(params, r.p); setControls(); syncOutputs(); scheduleProjection();
+  ignition = r.ign; resetSims(); setReto(k);
+  running = true; $('btnPlay').textContent = '⏸ Pausa';
+}));
+
+// ---------- Compartir escenario (parámetros en la URL) ----------
+function scenarioURL() {
+  const q = new URLSearchParams({ c: params.cams, r: params.resp, w: params.wind, d: params.windDir, s: params.dry, fa: params.fa, f: ignition });
+  return location.href.split('#')[0] + '#esc&' + q.toString();
+}
+function readScenarioFromURL() {
+  if (!location.hash.startsWith('#esc&')) return false;
+  const q = new URLSearchParams(location.hash.slice(5));
+  const num = (k, lo, hi, def) => { const v = parseInt(q.get(k), 10); return Number.isFinite(v) ? Math.max(lo, Math.min(hi, v)) : def; };
+  params.cams = num('c', 0, 12, params.cams); params.resp = num('r', 15, 180, params.resp);
+  params.wind = num('w', 0, 70, params.wind); params.dry = num('s', 1, 5, params.dry); params.fa = num('fa', 0, 10, params.fa);
+  if (WIND_DIRS[q.get('d')]) params.windDir = q.get('d');
+  const f = num('f', 0, N - 1, -1);
+  if (f >= 0 && FUEL[type[f]] > 0) ignition = f;
+  return true;
+}
+$('btnShare').addEventListener('click', () => {
+  const url = scenarioURL(), btn = $('btnShare');
+  const done = () => { btn.textContent = '✅ Link copiado'; setTimeout(() => btn.textContent = '🔗 Compartir escenario', 2000); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, () => window.prompt('Copiá este link:', url));
+  else window.prompt('Copiá este link:', url);
+});
+
+// ---------- Clima en vivo (Open-Meteo, opcional) ----------
+const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=-41.96&longitude=-71.53' +
+  '&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m' +
+  '&daily=precipitation_sum&past_days=14&forecast_days=1&timezone=America%2FArgentina%2FBuenos_Aires&wind_speed_unit=kmh';
+let wxSuggest = null;
+function windDirFromDeg(deg) {
+  // dirección de donde VIENE el viento → la opción más cercana del simulador
+  const opts = { E: 90, S: 180, O: 270, NO: 315, N: 360 };
+  let best = 'O', bd = 999;
+  for (const [k, a] of Object.entries(opts)) { const d = Math.min(Math.abs(deg - a), 360 - Math.abs(deg - a)); if (d < bd) { bd = d; best = k; } }
+  return best;
+}
+function dryFromWeather(temp, rh, rain14) {
+  let s = 0;
+  s += rain14 < 5 ? 2 : rain14 < 20 ? 1 : 0;
+  s += rh < 30 ? 1.5 : rh < 45 ? 0.75 : 0;
+  s += temp > 28 ? 1 : temp > 22 ? 0.5 : 0;
+  return Math.max(1, Math.min(5, 1 + Math.round(s)));
+}
+async function loadWeather() {
+  const box = $('wxBody');
+  try {
+    const ctrl = new AbortController(); const to = setTimeout(() => ctrl.abort(), 8000);
+    const r = await fetch(WX_URL, { signal: ctrl.signal }); clearTimeout(to);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json(), c = j.current;
+    const rain = (j.daily.precipitation_sum || []).slice(0, 14).reduce((a, b) => a + (b || 0), 0);
+    const dir = windDirFromDeg(c.wind_direction_10m), dry = dryFromWeather(c.temperature_2m, c.relative_humidity_2m, rain);
+    wxSuggest = { wind: Math.min(70, Math.round(c.wind_speed_10m / 5) * 5), windDir: dir, dry };
+    const hora = (c.time || '').slice(11, 16);
+    box.innerHTML = `<div class="wx-vals"><span>🌡️ <b>${Math.round(c.temperature_2m)} °C</b></span><span>💧 Humedad <b>${Math.round(c.relative_humidity_2m)}%</b></span>` +
+      `<span>💨 <b>${Math.round(c.wind_speed_10m)} km/h</b> ${WIND_LABEL[dir]} (ráfagas ${Math.round(c.wind_gusts_10m)})</span>` +
+      `<span>🌧️ Lluvia últimos 14 días: <b>${rain.toFixed(1).replace('.', ',')} mm</b></span>` +
+      `<span>🍂 Sequedad estimada: <b>${dry} · ${DRY_LABEL[dry - 1]}</b></span></div>` + (hora ? `Actualizado a las ${hora} (hora argentina).` : '');
+    $('btnWx').disabled = false;
+  } catch (e) {
+    box.textContent = 'No se pudo consultar el clima (puede que no haya conexión). Podés seguir usando los controles manuales: el resto de la página funciona igual.';
+    $('btnWx').disabled = true;
+  }
+}
+$('btnWx').addEventListener('click', () => {
+  if (!wxSuggest) return;
+  Object.assign(params, wxSuggest); setControls(); onParamsChange();
+  $('btnWx').textContent = '✅ Clima de hoy aplicado';
+  setTimeout(() => $('btnWx').textContent = 'Usar el clima de hoy', 2500);
+});
+
+$('btnPlay').addEventListener('click', () => {
+  if (simNo.ended && simAi.ended) resetSims();
+  running = !running;
+  $('btnPlay').textContent = running ? '⏸ Pausa' : '▶ Seguir';
+});
+$('btnReset').addEventListener('click', resetSims);
+$('btnRandom').addEventListener('click', () => {
+  let i;
+  do { i = Math.floor(Math.random() * N); } while (FUEL[type[i]] === 0 || type[i] === TOWN);
+  ignition = i; resetSims(); running = true; $('btnPlay').textContent = '⏸ Pausa';
+});
+function cellFromEvent(cv, e) {
+  const r = cv.getBoundingClientRect();
+  const x = Math.floor((e.clientX - r.left) / r.width * W), y = Math.floor((e.clientY - r.top) / r.height * H);
+  if (x < 0 || y < 0 || x >= W || y >= H) return -1;
+  return y * W + x;
+}
+for (const v of views) {
+  v.cv.addEventListener('click', e => {
+    const i = cellFromEvent(v.cv, e);
+    if (i < 0) return;
+    if (FUEL[type[i]] === 0) { $('mapHint').textContent = `Ahí hay ${TYPE_NAME[type[i]].toLowerCase()}: no hay nada que arda. Elegí otro punto.`; return; }
+    ignition = i; resetSims(); running = true; $('btnPlay').textContent = '⏸ Pausa';
+    $('mapHint').textContent = `🔥 Foco en ${TYPE_NAME[type[i]].toLowerCase()}. Tocá otro punto para probar de nuevo.`;
+  });
+  v.cv.addEventListener('mousemove', e => {
+    const i = cellFromEvent(v.cv, e);
+    if (i >= 0 && !running) $('mapHint').textContent = `${TYPE_NAME[type[i]]} · a ${(distTown[i] * 0.2).toFixed(1).replace('.', ',')} km de las casas` + (v.ai ? (cameraFor(i, params.cams) >= 0 ? ' · 📷 visible por una cámara' : ' · fuera del alcance de las cámaras') : '');
+  });
+  v.cv.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('btnPlay').click(); } });
+}
+window.addEventListener('resize', () => { drawAll(); drawChart(); drawLive(); });
+
+// ---------- Proyección 2040 ----------
+let projTimer = null, mcToken = 0, mcResult = null, projRows = null;
+function scheduleProjection() { clearTimeout(projTimer); projTimer = setTimeout(runMonteCarlo, 350); }
+function runMonteCarlo() {
+  const token = ++mcToken, p = { ...params };
+  const res = { no: [], ai: [] }; let k = 0;
+  $('mcProgress').textContent = 'Simulando 30 focos…';
+  (function chunk() {
+    if (token !== mcToken) return;
+    const end = Math.min(MC_IGNITIONS.length, k + 3);
+    for (; k < end; k++) {
+      res.no.push(runHeadless(p, false, MC_IGNITIONS[k]).burned * CELL_HA);
+      res.ai.push(runHeadless(p, true, MC_IGNITIONS[k]).burned * CELL_HA);
+    }
+    $('mcProgress').textContent = `Simulando focos… ${k}/${MC_IGNITIONS.length}`;
+    if (k < MC_IGNITIONS.length) setTimeout(chunk, 0);
+    else { mcResult = res; $('mcProgress').textContent = ''; updateProjection(); }
+  })();
+}
+function updateProjection() {
+  if (!mcResult) return;
+  const focos = +$('focos').value;
+  $('o-focos').textContent = focos;
+  const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+  const mNo = mean(mcResult.no), mAi = mean(mcResult.ai);
+  const esc = a => a.filter(v => v > 100).length / a.length;
+  projRows = project(mNo, mAi, focos);
+  const last = projRows[projRows.length - 1];
+  $('k-no').textContent = fmtHa(last.no);
+  $('k-ai').textContent = fmtHa(last.ai);
+  $('k-no-s').textContent = `${Math.round(last.no / FOREST0 * 100)}% del bosque · ${fmtHa(mNo)} por foco en promedio · ${Math.round(esc(mcResult.no) * 100)}% de los focos supera 100 ha`;
+  $('k-ai-s').textContent = `${Math.round(last.ai / FOREST0 * 100)}% del bosque · ${fmtHa(mAi)} por foco en promedio · ${Math.round(esc(mcResult.ai) * 100)}% de los focos supera 100 ha`;
+  const diff = last.no - last.ai;
+  $('k-diff').textContent = fmtHa(Math.max(0, diff));
+  $('fm-diff').textContent = fmtHa(Math.max(0, diff));
+  $('fm-veces').textContent = diff > 0 ? `unas ${(diff / 3825).toLocaleString('es-AR', { maximumFractionDigits: 1 })} veces el incendio de El Bolsón 2025` : 'prácticamente nada con estos parámetros: probá con más cámaras o una respuesta más rápida';
+  $('k-diff-s').textContent = diff > 0 ? `Equivale a unas ${(diff / 3825).toLocaleString('es-AR', { maximumFractionDigits: 1 })} veces el incendio de El Bolsón 2025 (3.825 ha).` : 'Con estos parámetros la IA no hace diferencia.';
+  $('projTable').innerHTML = '<thead><tr><th>Año</th><th>Focos</th><th>Sin IA (acum.)</th><th>Con IA (acum.)</th><th>Diferencia</th></tr></thead><tbody>' +
+    projRows.map(r => `<tr><td>${r.year}</td><td>${r.focos.toFixed(1).replace('.', ',')}</td><td>${fmtHa(r.no)}</td><td>${fmtHa(r.ai)}</td><td>${fmtHa(r.no - r.ai)}</td></tr>`).join('') + '</tbody>';
+  drawChart();
+}
+$('focos').addEventListener('input', updateProjection);
+
+// ---------- Gráfico ----------
+let hoverIdx = -1;
+function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function niceMax(v) { if (v <= 0) return 1000; const p = 10 ** Math.floor(Math.log10(v)), m = v / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p; }
+function chartGeom(cv) {
+  const dpr = Math.min(2, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight;
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  const narrow = w < 480;
+  return { dpr, w, h, l: narrow ? 52 : 70, r: narrow ? 16 : 70, t: 14, b: 30 };
+}
+function drawChart() {
+  const cv = $('chart'); if (!projRows) return;
+  const g = chartGeom(cv), ctx = cv.getContext('2d');
+  ctx.setTransform(g.dpr, 0, 0, g.dpr, 0, 0); ctx.clearRect(0, 0, g.w, g.h);
+  const ink2 = cssVar('--ink2'), muted = cssVar('--muted'), line = cssVar('--line'), cNo = cssVar('--noai'), cAi = cssVar('--ai'), surf = cssVar('--surface');
+  const max = niceMax(Math.max(...projRows.map(r => r.no)) * 1.05);
+  const pw = g.w - g.l - g.r, ph = g.h - g.t - g.b;
+  const X = i => g.l + i / (projRows.length - 1) * pw, Y = v => g.t + ph - v / max * ph;
+  ctx.font = '12px system-ui,sans-serif'; ctx.textBaseline = 'middle';
+  for (let k = 0; k <= 4; k++) {
+    const v = max * k / 4, y = Y(v);
+    ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(g.l, Math.round(y) + 0.5); ctx.lineTo(g.w - g.r, Math.round(y) + 0.5); ctx.stroke();
+    ctx.fillStyle = muted; ctx.textAlign = 'right';
+    ctx.fillText(v >= 1000 ? (v / 1000).toLocaleString('es-AR', { maximumFractionDigits: 1 }) + ' mil ha' : Math.round(v) + ' ha', g.l - 8, y);
+  }
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  projRows.forEach((r, i) => { if ((r.year - Y0) % (g.w < 480 ? 4 : 2) === 0) { ctx.fillStyle = muted; ctx.fillText(r.year, X(i), g.h - g.b + 8); } });
+  if (hoverIdx >= 0) { ctx.strokeStyle = muted; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(Math.round(X(hoverIdx)) + 0.5, g.t); ctx.lineTo(Math.round(X(hoverIdx)) + 0.5, g.t + ph); ctx.stroke(); }
+  for (const [key, col] of [['no', cNo], ['ai', cAi]]) {
+    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.beginPath();
+    projRows.forEach((r, i) => i ? ctx.lineTo(X(i), Y(r[key])) : ctx.moveTo(X(i), Y(r[key]))); ctx.stroke();
+    const li = hoverIdx >= 0 ? hoverIdx : projRows.length - 1;
+    ctx.beginPath(); ctx.arc(X(li), Y(projRows[li][key]), 4, 0, Math.PI * 2); ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = surf; ctx.stroke();
+  }
+  // etiquetas directas al final (solo si hay lugar)
+  if (g.r >= 60) {
+    const last = projRows[projRows.length - 1];
+    let yNo = Y(last.no), yAi = Y(last.ai);
+    if (Math.abs(yNo - yAi) < 16) { const m = (yNo + yAi) / 2; yNo = m - 8; yAi = m + 8; }
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = ink2; ctx.font = '600 12px system-ui,sans-serif';
+    ctx.fillText('Sin IA', g.w - g.r + 10, yNo); ctx.fillText('Con IA', g.w - g.r + 10, yAi);
+  }
+}
+function chartHover(e) {
+  if (!projRows) return;
+  const cv = $('chart'), r = cv.getBoundingClientRect(), g = chartGeom(cv);
+  const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+  const pw = g.w - g.l - g.r;
+  const i = Math.max(0, Math.min(projRows.length - 1, Math.round((x - g.l) / pw * (projRows.length - 1))));
+  hoverIdx = i; drawChart();
+  const row = projRows[i], tip = $('tip');
+  tip.innerHTML = `<b>${row.year}</b> · ${row.focos.toFixed(1).replace('.', ',')} focos<div class="row"><span class="dot" style="background:var(--noai)"></span>Sin IA: <b>${fmtHa(row.no)}</b></div><div class="row"><span class="dot" style="background:var(--ai)"></span>Con IA: <b>${fmtHa(row.ai)}</b></div><div class="row muted">Diferencia: ${fmtHa(row.no - row.ai)}</div>`;
+  tip.style.display = 'block';
+  const px = g.l + i / (projRows.length - 1) * pw, tw = tip.offsetWidth;
+  tip.style.left = Math.max(0, Math.min(g.w - tw, px + 12 > g.w - tw ? px - tw - 12 : px + 12)) + 'px';
+  tip.style.top = '10px';
+}
+function chartLeave() { hoverIdx = -1; $('tip').style.display = 'none'; drawChart(); }
+$('chart').addEventListener('mousemove', chartHover);
+$('chart').addEventListener('touchstart', chartHover, { passive: true });
+$('chart').addEventListener('touchmove', chartHover, { passive: true });
+$('chart').addEventListener('mouseleave', chartLeave);
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => { drawChart(); drawLive(); });
+
+// ---------- Inicio ----------
+ignition = pickDefaultIgnition();
+const fromURL = readScenarioFromURL();
+setControls(); syncOutputs(); resetSims(); scheduleProjection(); loadWeather();
+if (fromURL) { $('mapHint').textContent = '🔗 Abriste un escenario compartido. Apretá ▶ Iniciar para verlo.'; setTimeout(() => $('simulacion').scrollIntoView(), 50); }
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
