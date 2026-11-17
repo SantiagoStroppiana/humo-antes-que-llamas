@@ -4,6 +4,9 @@ Experiencia web interactiva para el **Desafío 2 (Big Data + IA)**: incendios fo
 
 Autor: **Santiago Stroppiana** · 2026
 
+🌐 **Sitio publicado:** <https://santiagostroppiana.github.io/humo-antes-que-llamas/>
+📦 **Repositorio:** <https://github.com/SantiagoStroppiana/humo-antes-que-llamas>
+
 > ⚠️ La simulación es un **modelo ilustrativo** con fines educativos. No es una predicción real ni reemplaza los modelos de comportamiento del fuego de los organismos oficiales.
 
 ## Cómo abrirla
