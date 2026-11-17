@@ -133,8 +133,15 @@ button:focus-visible,input:focus-visible,select:focus-visible,canvas:focus-visib
 .chart-legend i{width:18px;height:3px;border-radius:2px;display:inline-block}
 .chartwrap{position:relative}
 #chart{display:block;width:100%;height:340px}
-#tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.85rem;box-shadow:0 4px 16px rgba(0,0,0,.12);display:none;white-space:nowrap;z-index:2}
-#tip .row{display:flex;align-items:center;gap:6px}
+#climChart{display:block;width:100%;height:300px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tabs button{min-height:34px;padding:5px 12px;font-size:.88rem;border-radius:99px}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#eoMap{display:block;width:100%;height:auto}
+#eoMap text{font:12px system-ui,sans-serif;fill:var(--ink2)}
+.eo-row-sel td{background:var(--surface2)}
+.tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.85rem;box-shadow:0 4px 16px rgba(0,0,0,.12);display:none;white-space:nowrap;z-index:2}
+.tip .row{display:flex;align-items:center;gap:6px}
 table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
 th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}
 th:first-child,td:first-child{text-align:left}
@@ -184,7 +191,7 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
   <div class="wrap">
     <a class="brand" href="#inicio">🔥 Humo antes que llamas</a>
     <div class="links">
-      <a href="#hoy">Hoy</a><a href="#decidi">Decidí</a><a href="#simulacion">Simulación</a><a href="#futuro">2040</a><a href="#ia">IA real</a><a href="#futuro-mejor">Futuro mejor</a><a href="#fuentes">Fuentes</a>
+      <a href="#problema">Problema</a><a href="#solucion">Solución</a><a href="#simulacion">Simulación</a><a href="#futuro">2040</a><a href="#fuentes">Fuentes</a>
     </div>
   </div>
 </nav>
@@ -193,120 +200,124 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
   <div class="wrap">
     <div class="kicker">Comarca andina · El Bolsón · Epuyén · Lago Puelo</div>
     <h1>Ver el <span>humo</span> antes que las llamas</h1>
-    <p class="lead">Cada verano el bosque andino patagónico arde más. Esta experiencia te deja probar una idea concreta: si una red de cámaras con inteligencia artificial detectara el humo en minutos, ¿cuánto bosque llegaríamos a salvar de acá a 2040?</p>
+    <p class="lead">Los veranos de la comarca son cada vez más calurosos y secos, y los incendios, cada vez más grandes. Esta página muestra el problema con datos reales, propone una solución con inteligencia artificial y te deja probarla en una simulación.</p>
     <p class="byline">Por <b>Santiago Stroppiana</b> · Desafío 2 · Big Data + IA · 2026</p>
     <div class="disclaimer" role="note">
       <b>⚠️ Ojo:</b>
-      <span>La simulación es un <b>modelo ilustrativo</b> hecho con fines educativos. No es una predicción real ni reemplaza los modelos de comportamiento del fuego que usan los organismos oficiales. Los supuestos están explicados en la página y en el README.</span>
+      <span>Los datos del problema son reales y están citados. La simulación es un <b>modelo ilustrativo</b>: sirve para comparar escenarios, no para predecir.</span>
     </div>
   </div>
 </header>
 
-<!-- ============ 1. HOY ============ -->
-<section id="hoy">
+<!-- ============ 1. EL PROBLEMA ============ -->
+<section id="problema">
   <div class="wrap">
-    <div class="kicker">1 · Hoy</div>
-    <h2>La problemática</h2>
-    <p class="lead">La comarca andina del paralelo 42° vive entre bosques de ciprés, coihue y lenga, plantaciones de pino y barrios que crecen dentro del bosque (la llamada <i>interfaz urbano-forestal</i>). En los últimos cinco años sufrió algunos de los peores incendios de su historia.</p>
+    <div class="kicker">1 · El problema</div>
+    <h2>La comarca se quema cada vez más</h2>
 
-    <div class="grid cards" style="margin-top:24px">
+    <div class="grid cards" style="margin-top:20px">
+      <article class="card stat">
+        <div class="num">~14.000 ha · 3 muertes</div>
+        <div class="what">Las Golondrinas y Lago Puelo, marzo 2021</div>
+        <p class="small">Un incendio de interfaz que llegó a los barrios en pocas horas. Un reporte oficial citado por la prensa contó 605 viviendas dañadas <span class="tag verify">a verificar</span>.</p>
+        <div class="src">Fuentes [3][4]</div>
+      </article>
       <article class="card stat">
         <div class="num">3.825 ha</div>
         <div class="what">El Bolsón (Mallín Ahogado), verano 2025</div>
-        <p class="small">Superficie afectada estimada por el SPLIF (Río Negro) al 13/02/2025. El fuego empezó el 30 de enero. Al día siguiente, el Gobierno de Río Negro ya contaba unas 100 viviendas destruidas (los vecinos calculaban 140). Murió un vecino de Mallín Ahogado que no quiso evacuar. El número final de viviendas está <span class="tag verify">a verificar</span>.</p>
-        <div class="src">Fuente: Gobierno de Río Negro [1]; prensa [2] <span class="tag ok">oficial</span></div>
-      </article>
-      <article class="card stat">
-        <div class="num">3.075 ha</div>
-        <div class="what">Epuyén, enero 2025</div>
-        <p class="small">Bosque nativo, bosque implantado, matorrales y pastizales afectados según un parte del Servicio Provincial de Manejo del Fuego de Chubut. Es una cifra parcial del momento del parte, no un balance final <span class="tag verify">a verificar</span>.</p>
-        <div class="src">Fuente: parte del SPMF citado por ANBariloche [3]</div>
-      </article>
-      <article class="card stat">
-        <div class="num">~14.000 ha · 3 muertes</div>
-        <div class="what">Las Golondrinas, Cerro Radal y Lago Puelo, marzo 2021</div>
-        <p class="small">Un incendio de interfaz que llegó a los barrios en pocas horas. Los reportes publicados varían entre 13.000 y 15.000 ha. Un reporte oficial citado por la prensa contó 605 viviendas dañadas total o parcialmente en Las Golondrinas y Cerro Radal. Las cifras cambian según la fecha y el relevamiento <span class="tag verify">a verificar</span>.</p>
-        <div class="src">Fuente: prensa citando reportes oficiales [4][5]</div>
+        <p class="small">Unas 100 viviendas destruidas en los primeros días y un vecino muerto. Número final de viviendas <span class="tag verify">a verificar</span>.</p>
+        <div class="src">Gobierno de Río Negro [1], prensa [2] <span class="tag ok">oficial</span></div>
       </article>
       <article class="card stat">
         <div class="num">60.845 ha</div>
-        <div class="what">Bosques andino-patagónicos, temporada 2025-2026</div>
-        <p class="small">De ese total, 60.304 ha fueron en Chubut (Epuyén, El Hoyo, Puerto Patriada). Greenpeace la calificó como la peor temporada de las últimas seis décadas. Estimación por imágenes satelitales hecha por una ONG, no una cifra oficial.</p>
-        <div class="src">Fuente: Greenpeace Argentina, mayo 2026 [6] <span class="tag ngo">ONG</span></div>
+        <div class="what">Bosques andino-patagónicos, temporada 2025-26</div>
+        <p class="small">De ese total, 60.304 ha fueron en Chubut. La peor temporada en seis décadas, según una estimación satelital de Greenpeace.</p>
+        <div class="src">Greenpeace [5] <span class="tag ngo">ONG</span></div>
+      </article>
+      <article class="card stat">
+        <div class="num">95%</div>
+        <div class="what">de los incendios los empieza una persona</div>
+        <p class="small">Quemas, fogatas, colillas o intencionalidad, según el Servicio Nacional de Manejo del Fuego. Por eso los focos nacen cerca de caminos y casas.</p>
+        <div class="src">SNMF vía Chequeado [6]</div>
       </article>
     </div>
 
-    <div class="grid two" style="margin-top:16px">
-      <div class="card">
-        <h3>🧍 Casi siempre empieza una persona</h3>
-        <p class="small" style="margin:0">El Servicio Nacional de Manejo del Fuego informó que <b>el 95% de los incendios</b> en el país se originan por acción humana: quemas, fogatas, colillas o intencionalidad (dato difundido en 2020 y repetido en reportes posteriores) [7]. Por eso los focos suelen empezar cerca de caminos y casas, y por eso detectarlos rápido es tan importante.</p>
+    <h3 style="margin-top:40px">📈 Lo que dicen 45 veranos de datos</h3>
+    <p class="small muted" style="max-width:75ch">Procesamos <b>16.526 días</b> de clima de El Bolsón (diciembre de 1980 a febrero de 2026) con la API histórica de Open-Meteo (reanálisis ERA5) y resumimos cada verano (diciembre a febrero).</p>
+    <div class="grid kpis" style="margin:12px 0">
+      <div class="card kpi"><div class="k">Temperatura máxima media del verano</div><div class="v" id="ck-tx">—</div><div class="s" id="ck-tx-s"></div></div>
+      <div class="card kpi"><div class="k">Días de 30 °C o más por verano</div><div class="v" id="ck-d30">—</div><div class="s" id="ck-d30-s"></div></div>
+      <div class="card kpi"><div class="k">Días de peligro por verano</div><div class="v" id="ck-risk">—</div><div class="s" id="ck-risk-s"></div></div>
+    </div>
+    <div class="card">
+      <div class="tabs" role="tablist" aria-label="Variable climática" id="climTabs"></div>
+      <div class="chartwrap">
+        <canvas id="climChart" role="img" aria-label="Gráfico de la variable climática elegida por verano, 1981 a 2026, con su tendencia"></canvas>
+        <div id="climTip" class="tip"></div>
       </div>
-      <div class="card">
-        <h3>🌡️ Y el clima empuja hacia arriba</h3>
-        <p class="small" style="margin:0">Un estudio de CONICET (Kitzberger et al., 2022) proyecta con un modelo de aprendizaje automático que, en escenarios de emisiones plausibles, la <b>probabilidad de incendio se duplicaría a mediados de siglo</b> y se triplicaría o cuadruplicaría a fines de siglo en la Patagonia andina [8][9].</p>
+      <p class="small muted" id="climNote" style="margin:8px 0 0"></p>
+      <details><summary>Ver como tabla</summary><div style="overflow-x:auto"><table id="climTable"></table></div></details>
+    </div>
+    <p class="small muted" style="margin-top:8px">«Día de peligro»: máxima de 27 °C o más y humedad mínima de 25% o menos (criterio simple de esta página). ERA5 promedia celdas de ~25 km, así que suaviza los extremos locales. El estudio de CONICET (Kitzberger et al., 2022) proyecta que la probabilidad de incendio se duplicaría a mediados de siglo [7][8].</p>
+
+    <h3 style="margin-top:40px">🛰️ Incendios vistos desde el espacio</h3>
+    <p class="small muted" style="max-width:75ch">Eventos registrados por sistemas satelitales internacionales (GDACS y PDC) en la zona, según la API de NASA EONET. El tamaño del círculo muestra la superficie estimada.</p>
+    <div class="grid two" style="align-items:start">
+      <div class="card" style="padding:8px"><svg id="eoMap" viewBox="0 0 400 440" role="img" aria-label="Mapa de eventos de incendio satelitales en la región"></svg></div>
+      <div>
+        <div class="histwrap"><table id="eoTable"></table></div>
+        <p class="small" id="eoSum" style="margin-top:10px"></p>
+        <button type="button" id="btnEoLive" style="margin-top:4px">🔴 Consultar incendios activos ahora</button>
+        <p class="small muted" id="eoLive" aria-live="polite" style="margin-top:8px"></p>
       </div>
     </div>
 
-    <p class="callout"><b>¿Por qué importa la detección temprana?</b> Un foco recién nacido ocupa unos pocos metros y una brigada lo puede apagar con herramientas manuales. Pocas horas después, con viento y bosque seco, puede tener cientos de hectáreas y un frente que avanza más rápido de lo que se puede abrir una línea de defensa. El tiempo entre que aparece el humo y que llega el ataque inicial es la variable que esta experiencia te invita a mover.</p>
+    <p class="callout"><b>El punto clave:</b> un foco recién nacido ocupa unos metros y se apaga con herramientas manuales. Con viento y bosque seco, a las pocas horas puede tener cientos de hectáreas. <b>El tiempo entre que aparece el humo y que llega la brigada</b> decide si el foco queda en nada o se convierte en una catástrofe.</p>
   </div>
 </section>
 
-<!-- ============ 2. DECIDÍ ============ -->
-<section id="decidi">
+<!-- ============ 2. LA SOLUCIÓN ============ -->
+<section id="solucion">
   <div class="wrap">
-    <div class="kicker">2 · Decidí</div>
-    <h2>Vos armás la temporada</h2>
-    <p class="lead">Elegí cuánta tecnología instalar y en qué condiciones arde el bosque. Los cambios se aplican a la simulación y a la proyección 2040.</p>
+    <div class="kicker">2 · La solución</div>
+    <h2>Detección temprana con IA</h2>
+    <p class="lead">Una red de cámaras en los cerros, con visión por computadora que reconoce el humo en minutos, apoyada por satélites y siempre con una persona que confirma. No es ciencia ficción: Río Negro presentó un sistema así en 2026 [9] y en Neuquén ya hay cámaras con IA en estancias de la cordillera [10].</p>
 
-    <div class="card wx" id="wxCard">
-      <div>
-        <h3 style="margin:0">🌦️ El tiempo ahora en El Bolsón</h3>
-        <div id="wxBody" class="small muted" aria-live="polite">Consultando el pronóstico…</div>
-        <div class="small muted">Datos en vivo de <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0). La «sequedad estimada» es un índice simplificado hecho para esta página, no el índice oficial de peligro de incendio.</div>
-      </div>
-      <button type="button" id="btnWx" disabled>Usar el clima de hoy</button>
+    <div class="flow" aria-label="Cómo funciona el sistema">
+      <div class="step"><span class="n">1</span><b>📷 Cámaras en torres</b>Vista 360° desde las cimas, una imagen por minuto.</div>
+      <div class="step"><span class="n">2</span><b>🧠 Visión por computadora</b>Una red neuronal busca columnas de humo que crecen entre imágenes.</div>
+      <div class="step"><span class="n">3</span><b>🛰️ Satélites</b>Focos de calor VIIRS (375 m) de NASA FIRMS como respaldo [11][12].</div>
+      <div class="step"><span class="n">4</span><b>🧑‍💻 Operador</b>Confirma o descarta la alerta y ubica el foco.</div>
+      <div class="step"><span class="n">5</span><b>🚒 Brigada</b>Sale la más cercana mientras el foco todavía es chico.</div>
     </div>
 
-    <div class="presets" role="group" aria-label="Escenarios rápidos">
-      <button type="button" data-preset="tipico">☀️ Verano típico</button>
-      <button type="button" data-preset="extremo">🔥 Día extremo</button>
-      <button type="button" data-preset="favorable">🌧️ Día favorable</button>
-      <button type="button" data-preset="sinCam">📵 Sin cámaras (solo satélite)</button>
+    <div class="grid two">
+      <div class="card">
+        <h3>📚 Big Data detrás de la IA</h3>
+        <ul class="clean small">
+          <li><b>Escala:</b> 12 cámaras con una imagen por minuto durante una temporada de 120 días generan <b id="bigImgs">~2 millones de imágenes</b> para analizar en tiempo real.</li>
+          <li><b>Entrenamiento:</b> miles de imágenes etiquetadas como «humo» o «no humo». El dataset público FIgLib reúne unas 25.000 imágenes de 315 incendios reales [13][14]. Habría que sumar imágenes locales: niebla de los valles, nubes bajas, polvo, salamandras.</li>
+          <li><b>Contexto:</b> clima histórico como el de arriba y focos satelitales para priorizar alertas en días de peligro.</li>
+        </ul>
+      </div>
+      <div class="card limits">
+        <h3>🚧 Sus límites</h3>
+        <ul class="clean small">
+          <li><b>Falsas alarmas:</b> si la IA confunde niebla con humo muy seguido, hace perder tiempo y se pierde la confianza en el sistema. La simulación te deja probarlo.</li>
+          <li><b>Puntos ciegos:</b> laderas, noche y dosel tapan focos.</li>
+          <li><b>Costo y conectividad:</b> torres, energía, enlaces en los cerros y monitoreo las 24 horas.</li>
+          <li><b>Privacidad:</b> las cámaras también ven casas y personas, así que hacen falta reglas sobre qué se graba y quién accede.</li>
+          <li><b>La IA no apaga incendios:</b> sin brigadas cerca, detectar antes solo sirve para enterarse antes.</li>
+        </ul>
+      </div>
     </div>
 
-    <div class="grid controls">
-      <div class="card ctrl">
-        <label for="cams">📷 Cámaras con IA <output id="o-cams"></output></label>
-        <input type="range" id="cams" min="0" max="12" step="1" value="6">
-        <p>Torres con cámaras 360° que detectan humo automáticamente. Se ubican en las cimas que más bosque ven. En el modelo cada una vigila unos 3 km a la redonda (el relieve tapa la visión).</p>
-      </div>
-      <div class="card ctrl">
-        <label for="resp">🚒 Tiempo de respuesta <output id="o-resp"></output></label>
-        <input type="range" id="resp" min="15" max="180" step="5" value="60">
-        <p>Minutos desde que se da el aviso hasta que la primera brigada empieza a combatir: despacho, acceso por caminos de montaña y caminata.</p>
-      </div>
-      <div class="card ctrl">
-        <label for="wind">💨 Viento <output id="o-wind"></output></label>
-        <input type="range" id="wind" min="0" max="70" step="5" value="30">
-        <select id="windDir" aria-label="Dirección del viento">
-          <option value="O">Del Oeste (predominante en la cordillera)</option>
-          <option value="NO">Del Noroeste</option>
-          <option value="N">Del Norte</option>
-          <option value="S">Del Sur</option>
-          <option value="E">Del Este</option>
-        </select>
-        <p>El viento inclina las llamas, empuja el frente y arrastra brasas que pueden saltar ríos y caminos.</p>
-      </div>
-      <div class="card ctrl">
-        <label for="dry">🍂 Sequedad del bosque <output id="o-dry"></output></label>
-        <input type="range" id="dry" min="1" max="5" step="1" value="4">
-        <p>Qué tan seco está el combustible (ramas, hojarasca, pasto). Depende de la lluvia acumulada, el calor y la humedad del aire.</p>
-      </div>
-      <div class="card ctrl">
-        <label for="fa">🚨 Falsas alarmas de la IA <output id="o-fa"></output></label>
-        <input type="range" id="fa" min="0" max="10" step="1" value="2">
-        <p>Alertas por día que resultan ser niebla, nubes o polvo. Cada una hay que revisarla, y alguna puede tener a la brigada ocupada justo cuando aparece el fuego de verdad.</p>
-      </div>
+    <h3 style="margin-top:28px">Lo que hace falta además de la IA</h3>
+    <div class="grid pillars">
+      <div class="card"><h3>🚒 Brigadas cerca</h3><p>Bases descentralizadas y presupuesto estable.</p></div>
+      <div class="card"><h3>📊 Datos abiertos</h3><p>Partes de incendio e imágenes locales para entrenar modelos propios.</p></div>
+      <div class="card"><h3>🌲 Menos combustible</h3><p>Manejo de pinos y cortafuegos en la interfaz con las casas.</p></div>
+      <div class="card"><h3>🏘️ Comunidad</h3><p>Si el 95% de los focos es humano, la prevención es la primera defensa.</p></div>
     </div>
   </div>
 </section>
@@ -315,12 +326,54 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
 <section id="simulacion">
   <div class="wrap">
     <div class="kicker">3 · Simulación</div>
-    <h2>El mismo foco, dos finales</h2>
-    <p class="lead">Un bosque de 18 × 12 km inspirado en la comarca (no es un mapa real). El mismo foco arranca en los dos mapas, con el mismo viento y la misma sequedad. Lo único que cambia es <b>cuándo se detecta</b>.</p>
+    <h2>Probalo vos: el mismo foco, dos finales</h2>
+    <p class="lead">Un bosque de 18 × 12 km inspirado en la comarca (no es un mapa real). El mismo foco arranca en los dos mapas con el mismo clima. Lo único que cambia es <b>cuándo se detecta</b>.</p>
+
     <div class="card" style="margin-top:8px">
-      <h3 style="margin:0">🎯 Retos: cinco experimentos para entender el problema</h3>
+      <h3 style="margin:0">🌦️ Elegí el clima de un día real</h3>
+      <div class="retos" id="realDays" role="group" aria-label="Días reales"></div>
+      <div class="small" id="wxBody" aria-live="polite">Elegí un día: el viento y la sequedad salen de los datos de Open-Meteo de ese día y ese lugar.</div>
+      <p class="small muted" style="margin:6px 0 0">Viento efectivo = promedio entre el viento máximo y la ráfaga máxima del día. Sequedad = índice simple de lluvia de 14 días, humedad mínima y temperatura (no es el índice oficial).</p>
+    </div>
+
+    <div class="grid controls" style="margin-top:16px">
+      <div class="card ctrl">
+        <label for="cams">📷 Cámaras con IA <output id="o-cams"></output></label>
+        <input type="range" id="cams" min="0" max="12" step="1" value="6">
+        <p>Se ubican en las cimas que más bosque ven. Cada una vigila ~3 km.</p>
+      </div>
+      <div class="card ctrl">
+        <label for="resp">🚒 Respuesta de la brigada <output id="o-resp"></output></label>
+        <input type="range" id="resp" min="15" max="180" step="5" value="60">
+        <p>Del aviso al primer combate: despacho, acceso y caminata.</p>
+      </div>
+      <div class="card ctrl">
+        <label for="fa">🚨 Falsas alarmas de la IA <output id="o-fa"></output></label>
+        <input type="range" id="fa" min="0" max="10" step="1" value="2">
+        <p>Más alertas para revisar y riesgo de tener a la brigada ocupada.</p>
+      </div>
+      <div class="card ctrl">
+        <label for="wind">💨 Viento <output id="o-wind"></output></label>
+        <input type="range" id="wind" min="0" max="70" step="5" value="30">
+        <select id="windDir" aria-label="Dirección del viento">
+          <option value="O">Del Oeste</option>
+          <option value="NO">Del Noroeste</option>
+          <option value="N">Del Norte</option>
+          <option value="S">Del Sur</option>
+          <option value="E">Del Este</option>
+        </select>
+      </div>
+      <div class="card ctrl">
+        <label for="dry">🍂 Sequedad del bosque <output id="o-dry"></output></label>
+        <input type="range" id="dry" min="1" max="5" step="1" value="4">
+        <p>Depende de la lluvia acumulada, el calor y la humedad.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="margin:0">🎯 Retos: cinco experimentos con lección</h3>
       <div class="retos" id="retos" role="group" aria-label="Retos guiados"></div>
-      <div class="small muted" id="retoText">Elegí un reto: configura todo solo y te deja una lección al final.</div>
+      <div class="small muted" id="retoText">Cada reto configura todo solo y al final te deja una conclusión.</div>
     </div>
 
     <p class="hint" id="mapHint" style="margin-top:12px">👆 Tocá cualquier punto del bosque para elegir dónde empieza el fuego.</p>
@@ -334,14 +387,14 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
         <option value="3" selected>Velocidad normal</option>
         <option value="8">Velocidad rápida</option>
       </select>
-      <button type="button" id="btnShare" title="Copia un link que abre la página con este mismo escenario">🔗 Compartir escenario</button>
+      <button type="button" id="btnShare" title="Copia un link que abre la página con este mismo escenario">🔗 Compartir</button>
       <span class="clock" id="clock" aria-live="off">T + 0 min</span>
     </div>
     <div class="params-line" id="paramsLine"></div>
 
     <div class="grid maps" style="margin-top:12px">
       <div class="mapbox">
-        <h3><span class="dot" style="background:var(--noai)"></span>Sin IA <span class="muted small" style="font-weight:400">· aviso de vecinos o guardaparques</span></h3>
+        <h3><span class="dot" style="background:var(--noai)"></span>Sin IA <span class="muted small" style="font-weight:400">· aviso de vecinos</span></h3>
         <canvas id="mapNo" tabindex="0" aria-label="Mapa de simulación sin IA"></canvas>
         <div class="mstats">
           <div><div class="k">Superficie quemada</div><div class="v big" id="no-ha">0 ha</div></div>
@@ -369,7 +422,7 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
     <p class="sr-only" id="mapDesc" aria-live="polite"></p>
 
     <div class="card" style="margin-top:16px">
-      <h3 style="margin-bottom:4px">Superficie quemada minuto a minuto</h3>
+      <h3 style="margin-bottom:4px">Superficie quemada en el tiempo</h3>
       <div class="chart-legend"><span><i style="background:var(--noai)"></i>Sin IA</span><span><i style="background:var(--ai)"></i>Con IA</span><span class="muted">▲ detección · ● llegada de la brigada</span></div>
       <canvas id="liveChart" role="img" aria-label="Gráfico de hectáreas quemadas en el tiempo, con y sin IA"></canvas>
     </div>
@@ -383,15 +436,15 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
     </div>
 
     <details>
-      <summary>¿Cómo funciona este modelo?</summary>
+      <summary>¿Cómo funciona el modelo?</summary>
       <div class="card" style="margin-top:10px">
         <ul class="clean small">
-          <li><b>Autómata celular:</b> el mapa es una grilla de 90 × 60 celdas de 200 × 200 m (4 ha cada una). Cada paso equivale a 10 minutos.</li>
-          <li><b>Propagación:</b> una celda en llamas puede encender a sus 8 vecinas. La probabilidad sube con la sequedad, el viento a favor, la pendiente hacia arriba y el tipo de combustible (el pino arde más que el bosque nativo, y el mallín húmedo mucho menos). Con viento fuerte, las brasas pueden saltar de 2 a 5 celdas.</li>
-          <li><b>Detección sin IA:</b> alguien ve el humo y avisa. Pasa entre 30 minutos y 4 horas según lo lejos que esté el foco de las casas, o antes si el fuego ya supera las 160 ha y la columna de humo se ve desde todos lados.</li>
-          <li><b>Detección con IA:</b> si el foco está dentro del radio de una cámara, la IA lo marca y un operador lo confirma en unos 10 minutos, más 2 minutos por cada falsa alarma diaria (hay más alertas para revisar). Además, la brigada puede estar atendiendo una falsa alarma: eso suma una demora promedio. Si no, un satélite lo puede ver en su próxima pasada (cada ~3 h) cuando supera unas 16 ha. Si todo falla, queda el aviso de vecinos.</li>
-          <li><b>Combate:</b> la brigada llega después del tiempo de respuesta y apaga algunas celdas del frente por paso. Llegan refuerzos cada hora, y el viento fuerte le resta eficacia. Si el frente crece más rápido de lo que se puede apagar, el fuego se escapa.</li>
-          <li>Ambos mapas usan exactamente la misma secuencia de azar, así que las diferencias vienen solo del momento de la detección.</li>
+          <li><b>Autómata celular:</b> grilla de 90 × 60 celdas de 4 ha. Cada paso equivale a 10 minutos y la simulación corta a las 72 h.</li>
+          <li><b>Propagación:</b> una celda en llamas enciende vecinas con más probabilidad si hay sequedad, viento a favor, pendiente hacia arriba o pino. Con viento fuerte saltan brasas.</li>
+          <li><b>Sin IA:</b> el aviso llega entre 30 min y 4 h según la distancia a las casas, o cuando el fuego supera las 160 ha.</li>
+          <li><b>Con IA:</b> si una cámara ve el foco, se confirma en 10 min (+2 min por cada falsa alarma diaria). Si no, lo detecta el satélite cada ~3 h cuando supera 16 ha. Las falsas alarmas pueden demorar a la brigada.</li>
+          <li><b>Combate:</b> la brigada apaga celdas del frente. Llegan refuerzos cada hora y el viento le resta eficacia.</li>
+          <li>Los dos mapas usan el mismo azar: la diferencia viene solo de la detección.</li>
         </ul>
       </div>
     </details>
@@ -401,21 +454,21 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
 <!-- ============ 4. 2040 ============ -->
 <section id="futuro">
   <div class="wrap">
-    <div class="kicker">4 · 2040</div>
-    <h2>Quince temporadas después</h2>
-    <p class="lead">Simulamos 30 focos en lugares distintos del mapa con tus parámetros y calculamos cuánto quema, en promedio, cada uno con y sin IA. Después lo proyectamos año por año hasta 2040, con más focos cada temporada por el clima (según la tendencia del estudio de CONICET).</p>
+    <div class="kicker">4 · Un futuro mejor</div>
+    <h2>La comarca en 2040: dos caminos</h2>
+    <p class="lead">Simulamos 30 focos con tus parámetros para obtener las hectáreas promedio por foco con y sin IA. Después lo proyectamos hasta 2040, con más focos cada año según la <b>tendencia real de días de peligro</b> que medimos arriba.</p>
 
     <div class="grid controls" style="margin-bottom:16px">
       <div class="card ctrl">
-        <label for="focos">🔥 Focos en zona de bosque por temporada (2026) <output id="o-focos"></output></label>
+        <label for="focos">🔥 Focos por temporada en 2026 <output id="o-focos"></output></label>
         <input type="range" id="focos" min="2" max="20" step="1" value="6">
-        <p>Supuesto ilustrativo: igniciones que necesitan combate en la comarca. Sube linealmente hasta duplicarse en 2050.</p>
+        <p>Supuesto ilustrativo: igniciones que requieren combate. Bosque de partida: 150.000 ha (supuesto), sin regeneración.</p>
+        <div class="progress" id="mcProgress" aria-live="polite"></div>
       </div>
       <div class="card" style="display:flex;flex-direction:column;justify-content:center">
-        <div class="small muted">Bosque de partida (supuesto)</div>
-        <div style="font-size:1.4rem;font-weight:800">150.000 ha</div>
-        <div class="small muted">Sin regeneración en el período: el bosque nativo tarda décadas en recuperarse.</div>
-        <div class="progress" id="mcProgress" aria-live="polite"></div>
+        <div class="small muted">Factor climático 2040 (tendencia de días de peligro)</div>
+        <div style="font-size:1.4rem;font-weight:800" id="growthTxt">—</div>
+        <div class="small muted">Sale de la regresión lineal de los 46 veranos medidos.</div>
       </div>
     </div>
 
@@ -429,117 +482,59 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
       <h3 style="margin-bottom:4px">Superficie quemada acumulada, 2026–2040</h3>
       <div class="chart-legend"><span><i style="background:var(--noai)"></i>Sin IA</span><span><i style="background:var(--ai)"></i>Con IA</span></div>
       <div class="chartwrap">
-        <canvas id="chart" role="img" aria-label="Gráfico de líneas de hectáreas quemadas acumuladas por año, con y sin IA"></canvas>
-        <div id="tip"></div>
+        <canvas id="chart" role="img" aria-label="Gráfico de hectáreas quemadas acumuladas por año, con y sin IA"></canvas>
+        <div id="tip" class="tip"></div>
       </div>
       <details>
         <summary>Ver como tabla</summary>
         <div style="overflow-x:auto"><table id="projTable"></table></div>
       </details>
     </div>
-    <p class="small muted" style="margin-top:12px">Es una cuenta simple: <i>focos por año × hectáreas promedio por foco</i>. No incluye años lluviosos, cambios en las plantaciones, prevención ni la regeneración del bosque. Sirve para comparar escenarios, no para pronosticar.</p>
-  </div>
-</section>
 
-<!-- ============ 5. IA REAL ============ -->
-<section id="ia">
-  <div class="wrap">
-    <div class="kicker">5 · Cómo funcionaría la IA de verdad</div>
-    <h2>Ojos en las torres, ojos en el cielo</h2>
-    <p class="lead">No es ciencia ficción. Río Negro presentó en febrero de 2026 cámaras con IA desarrolladas por INVAP y GPTECH para el SPLIF de Bariloche [10], y en Neuquén una fundación instaló cámaras de detección temprana en estancias de la cordillera [11]. Así funcionaría un sistema para la comarca:</p>
-
-    <div class="flow" aria-label="Flujo del sistema de detección">
-      <div class="step"><span class="n">PASO 1</span><b>📷 Cámaras en torres</b>Cámaras 360° en cerros con buena vista, girando y tomando una imagen por minuto.</div>
-      <div class="step"><span class="n">PASO 2</span><b>🧠 Visión por computadora</b>Una red neuronal compara cada imagen con las anteriores y busca columnas de humo que crecen.</div>
-      <div class="step"><span class="n">PASO 3</span><b>🛰️ Satélites</b>Los sensores VIIRS (píxeles de 375 m) y MODIS (1 km) detectan focos de calor y los publica NASA FIRMS [12][13].</div>
-      <div class="step"><span class="n">PASO 4</span><b>🧑‍💻 Operador humano</b>Una persona en la central revisa la alerta, mueve la cámara y confirma o descarta.</div>
-      <div class="step"><span class="n">PASO 5</span><b>🚒 Despacho</b>Se cruzan dos cámaras para ubicar el foco y se envía la brigada más cercana.</div>
-    </div>
-
-    <div class="grid two">
-      <div class="card">
-        <h3>📚 ¿Con qué datos se entrena?</h3>
-        <ul class="clean small">
-          <li><b>Imágenes etiquetadas de humo y no-humo.</b> Un ejemplo público es FIgLib (HPWREN, California): unas 25.000 imágenes de 315 incendios reales, tomadas desde cámaras fijas desde 40 minutos antes hasta 40 minutos después del inicio. Con ellas se entrenó el modelo SmokeyNet, que usa la secuencia temporal de las imágenes [14][15].</li>
-          <li><b>Datos locales:</b> un modelo de California no conoce la niebla de los valles, las nubes bajas sobre el Piltriquitrón, el polvo de los caminos ni el humo de las salamandras en invierno. Habría que juntar y etiquetar imágenes de la comarca en todas las estaciones.</li>
-          <li><b>Históricos satelitales y partes de incendio</b> (fecha, lugar, causa, superficie) para validar y calibrar alertas y para modelos de riesgo como el de CONICET [8].</li>
-          <li><b>Meteorología:</b> viento, humedad y temperatura de estaciones locales, para priorizar alertas en días peligrosos.</li>
-        </ul>
-      </div>
-      <div class="card limits">
-        <h3>🚧 Sus límites (y son importantes)</h3>
-        <ul class="clean small">
-          <li><b>Falsos positivos:</b> niebla, nubes, polvo, chimeneas o quemas autorizadas pueden disparar alertas. Si hay muchas falsas, los operadores dejan de confiar. Por eso siempre hay una persona que confirma.</li>
-          <li><b>Falsos negativos:</b> un foco detrás de una ladera, de noche o bajo el dosel puede pasar desapercibido hasta que crece.</li>
-          <li><b>Costo:</b> torres, cámaras, energía solar, mantenimiento en la nieve y personal de monitoreo 24 h durante la temporada.</li>
-          <li><b>Conectividad:</b> las cámaras necesitan enlaces de radio o internet estables en cerros donde a veces no hay señal.</li>
-          <li><b>Satélites:</b> pasan pocas veces por día, sus píxeles son grandes y las nubes o el humo los tapan. Sirven de respaldo, no para ver un foco de minutos.</li>
-          <li><b>La IA no apaga incendios.</b> Detectar antes solo sirve si hay brigadistas, equipos, caminos y presupuesto para llegar a tiempo. Y nada reemplaza la prevención: casi todos los focos los empezamos las personas.</li>
-        </ul>
-      </div>
+    <div class="letter" style="margin-top:28px">
+      <p><b>El Bolsón, 3 de febrero de 2040.</b> Hoy hizo 34 °C con viento del noroeste, el tipo de día que antes nos daba miedo. A las 15:12, la cámara del cerro marcó humo sobre una ladera de pinos. Una operadora lo confirmó con una segunda cámara (esa tarde ya había descartado tres falsas alarmas por niebla y polvo) y la brigada de Mallín Ahogado llegó a los 40 minutos. Era una fogata mal apagada y no pasó de media hectárea.</p>
+      <p>Lo que más cambió no fueron las cámaras, sino todo lo que pusimos alrededor: brigadas cerca, menos pinos pegados a las casas y una comunidad que sabe que casi todos los incendios los empezamos nosotros.</p>
+      <p class="sig">— Ficción: una brigadista de la comarca</p>
     </div>
   </div>
 </section>
 
-<!-- ============ 6. FUTURO MEJOR ============ -->
-<section id="futuro-mejor">
-  <div class="wrap">
-    <div class="kicker">6 · Imaginar un futuro mejor</div>
-    <h2>La comarca en 2040, si lo hacemos bien</h2>
-    <p class="lead">Esta carta es una <b>ficción</b>. No predice nada: imagina cómo podría ser el verano de 2040 si combinamos tecnología, brigadas y comunidad.</p>
-
-    <div class="letter">
-      <p>El Bolsón, 3 de febrero de 2040.</p>
-      <p>Hoy hubo 34 °C y viento del noroeste, el tipo de día que antes nos daba miedo. A las 15:12, la cámara del cerro marcó una columna de humo sobre una ladera de pinos. A los pocos minutos, una operadora de la central de monitoreo que comparten Río Negro y Chubut ya la había confirmado con una segunda cámara. Esa misma tarde había descartado tres alertas falsas: niebla y polvo del camino.</p>
-      <p>La brigada de la base de Mallín Ahogado llegó a los 40 minutos. El foco era una fogata mal apagada y no pasó de media hectárea. Los vecinos recibieron un aviso en el celular, pero nadie tuvo que evacuar.</p>
-      <p>Lo que más cambió no fueron las cámaras, sino todo lo que pusimos alrededor de ellas: brigadas cerca, cortafuegos alrededor de los barrios, menos pinos pegados a las casas y una comunidad que sabe que casi todos los incendios los empezamos nosotros.</p>
-      <p class="sig">— Una brigadista de la comarca</p>
-    </div>
-
-    <p style="margin-top:20px">Según <b>tu</b> configuración, la diferencia entre los dos caminos de acá a 2040 sería de <b id="fm-diff">—</b> de bosque, o sea <b id="fm-veces">—</b>. Es un cálculo ilustrativo, pero muestra el orden de magnitud de lo que está en juego.</p>
-
-    <h3 style="margin-top:24px">Las cinco piezas que harían falta</h3>
-    <div class="grid pillars">
-      <div class="card"><h3>📷 Red de cámaras con IA</h3><p>Torres en las cimas que más bosque ven, con una central de monitoreo regional y siempre una persona que confirme cada alerta.</p></div>
-      <div class="card"><h3>🚒 Brigadas cerca y rápidas</h3><p>Bases descentralizadas y presupuesto estable. Como muestra la simulación, detectar antes sirve de poco si nadie llega a tiempo.</p></div>
-      <div class="card"><h3>📊 Datos abiertos</h3><p>Partes de incendio, imágenes etiquetadas y focos satelitales abiertos, para entrenar modelos con imágenes de nuestra zona y no solo de California.</p></div>
-      <div class="card"><h3>🌲 Prevención del combustible</h3><p>Manejo de plantaciones de pino en la interfaz, cortafuegos y planificación de dónde se construye.</p></div>
-      <div class="card"><h3>🏘️ Comunidad informada</h3><p>Si el 95% de los focos es de origen humano, la mejor «IA» sigue siendo no prender fuego: educación, alertas a vecinos y avisos tempranos al servicio de manejo del fuego.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 7. FUENTES ============ -->
+<!-- ============ 5. FUENTES ============ -->
 <section id="fuentes">
   <div class="wrap">
-    <div class="kicker">7 · Fuentes</div>
-    <h2>Fuentes</h2>
-    <p class="small muted">Consultadas en noviembre de 2026. Cuando las cifras de distintas fuentes no coinciden o no hay un balance oficial final, el dato está marcado como <span class="tag verify">a verificar</span>.</p>
+    <div class="kicker">5 · Fuentes</div>
+    <h2>Fuentes y datos</h2>
+    <p class="small muted">Consultadas en noviembre de 2026. Cuando las fuentes no coinciden o no hay un balance oficial final, el dato está marcado como <span class="tag verify">a verificar</span>.</p>
+    <h3 style="margin-top:16px">APIs de datos reales</h3>
+    <ul class="clean small">
+      <li><b>Open-Meteo Historical Weather API</b> (reanálisis ERA5, licencia CC BY 4.0): <a href="https://open-meteo.com/en/docs/historical-weather-api" target="_blank" rel="noopener">documentación</a>. Clima diario de El Bolsón entre 1980 y 2026 y clima de los días en que empezaron los incendios reales (datos procesados e incluidos en la página).</li>
+      <li><b>Open-Meteo Forecast API</b>: <a href="https://open-meteo.com/en/docs" target="_blank" rel="noopener">documentación</a>. Clima de hoy, consultado en vivo.</li>
+      <li><b>NASA EONET v3</b>: <a href="https://eonet.gsfc.nasa.gov/docs/v3" target="_blank" rel="noopener">documentación</a>. Eventos de incendio con fuentes GDACS y PDC (guardados en la página y también consultables en vivo).</li>
+    </ul>
+    <h3 style="margin-top:16px">Referencias</h3>
     <ol class="sources small">
-      <li>Gobierno de Río Negro (13/02/2025). <a href="https://rionegro.gov.ar/articulo/52894/el-bolson-avanza-el-combate-de-brigadistas-y-la-lluvia-brinda-un-respiro" target="_blank" rel="noopener">El Bolsón: avanza el combate de brigadistas y la lluvia brinda un respiro</a>. <span class="why">3.825 ha afectadas según estimaciones del SPLIF.</span></li>
-      <li>Tiempo Argentino (02/2025). <a href="https://www.tiempoar.com.ar/ta_article/el-incendio-de-el-bolson-presenta-un-panorama-desolador/" target="_blank" rel="noopener">El incendio de El Bolsón presenta un panorama desolador</a>. Diario Río Negro: <a href="https://www.rionegro.com.ar/?p=3990751" target="_blank" rel="noopener">Quién era el hombre que murió en los incendios de El Bolsón</a>. <span class="why">Tiempo Argentino (31/01/2025): unas 100 viviendas destruidas según el Gobierno de Río Negro, unas 140 según vecinos. Diario Río Negro (02/02/2025): muerte de un vecino de Mallín Ahogado.</span></li>
-      <li>ANBariloche (27/01/2025). <a href="https://www.anbariloche.com.ar/noticias/2025/01/27/96949-epuyen-el-fuego-consumio-mas-de-3-mil-hectareas-de-bosque" target="_blank" rel="noopener">Epuyén: el fuego consumió más de 3 mil hectáreas de bosque</a>. <span class="why">3.075 ha según un parte del SPMF de Chubut.</span></li>
-      <li>ANBariloche (09/03/2022). <a href="https://www.anbariloche.com.ar/noticias/2022/03/09/84147-a-un-ano-del-incendio-en-la-comarca-andina-la-situacion-incluso-hasta-esta-peor" target="_blank" rel="noopener">A un año del incendio en la comarca andina</a>. <span class="why">Alrededor de 14.000 ha en la comarca andina de Chubut, 3 víctimas y 605 viviendas dañadas total o parcialmente, según un reporte oficial citado en la nota.</span></li>
-      <li>National Geographic (03/2021). <a href="https://www.nationalgeographicla.com/medio-ambiente/2021/03/incendios-en-la-patagonia-argentina-como-resurgir-de-las-cenizas" target="_blank" rel="noopener">La Patagonia argentina en llamas: resurgir de las cenizas</a>. Cholila Online: <a href="https://cholilaonline.ar/2021/03/cerca-de-500-viviendas-fueron-afectadas-por-los-incendios-en-la-comarca-andina.html" target="_blank" rel="noopener">Cerca de 500 viviendas fueron afectadas</a>. <span class="why">Rango de superficie y de viviendas afectadas en 2021.</span></li>
-      <li>Greenpeace Argentina (19/05/2026). <a href="https://www.greenpeace.org/argentina/story/problemas/bosques/se-multiplicaron-por-diez-los-bosques-patagonicos-arrasados-por-el-fuego-y-fueron-los-peores-incendios-de-las-ultimas-seis-decadas/" target="_blank" rel="noopener">Se multiplicaron por diez los bosques patagónicos arrasados por el fuego</a> y <a href="https://www.greenpeace.org/static/planet4-argentina-stateless/2026/05/a3a80031-reporte-incendios-gp-2025-26.pdf" target="_blank" rel="noopener">reporte 2025-26 (PDF)</a>. <span class="why">60.845 ha en la temporada 2025-26, 60.304 en Chubut. Estimación satelital de una ONG.</span></li>
-      <li>Chequeado (2020). <a href="https://chequeado.com/el-explicador/mas-de-la-mitad-de-las-provincias-sufren-incendios-forestales-y-el-95-fueron-causados-por-el-hombre/" target="_blank" rel="noopener">Más de la mitad de las provincias sufren incendios forestales y el 95% fueron causados por el hombre</a>. <span class="why">Dato atribuido al Servicio Nacional de Manejo del Fuego.</span></li>
-      <li>CONICET (05/08/2022). <a href="https://www.conicet.gov.ar/evaluan-los-posibles-efectos-del-cambio-climatico-sobre-la-ocurrencia-de-incendios-en-la-patagonia/" target="_blank" rel="noopener">Evalúan los posibles efectos del cambio climático sobre la ocurrencia de incendios en la Patagonia</a>. <span class="why">Proyecciones de probabilidad de incendio a mitad y fin de siglo.</span></li>
-      <li>Kitzberger, T., Tiribelli, F., Barberá, I., Gowda, J. H., Morales, J. M., Zalazar, L. y Paritsis, J. (2022). Projections of fire probability and ecosystem vulnerability under 21st century climate across a trans-Andean productivity gradient in Patagonia. <i>Science of the Total Environment</i>, 156303. <a href="https://doi.org/10.1016/j.scitotenv.2022.156303" target="_blank" rel="noopener">doi:10.1016/j.scitotenv.2022.156303</a></li>
-      <li>Gobierno de Río Negro (04/02/2026). <a href="https://rionegro.gov.ar/articulo/57747/camaras-con-ia-y-tecnologia-satelital-para-la-prevencion-de-incendios" target="_blank" rel="noopener">Cámaras con IA y tecnología satelital para la prevención de incendios</a>. <span class="why">Sistema de INVAP y GPTECH para el SPLIF: cámaras 360° con detección de humo por IA.</span></li>
-      <li>Noticias NQN (25/02/2025). <a href="https://www.noticiasnqn.com.ar/noticias/2025/02/25/310077-emergencia-ignea-instalan-camaras-para-la-deteccion-temprana-de-incendios-en-la-cordillera" target="_blank" rel="noopener">Emergencia ígnea: instalan cámaras para la detección temprana de incendios en la cordillera</a>. <span class="why">Cámaras de la Fundación Tierras Patagónicas en Neuquén.</span></li>
-      <li>NASA Earthdata. <a href="https://www.earthdata.nasa.gov/data/instruments/viirs/viirs-i-band-375-m-active-fire-data" target="_blank" rel="noopener">VIIRS I-Band 375 m Active Fire Data</a>. <span class="why">Resolución de 375 m, mejor que MODIS (1 km) para detectar focos chicos.</span></li>
-      <li>NASA. <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noopener">FIRMS: Fire Information for Resource Management System</a>. <span class="why">Distribución de focos de calor satelitales casi en tiempo real.</span></li>
+      <li>Gobierno de Río Negro (13/02/2025). <a href="https://rionegro.gov.ar/articulo/52894/el-bolson-avanza-el-combate-de-brigadistas-y-la-lluvia-brinda-un-respiro" target="_blank" rel="noopener">El Bolsón: avanza el combate de brigadistas</a>. <span class="why">3.825 ha según el SPLIF.</span></li>
+      <li>Tiempo Argentino (31/01/2025), <a href="https://www.tiempoar.com.ar/ta_article/el-incendio-de-el-bolson-presenta-un-panorama-desolador/" target="_blank" rel="noopener">El incendio de El Bolsón presenta un panorama desolador</a>, y Diario Río Negro (02/02/2025), <a href="https://www.rionegro.com.ar/?p=3990751" target="_blank" rel="noopener">Quién era el hombre que murió en los incendios de El Bolsón</a>.</li>
+      <li>ANBariloche (09/03/2022). <a href="https://www.anbariloche.com.ar/noticias/2022/03/09/84147-a-un-ano-del-incendio-en-la-comarca-andina-la-situacion-incluso-hasta-esta-peor" target="_blank" rel="noopener">A un año del incendio en la comarca andina</a>. <span class="why">~14.000 ha, 3 víctimas y 605 viviendas dañadas.</span></li>
+      <li>National Geographic (23/03/2021), <a href="https://www.nationalgeographicla.com/medio-ambiente/2021/03/incendios-en-la-patagonia-argentina-como-resurgir-de-las-cenizas" target="_blank" rel="noopener">La Patagonia argentina en llamas</a>, y Cholila Online (13/03/2021), <a href="https://cholilaonline.ar/2021/03/cerca-de-500-viviendas-fueron-afectadas-por-los-incendios-en-la-comarca-andina.html" target="_blank" rel="noopener">Cerca de 500 viviendas fueron afectadas</a>.</li>
+      <li>Greenpeace Argentina (19/05/2026). <a href="https://www.greenpeace.org/argentina/story/problemas/bosques/se-multiplicaron-por-diez-los-bosques-patagonicos-arrasados-por-el-fuego-y-fueron-los-peores-incendios-de-las-ultimas-seis-decadas/" target="_blank" rel="noopener">Se multiplicaron por diez los bosques patagónicos arrasados por el fuego</a>.</li>
+      <li>Chequeado (02/10/2020). <a href="https://chequeado.com/el-explicador/mas-de-la-mitad-de-las-provincias-sufren-incendios-forestales-y-el-95-fueron-causados-por-el-hombre/" target="_blank" rel="noopener">El 95% de los incendios fueron causados por el hombre</a>. <span class="why">Dato del Servicio Nacional de Manejo del Fuego.</span></li>
+      <li>CONICET (05/08/2022). <a href="https://www.conicet.gov.ar/evaluan-los-posibles-efectos-del-cambio-climatico-sobre-la-ocurrencia-de-incendios-en-la-patagonia/" target="_blank" rel="noopener">Evalúan los posibles efectos del cambio climático sobre la ocurrencia de incendios en la Patagonia</a>.</li>
+      <li>Kitzberger, T. et al. (2022). Projections of fire probability and ecosystem vulnerability under 21st century climate across a trans-Andean productivity gradient in Patagonia. <i>Science of the Total Environment</i>, 156303. <a href="https://doi.org/10.1016/j.scitotenv.2022.156303" target="_blank" rel="noopener">doi:10.1016/j.scitotenv.2022.156303</a></li>
+      <li>Gobierno de Río Negro (04/02/2026). <a href="https://rionegro.gov.ar/articulo/57747/camaras-con-ia-y-tecnologia-satelital-para-la-prevencion-de-incendios" target="_blank" rel="noopener">Cámaras con IA y tecnología satelital para la prevención de incendios</a>.</li>
+      <li>Noticias NQN (25/02/2025). <a href="https://www.noticiasnqn.com.ar/noticias/2025/02/25/310077-emergencia-ignea-instalan-camaras-para-la-deteccion-temprana-de-incendios-en-la-cordillera" target="_blank" rel="noopener">Instalan cámaras para la detección temprana de incendios en la cordillera</a>.</li>
+      <li>NASA Earthdata. <a href="https://www.earthdata.nasa.gov/data/instruments/viirs/viirs-i-band-375-m-active-fire-data" target="_blank" rel="noopener">VIIRS I-Band 375 m Active Fire Data</a>.</li>
+      <li>NASA. <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noopener">FIRMS: Fire Information for Resource Management System</a>.</li>
       <li>Dewangan, A. et al. (2022). FIgLib &amp; SmokeyNet: Dataset and Deep Learning Model for Real-Time Wildland Fire Smoke Detection. <i>Remote Sensing</i> 14(4), 1007. <a href="https://arxiv.org/abs/2112.08598" target="_blank" rel="noopener">arXiv:2112.08598</a></li>
       <li>HPWREN, UC San Diego. <a href="https://www.hpwren.ucsd.edu/FIgLib/" target="_blank" rel="noopener">Fire Ignition images Library (FIgLib)</a>.</li>
-      <li>López, S. y Madariaga, M. (2021). <a href="https://repositorio.inta.gob.ar/bitstream/handle/20.500.12123/10120/INTA_CRPatagoniaNorte_EEABariloche_Lopez_S_Dinamica_Poblacional_Y_La_Incidencia_De_Incendios_En_La_Comarca_Andina.pdf" target="_blank" rel="noopener">Dinámica poblacional y la incidencia de incendios en la Comarca Andina</a>. INTA EEA Bariloche. <span class="why">Contexto sobre población, interfaz urbano-forestal e incendios en la comarca (lectura complementaria).</span></li>
-      <li>Open-Meteo. <a href="https://open-meteo.com/en/docs" target="_blank" rel="noopener">Weather Forecast API</a> (licencia CC BY 4.0). <span class="why">Clima en vivo de El Bolsón (temperatura, humedad, viento y lluvia de los últimos 14 días) en la sección «Decidí». Es la única conexión externa de la página y es opcional: sin internet, todo lo demás funciona igual.</span></li>
+      <li>López, S. y Madariaga, M. (2021). <a href="https://repositorio.inta.gob.ar/bitstream/handle/20.500.12123/10120/INTA_CRPatagoniaNorte_EEABariloche_Lopez_S_Dinamica_Poblacional_Y_La_Incidencia_De_Incendios_En_La_Comarca_Andina.pdf" target="_blank" rel="noopener">Dinámica poblacional y la incidencia de incendios en la Comarca Andina</a>. INTA EEA Bariloche.</li>
     </ol>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    Santiago Stroppiana · Desafío 2 · Big Data + IA · Experiencia interactiva individual. Modelo ilustrativo: la simulación corre entera en tu navegador. La única consulta externa es el clima de Open-Meteo, que es opcional. No se usan cookies ni seguimiento.
+    Santiago Stroppiana · Desafío 2 · Big Data + IA. La simulación corre en tu navegador. Las consultas en vivo (clima e incendios activos) son opcionales. Sin cookies ni seguimiento.
   </div>
 </footer>
 
@@ -828,12 +823,26 @@ const MC_IGNITIONS = (function () {
   return out;
 })();
 
-// proyección 2026-2040
+// ---------- Datos reales: veranos (dic–feb) de El Bolsón, 1981–2026 ----------
+// Fuente: Open-Meteo Historical Weather API (reanálisis ERA5), lat -41.96, lon -71.53,
+// 16.526 días diarios procesados. Columnas: [verano (año de enero), temp. máx. media °C,
+// lluvia total mm, días con máx ≥ 30 °C, días de peligro (máx ≥ 27 °C y humedad mín ≤ 25%), déficit hídrico mm]
+const CLIMATE = [[1981,20.65,154,2,3,214],[1982,21.58,197,2,7,202],[1983,22.86,99,12,15,315],[1984,21.88,224,5,9,172],[1985,21.35,243,2,2,127],[1986,21.28,174,1,3,225],[1987,23.21,60,8,17,383],[1988,22.58,127,7,18,299],[1989,21.61,191,5,3,200],[1990,21.61,233,6,7,144],[1991,21.37,144,6,8,249],[1992,20.83,353,5,2,26],[1993,20.89,153,3,1,227],[1994,21.84,213,2,6,197],[1995,20.94,169,2,3,216],[1996,22.37,133,7,7,298],[1997,20.33,254,3,2,122],[1998,21.7,161,4,5,236],[1999,23.45,82,12,19,353],[2000,20.84,189,2,6,198],[2001,19.39,287,0,0,65],[2002,23.94,140,13,16,305],[2003,20.55,179,0,0,194],[2004,22.46,138,14,11,272],[2005,22.27,172,8,6,228],[2006,22.71,248,11,7,167],[2007,20.36,243,4,1,135],[2008,24.24,115,23,19,327],[2009,23.76,101,11,14,336],[2010,19.55,261,1,0,92],[2011,21.29,272,9,2,105],[2012,23.54,273,18,18,157],[2013,22.05,408,14,5,-24],[2014,22.41,199,4,11,234],[2015,23.15,53,7,16,377],[2016,22.58,113,11,10,301],[2017,22.46,257,4,7,137],[2018,23.63,208,11,8,205],[2019,23.64,92,13,19,346],[2020,22.77,188,8,6,231],[2021,24.13,124,17,17,321],[2022,24.58,228,16,20,213],[2023,24.69,91,13,19,359],[2024,25.7,81,18,25,391],[2025,24.67,95,13,19,353],[2026,25.11,128,22,26,308]];
+function linreg(xs, ys) {
+  const n = xs.length, mx = xs.reduce((a, b) => a + b) / n, my = ys.reduce((a, b) => a + b) / n;
+  let sxy = 0, sxx = 0;
+  for (let i = 0; i < n; i++) { sxy += (xs[i] - mx) * (ys[i] - my); sxx += (xs[i] - mx) ** 2; }
+  const b = sxy / sxx; return { a: my - b * mx, b };
+}
+const RISK_FIT = linreg(CLIMATE.map(r => r[0]), CLIMATE.map(r => r[4]));
+
+// proyección 2026-2040: los focos crecen como la tendencia medida de días de peligro
 const FOREST0 = 150000, Y0 = 2026, Y1 = 2040;
+function climateGrowth(y) { return (RISK_FIT.a + RISK_FIT.b * y) / (RISK_FIT.a + RISK_FIT.b * Y0); }
 function project(meanNo, meanAi, focos0) {
   const rows = []; let cNo = 0, cAi = 0;
   for (let y = Y0; y <= Y1; y++) {
-    const f = focos0 * (1 + (y - Y0) / (2050 - Y0));   // se duplica hacia 2050
+    const f = focos0 * climateGrowth(y);
     cNo = Math.min(FOREST0, cNo + f * meanNo);
     cAi = Math.min(FOREST0, cAi + f * meanAi);
     rows.push({ year: y, focos: f, no: cNo, ai: cAi });
@@ -1111,13 +1120,9 @@ function setReto(k) {
   document.querySelectorAll('#retos button').forEach((b, j) => { b.classList.toggle('on', j === k); b.setAttribute('aria-pressed', j === k); });
   $('retoText').textContent = k >= 0 ? 'Reto activo: ' + RETOS[k].t.replace(/^\d · /, '') + '. Mirá qué pasa en los dos mapas y leé la lección al final.' : 'Elegí un reto: configura todo solo y te deja una lección al final.';
 }
-function onParamsChange() { setReto(-1); syncOutputs(); resetSims(); scheduleProjection(); }
+function onParamsChange() { setReto(-1); markDay(-1); syncOutputs(); resetSims(); scheduleProjection(); }
 for (const id of ['cams', 'resp', 'wind', 'dry', 'fa']) $(id).addEventListener('input', e => { params[id] = +e.target.value; onParamsChange(); });
 $('windDir').addEventListener('change', e => { params.windDir = e.target.value; onParamsChange(); });
-document.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => {
-  Object.assign(params, PRESETS[b.dataset.preset]); setControls(); onParamsChange();
-  document.getElementById('simulacion').scrollIntoView();
-}));
 
 // ---------- Retos guiados ----------
 $('retos').innerHTML = RETOS.map((r, k) => `<button type="button" data-reto="${k}" aria-pressed="false">${r.t}</button>`).join('');
@@ -1151,11 +1156,18 @@ $('btnShare').addEventListener('click', () => {
   else window.prompt('Copiá este link:', url);
 });
 
-// ---------- Clima en vivo (Open-Meteo, opcional) ----------
+// ---------- Clima de días reales (Open-Meteo) ----------
+// Datos del día en que empezó cada incendio, en su lugar, de la Historical Weather API (ERA5).
+// rain = lluvia de los 14 días previos.
+const REAL_DAYS = [
+  { label: '9/3/2021 · Las Golondrinas', place: 'Las Golondrinas (Lago Puelo)', tmax: 27.9, rh: 22, wmax: 11.8, gust: 59, dir: 313, rain: 3.6 },
+  { label: '15/1/2025 · Epuyén', place: 'Epuyén', tmax: 21.9, rh: 38, wmax: 21.5, gust: 58.3, dir: 285, rain: 5.0 },
+  { label: '30/1/2025 · El Bolsón', place: 'Mallín Ahogado (El Bolsón)', tmax: 29, rh: 14, wmax: 14.4, gust: 52.9, dir: 311, rain: 8.8 },
+  { label: '4/1/2026 · El Hoyo / Epuyén', place: 'entre El Hoyo y Epuyén (evento GDACS de 9.640 ha)', tmax: 31.6, rh: 14, wmax: 12.6, gust: 46.8, dir: 266, rain: 5.4 }
+];
 const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=-41.96&longitude=-71.53' +
-  '&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m' +
-  '&daily=precipitation_sum&past_days=14&forecast_days=1&timezone=America%2FArgentina%2FBuenos_Aires&wind_speed_unit=kmh';
-let wxSuggest = null;
+  '&daily=temperature_2m_max,relative_humidity_2m_min,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,precipitation_sum' +
+  '&past_days=14&forecast_days=1&timezone=America%2FArgentina%2FBuenos_Aires&wind_speed_unit=kmh';
 function windDirFromDeg(deg) {
   // dirección de donde VIENE el viento → la opción más cercana del simulador
   const opts = { E: 90, S: 180, O: 270, NO: 315, N: 360 };
@@ -1166,36 +1178,180 @@ function windDirFromDeg(deg) {
 function dryFromWeather(temp, rh, rain14) {
   let s = 0;
   s += rain14 < 5 ? 2 : rain14 < 20 ? 1 : 0;
-  s += rh < 30 ? 1.5 : rh < 45 ? 0.75 : 0;
+  s += rh < 20 ? 1.5 : rh < 35 ? 0.75 : 0;
   s += temp > 28 ? 1 : temp > 22 ? 0.5 : 0;
   return Math.max(1, Math.min(5, 1 + Math.round(s)));
 }
-async function loadWeather() {
-  const box = $('wxBody');
+const fmt1 = v => (Math.round(v * 10) / 10).toLocaleString('es-AR');
+function applyDay(d, k, live) {
+  const eff = (d.wmax + d.gust) / 2;
+  const sug = { wind: Math.min(70, Math.round(eff / 5) * 5), windDir: windDirFromDeg(d.dir), dry: dryFromWeather(d.tmax, d.rh, d.rain) };
+  Object.assign(params, sug); setControls(); onParamsChange(); markDay(k);
+  $('wxBody').innerHTML = `<div class="wx-vals"><span>📍 <b>${d.place}</b></span><span>🌡️ Máx. <b>${fmt1(d.tmax)} °C</b></span><span>💧 Humedad mín. <b>${Math.round(d.rh)}%</b></span>` +
+    `<span>💨 Viento máx. ${fmt1(d.wmax)} km/h, ráfagas ${fmt1(d.gust)} → <b>${sug.wind} km/h ${WIND_LABEL[sug.windDir]}</b></span>` +
+    `<span>🌧️ Lluvia 14 días previos: <b>${fmt1(d.rain)} mm</b></span><span>🍂 Sequedad: <b>${sug.dry} · ${DRY_LABEL[sug.dry - 1]}</b></span></div>` +
+    (live ? 'Pronóstico de hoy en El Bolsón, consultado en vivo a Open-Meteo.' : 'Clima real del día en que empezó el incendio (Open-Meteo, ERA5). Ya está cargado en los controles: apretá ▶ Iniciar.');
+}
+function markDay(k) { document.querySelectorAll('#realDays button').forEach((b, j) => { b.classList.toggle('on', j === k); b.setAttribute('aria-pressed', j === k); }); }
+async function loadToday(k) {
+  const box = $('wxBody'); box.textContent = 'Consultando el pronóstico de hoy…';
   try {
     const ctrl = new AbortController(); const to = setTimeout(() => ctrl.abort(), 8000);
     const r = await fetch(WX_URL, { signal: ctrl.signal }); clearTimeout(to);
     if (!r.ok) throw new Error('HTTP ' + r.status);
-    const j = await r.json(), c = j.current;
-    const rain = (j.daily.precipitation_sum || []).slice(0, 14).reduce((a, b) => a + (b || 0), 0);
-    const dir = windDirFromDeg(c.wind_direction_10m), dry = dryFromWeather(c.temperature_2m, c.relative_humidity_2m, rain);
-    wxSuggest = { wind: Math.min(70, Math.round(c.wind_speed_10m / 5) * 5), windDir: dir, dry };
-    const hora = (c.time || '').slice(11, 16);
-    box.innerHTML = `<div class="wx-vals"><span>🌡️ <b>${Math.round(c.temperature_2m)} °C</b></span><span>💧 Humedad <b>${Math.round(c.relative_humidity_2m)}%</b></span>` +
-      `<span>💨 <b>${Math.round(c.wind_speed_10m)} km/h</b> ${WIND_LABEL[dir]} (ráfagas ${Math.round(c.wind_gusts_10m)})</span>` +
-      `<span>🌧️ Lluvia últimos 14 días: <b>${rain.toFixed(1).replace('.', ',')} mm</b></span>` +
-      `<span>🍂 Sequedad estimada: <b>${dry} · ${DRY_LABEL[dry - 1]}</b></span></div>` + (hora ? `Actualizado a las ${hora} (hora argentina).` : '');
-    $('btnWx').disabled = false;
+    const dd = (await r.json()).daily, t = dd.time.length - 1;
+    const rain = dd.precipitation_sum.slice(0, t).reduce((a, b) => a + (b || 0), 0);
+    applyDay({ place: 'El Bolsón, hoy', tmax: dd.temperature_2m_max[t], rh: dd.relative_humidity_2m_min[t], wmax: dd.wind_speed_10m_max[t], gust: dd.wind_gusts_10m_max[t], dir: dd.wind_direction_10m_dominant[t], rain }, k, true);
   } catch (e) {
-    box.textContent = 'No se pudo consultar el clima (puede que no haya conexión). Podés seguir usando los controles manuales: el resto de la página funciona igual.';
-    $('btnWx').disabled = true;
+    box.textContent = 'No se pudo consultar el clima de hoy (puede que no haya conexión). Los días reales y los controles funcionan igual.';
   }
 }
-$('btnWx').addEventListener('click', () => {
-  if (!wxSuggest) return;
-  Object.assign(params, wxSuggest); setControls(); onParamsChange();
-  $('btnWx').textContent = '✅ Clima de hoy aplicado';
-  setTimeout(() => $('btnWx').textContent = 'Usar el clima de hoy', 2500);
+$('realDays').innerHTML = REAL_DAYS.map((d, k) => `<button type="button" aria-pressed="false">${d.label}</button>`).join('') + '<button type="button" aria-pressed="false">📡 Hoy (en vivo)</button>';
+document.querySelectorAll('#realDays button').forEach((b, k) => b.addEventListener('click', () => k < REAL_DAYS.length ? applyDay(REAL_DAYS[k], k) : loadToday(k)));
+
+// ---------- Clima histórico: KPIs, gráfico y tabla ----------
+const CLIM_METRICS = [
+  { col: 1, t: 'Temperatura máxima', unit: '°C', dec: 1, zero: false, note: 'Promedio de las máximas diarias de diciembre a febrero.' },
+  { col: 3, t: 'Días de 30 °C o más', unit: 'días', dec: 0, zero: true, note: 'Cantidad de días del verano con máxima de 30 °C o más.' },
+  { col: 4, t: 'Días de peligro', unit: 'días', dec: 0, zero: true, note: 'Días con máxima de 27 °C o más y humedad mínima de 25% o menos: calor y aire seco al mismo tiempo.' },
+  { col: 2, t: 'Lluvia del verano', unit: 'mm', dec: 0, zero: true, note: 'Lluvia total de diciembre a febrero. Varía mucho de un año a otro y su tendencia es débil.' }
+];
+const FIRE_SEASONS = { 2021: 'Las Golondrinas', 2025: 'El Bolsón y Epuyén', 2026: 'Chubut, récord' };
+let climMetric = 0, climHover = -1;
+const seasonLabel = s => `${s - 1}-${String(s).slice(2)}`;
+function decadeAvg(col, a, b) { const r = CLIMATE.filter(x => x[0] >= a && x[0] <= b); return r.reduce((s, x) => s + x[col], 0) / r.length; }
+function initClimate() {
+  const kp = (id, col, unit, dec) => {
+    const a = decadeAvg(col, 1981, 1990), b = decadeAvg(col, 2017, 2026), fit = linreg(CLIMATE.map(r => r[0]), CLIMATE.map(r => r[col]));
+    const f = v => v.toLocaleString('es-AR', { maximumFractionDigits: dec, minimumFractionDigits: dec });
+    $(id).textContent = `${f(a)} → ${f(b)}${unit === '°C' ? ' °C' : ''}`;
+    $(id + '-s').textContent = unit === '°C'
+      ? `+${f(b - a)} °C entre 1981–90 y 2017–26 · tendencia +${fmt1(fit.b * 10)} °C por década`
+      : `×${fmt1(b / a)} entre 1981–90 y 2017–26 · tendencia +${fmt1(fit.b * 10)} días por década`;
+  };
+  kp('ck-tx', 1, '°C', 1); kp('ck-d30', 3, 'días', 1); kp('ck-risk', 4, 'días', 1);
+  $('climTabs').innerHTML = CLIM_METRICS.map((m, k) => `<button type="button" role="tab" aria-selected="${k === 0}">${m.t}</button>`).join('');
+  document.querySelectorAll('#climTabs button').forEach((b, k) => b.addEventListener('click', () => {
+    climMetric = k; document.querySelectorAll('#climTabs button').forEach((x, j) => x.setAttribute('aria-selected', j === k)); drawClimate();
+  }));
+  $('climTable').innerHTML = '<thead><tr><th>Verano</th><th>Temp. máx. media</th><th>Lluvia</th><th>Días ≥ 30 °C</th><th>Días de peligro</th></tr></thead><tbody>' +
+    CLIMATE.map(r => `<tr><td>${seasonLabel(r[0])}</td><td>${fmt1(r[1])} °C</td><td>${r[2]} mm</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join('') + '</tbody>';
+  const cv = $('climChart');
+  const hover = e => {
+    const r = cv.getBoundingClientRect(), x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    const g = climGeom(cv), i = Math.max(0, Math.min(CLIMATE.length - 1, Math.round((x - g.l) / (g.w - g.l - g.r) * (CLIMATE.length - 1))));
+    climHover = i; drawClimate();
+    const m = CLIM_METRICS[climMetric], row = CLIMATE[i], tip = $('climTip');
+    tip.innerHTML = `<b>Verano ${seasonLabel(row[0])}</b><div>${m.t}: <b>${m.dec ? fmt1(row[m.col]) : row[m.col]} ${m.unit}</b></div>` + (FIRE_SEASONS[row[0]] ? `<div class="muted">🔥 ${FIRE_SEASONS[row[0]]}</div>` : '');
+    tip.style.display = 'block';
+    const px = g.l + i / (CLIMATE.length - 1) * (g.w - g.l - g.r), tw = tip.offsetWidth;
+    tip.style.left = Math.max(0, Math.min(g.w - tw, px + 12 > g.w - tw ? px - tw - 12 : px + 12)) + 'px'; tip.style.top = '8px';
+  };
+  cv.addEventListener('mousemove', hover); cv.addEventListener('touchstart', hover, { passive: true }); cv.addEventListener('touchmove', hover, { passive: true });
+  cv.addEventListener('mouseleave', () => { climHover = -1; $('climTip').style.display = 'none'; drawClimate(); });
+  drawClimate();
+}
+function climGeom(cv) {
+  const dpr = Math.min(2, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight;
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  return { dpr, w, h, l: 52, r: 16, t: 22, b: 28 };
+}
+function drawClimate() {
+  const cv = $('climChart'); if (!cv.clientWidth) return;
+  const g = climGeom(cv), ctx = cv.getContext('2d'), m = CLIM_METRICS[climMetric];
+  ctx.setTransform(g.dpr, 0, 0, g.dpr, 0, 0); ctx.clearRect(0, 0, g.w, g.h);
+  const muted = cssVar('--muted'), line = cssVar('--line'), ink2 = cssVar('--ink2'), col = cssVar('--fire'), surf = cssVar('--surface');
+  const xs = CLIMATE.map(r => r[0]), ys = CLIMATE.map(r => r[m.col]);
+  let lo = m.zero ? 0 : Math.floor(Math.min(...ys)), hi = m.zero ? niceMax(Math.max(...ys) * 1.08) : Math.ceil(Math.max(...ys) + 0.3);
+  const pw = g.w - g.l - g.r, ph = g.h - g.t - g.b;
+  const X = i => g.l + i / (xs.length - 1) * pw, Y = v => g.t + ph - (v - lo) / (hi - lo) * ph;
+  ctx.font = '12px system-ui,sans-serif'; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+  const nT = m.zero ? 4 : hi - lo;
+  for (let k = 0; k <= nT; k++) {
+    const v = lo + (hi - lo) * k / nT, y = Math.round(Y(v)) + 0.5;
+    ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(g.l, y); ctx.lineTo(g.w - g.r, y); ctx.stroke();
+    ctx.fillStyle = muted; ctx.fillText((m.dec ? fmt1(v) : Math.round(v)) + (m.unit === '°C' ? '°' : ''), g.l - 8, y);
+  }
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  xs.forEach((s, i) => { if (s % (g.w < 480 ? 10 : 5) === 0) { ctx.fillStyle = muted; ctx.fillText(s, X(i), g.h - g.b + 8); } });
+  // tendencia
+  const fit = linreg(xs, ys);
+  ctx.setLineDash([5, 4]); ctx.strokeStyle = ink2; ctx.lineWidth = 1.5; ctx.beginPath();
+  ctx.moveTo(X(0), Y(fit.a + fit.b * xs[0])); ctx.lineTo(X(xs.length - 1), Y(fit.a + fit.b * xs[xs.length - 1])); ctx.stroke(); ctx.setLineDash([]);
+  // serie
+  ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.beginPath();
+  ys.forEach((v, i) => i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v))); ctx.stroke();
+  // veranos con grandes incendios
+  ctx.textBaseline = 'bottom'; ctx.font = '600 11px system-ui,sans-serif';
+  xs.forEach((s, i) => {
+    if (!FIRE_SEASONS[s] && i !== climHover) return;
+    ctx.beginPath(); ctx.arc(X(i), Y(ys[i]), FIRE_SEASONS[s] ? 5 : 4, 0, Math.PI * 2); ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = surf; ctx.stroke();
+    if (FIRE_SEASONS[s] && g.w >= 480 && s !== 2026) { ctx.fillStyle = ink2; ctx.textAlign = 'center'; ctx.fillText('🔥 ' + s, X(i), Y(ys[i]) - 8); }
+  });
+  if (climHover >= 0) { ctx.strokeStyle = muted; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(Math.round(X(climHover)) + 0.5, g.t); ctx.lineTo(Math.round(X(climHover)) + 0.5, g.t + ph); ctx.stroke(); }
+  $('climNote').innerHTML = `${m.note} Línea punteada: tendencia lineal (${fit.b >= 0 ? '+' : ''}${fmt1(fit.b * 10)} ${m.unit} por década). 🔥 = veranos con grandes incendios en la comarca.`;
+}
+
+// ---------- Incendios satelitales (NASA EONET) ----------
+// Eventos de la API NASA EONET v3 (categoría wildfires, bbox -72.5,-40.5,-70.5,-43.5), consultada en nov. 2026.
+const EONET_EVENTS = [
+  { d: '2026-01-03', ha: 16194, lat: -42.698, lon: -71.726, src: 'GDACS', url: 'https://www.gdacs.org/report.aspx?eventtype=WF&eventid=1026777' },
+  { d: '2026-01-04', ha: 9640, lat: -42.158, lon: -71.499, src: 'GDACS', url: 'https://www.gdacs.org/report.aspx?eventtype=WF&eventid=1026609' },
+  { d: '2026-01-05', ha: 5823, lat: -42.685, lon: -71.708, src: 'GDACS', url: 'https://www.gdacs.org/report.aspx?eventtype=WF&eventid=1026701' },
+  { d: '2025-11-30', ha: 5291, lat: -42.309, lon: -71.891, src: 'GDACS', url: 'https://www.gdacs.org/report.aspx?eventtype=WF&eventid=1026123' },
+  { d: '2025-01-29', ha: null, lat: -41.872, lon: -71.574, src: 'GDACS', url: 'https://www.gdacs.org/report.aspx?eventtype=WF&eventid=1023484' },
+  { d: '2021-03-12', ha: null, lat: -42.591, lon: -71.385, src: 'PDC', name: 'Región Patagonia (punto aproximado)' },
+  { d: '2019-02-07', ha: null, lat: -41.451, lon: -72.254, src: 'PDC', name: 'Cochamó (Chile)' }
+];
+const PLACES = [['Bariloche', -41.133, -71.31], ['El Bolsón', -41.964, -71.533], ['Lago Puelo', -42.067, -71.6, 'L'], ['El Hoyo', -42.066, -71.519], ['Epuyén', -42.226, -71.367], ['Cholila', -42.51, -71.447], ['Esquel', -42.911, -71.32]];
+const EO_BOX = { lon0: -72.45, lon1: -70.95, lat0: -40.95, lat1: -43.1 };
+const eoX = lon => 20 + (lon - EO_BOX.lon0) / (EO_BOX.lon1 - EO_BOX.lon0) * 360, eoY = lat => 20 + (lat - EO_BOX.lat0) / (EO_BOX.lat1 - EO_BOX.lat0) * 400;
+function nearestPlace(lat, lon) {
+  let best = null, bd = 1e9;
+  for (const [n, la, lo] of PLACES) { const dx = (lon - lo) * 111.32 * Math.cos(lat * Math.PI / 180), dy = (lat - la) * 110.57, d = Math.hypot(dx, dy); if (d < bd) { bd = d; best = n; } }
+  return bd < 4 ? best : `${Math.round(bd)} km de ${best}`;
+}
+const fmtDate = s => s.slice(8, 10) + '/' + s.slice(5, 7) + '/' + s.slice(0, 4);
+function eoCircles(evs, cls) {
+  return evs.map((e, k) => {
+    const r = e.ha ? 5 + Math.sqrt(e.ha) / 11 : 6;
+    return `<circle data-k="${k}" class="${cls}" cx="${eoX(e.lon).toFixed(1)}" cy="${eoY(e.lat).toFixed(1)}" r="${r.toFixed(1)}" fill="${e.ha ? 'var(--fire)' : 'none'}" fill-opacity="0.45" stroke="var(--fire)" stroke-width="2"><title>${fmtDate(e.d)} · ${e.ha ? e.ha.toLocaleString('es-AR') + ' ha' : 'superficie sin dato'}</title></circle>`;
+  }).join('');
+}
+function initEonet() {
+  const svg = $('eoMap');
+  let s = `<rect x="1" y="1" width="398" height="438" rx="10" fill="var(--surface2)" stroke="var(--line)"/>`;
+  s += PLACES.map(([n, la, lo, side]) => `<rect x="${(eoX(lo) - 3).toFixed(1)}" y="${(eoY(la) - 3).toFixed(1)}" width="6" height="6" fill="var(--ink2)"/><text x="${(eoX(lo) + (side ? -7 : 7)).toFixed(1)}" y="${(eoY(la) + 4).toFixed(1)}"${side ? ' text-anchor="end"' : ''}>${n}</text>`).join('');
+  s += eoCircles(EONET_EVENTS, 'eo') + '<g id="eoLiveG"></g>';
+  s += `<text x="16" y="428" style="font-size:10px">Posiciones aproximadas · N ↑</text>`;
+  svg.innerHTML = s;
+  $('eoTable').innerHTML = '<thead><tr><th>Inicio</th><th>Dónde</th><th>Superficie</th><th>Fuente</th></tr></thead><tbody>' +
+    EONET_EVENTS.map((e, k) => `<tr data-k="${k}"><td>${fmtDate(e.d)}</td><td style="text-align:left">${e.name || nearestPlace(e.lat, e.lon)}</td><td>${e.ha ? e.ha.toLocaleString('es-AR') + ' ha' : '—'}</td><td>${e.url ? `<a href="${e.url}" target="_blank" rel="noopener">${e.src}</a>` : e.src}</td></tr>`).join('') + '</tbody>';
+  const sel = k => {
+    document.querySelectorAll('#eoTable tbody tr').forEach(tr => tr.classList.toggle('eo-row-sel', +tr.dataset.k === k));
+    document.querySelectorAll('#eoMap circle.eo').forEach(c => c.setAttribute('stroke-width', +c.dataset.k === k ? 4 : 2));
+  };
+  document.querySelectorAll('#eoTable tbody tr').forEach(tr => { tr.addEventListener('mouseenter', () => sel(+tr.dataset.k)); tr.addEventListener('mouseleave', () => sel(-1)); });
+  const season = EONET_EVENTS.filter(e => e.d >= '2025-07-01' && e.ha);
+  $('eoSum').innerHTML = `Solo en la temporada 2025-26, GDACS registró <b>${season.length} incendios</b> en esta zona que suman <b>${season.reduce((a, e) => a + e.ha, 0).toLocaleString('es-AR')} ha</b>. Son estimaciones satelitales gruesas, pero muestran la escala del problema.`;
+}
+$('btnEoLive').addEventListener('click', async () => {
+  const out = $('eoLive'); out.textContent = 'Consultando NASA EONET…';
+  try {
+    const ctrl = new AbortController(); const to = setTimeout(() => ctrl.abort(), 10000);
+    const r = await fetch('https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires&status=open&bbox=-72.5,-40.5,-70.5,-43.5', { signal: ctrl.signal }); clearTimeout(to);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const all = (await r.json()).events.map(e => { const g = e.geometry[e.geometry.length - 1]; return { d: g.date.slice(0, 10), ha: g.magnitudeValue, lat: g.coordinates[1], lon: g.coordinates[0] }; });
+    // EONET a veces deja eventos viejos sin cerrar: solo contamos como activos los de los últimos 30 días
+    const recent = all.filter(e => Date.now() - Date.parse(e.d) < 30 * 864e5), stale = all.length - recent.length;
+    $('eoLiveG').innerHTML = eoCircles(recent, 'eolive');
+    const where = e => { const p = nearestPlace(e.lat, e.lon); return p.includes(' km ') ? 'a ' + p : 'en ' + p; };
+    out.innerHTML = (recent.length
+      ? `🔴 Hay <b>${recent.length}</b> incendio(s) activo(s) registrado(s) en la zona: ` + recent.map(e => `desde el ${fmtDate(e.d)} ${where(e)}${e.ha ? ' (' + e.ha.toLocaleString('es-AR') + ' ha)' : ''}`).join('; ') + '.'
+      : '✅ En este momento NASA EONET no registra incendios activos recientes en la zona.') +
+      (stale ? ` <span class="muted">(Además figura${stale > 1 ? 'n' : ''} ${stale} evento${stale > 1 ? 's' : ''} viejo${stale > 1 ? 's' : ''} sin cerrar en la base, que no contamos.)</span>` : '') +
+      ` <span class="muted">Consultado: ${new Date().toLocaleString('es-AR')}.</span>`;
+  } catch (e) { out.textContent = 'No se pudo consultar NASA EONET (puede que no haya conexión). Los datos guardados de arriba siguen disponibles.'; }
 });
 
 $('btnPlay').addEventListener('click', () => {
@@ -1229,7 +1385,7 @@ for (const v of views) {
   });
   v.cv.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('btnPlay').click(); } });
 }
-window.addEventListener('resize', () => { drawAll(); drawChart(); drawLive(); });
+window.addEventListener('resize', () => { drawAll(); drawChart(); drawLive(); drawClimate(); });
 
 // ---------- Proyección 2040 ----------
 let projTimer = null, mcToken = 0, mcResult = null, projRows = null;
@@ -1265,8 +1421,7 @@ function updateProjection() {
   $('k-ai-s').textContent = `${Math.round(last.ai / FOREST0 * 100)}% del bosque · ${fmtHa(mAi)} por foco en promedio · ${Math.round(esc(mcResult.ai) * 100)}% de los focos supera 100 ha`;
   const diff = last.no - last.ai;
   $('k-diff').textContent = fmtHa(Math.max(0, diff));
-  $('fm-diff').textContent = fmtHa(Math.max(0, diff));
-  $('fm-veces').textContent = diff > 0 ? `unas ${(diff / 3825).toLocaleString('es-AR', { maximumFractionDigits: 1 })} veces el incendio de El Bolsón 2025` : 'prácticamente nada con estos parámetros: probá con más cámaras o una respuesta más rápida';
+  $('growthTxt').textContent = `×${fmt1(climateGrowth(Y1))} focos en 2040 respecto de 2026`;
   $('k-diff-s').textContent = diff > 0 ? `Equivale a unas ${(diff / 3825).toLocaleString('es-AR', { maximumFractionDigits: 1 })} veces el incendio de El Bolsón 2025 (3.825 ha).` : 'Con estos parámetros la IA no hace diferencia.';
   $('projTable').innerHTML = '<thead><tr><th>Año</th><th>Focos</th><th>Sin IA (acum.)</th><th>Con IA (acum.)</th><th>Diferencia</th></tr></thead><tbody>' +
     projRows.map(r => `<tr><td>${r.year}</td><td>${r.focos.toFixed(1).replace('.', ',')}</td><td>${fmtHa(r.no)}</td><td>${fmtHa(r.ai)}</td><td>${fmtHa(r.no - r.ai)}</td></tr>`).join('') + '</tbody>';
@@ -1336,12 +1491,12 @@ $('chart').addEventListener('mousemove', chartHover);
 $('chart').addEventListener('touchstart', chartHover, { passive: true });
 $('chart').addEventListener('touchmove', chartHover, { passive: true });
 $('chart').addEventListener('mouseleave', chartLeave);
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => { drawChart(); drawLive(); });
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => { drawChart(); drawLive(); drawClimate(); });
 
 // ---------- Inicio ----------
 ignition = pickDefaultIgnition();
 const fromURL = readScenarioFromURL();
-setControls(); syncOutputs(); resetSims(); scheduleProjection(); loadWeather();
+setControls(); syncOutputs(); resetSims(); scheduleProjection(); initClimate(); initEonet();
 if (fromURL) { $('mapHint').textContent = '🔗 Abriste un escenario compartido. Apretá ▶ Iniciar para verlo.'; setTimeout(() => $('simulacion').scrollIntoView(), 50); }
 requestAnimationFrame(loop);
 </script>
