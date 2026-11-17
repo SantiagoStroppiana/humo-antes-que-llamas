@@ -231,6 +231,9 @@ ol.sources .why{color:var(--muted);font-size:.84rem;display:block}
 ol.sources .why b{color:var(--ink2);font-weight:600}
 ul.ctx{padding-left:1.2em;color:var(--muted)}
 ul.ctx li{margin-bottom:.4em;max-width:92ch}
+.ctxbox{margin-top:20px;border:1px solid var(--line);background:rgba(20,23,25,.88);padding:10px 14px;max-width:92ch}
+.ctxbox summary{margin:0}
+.ctxbox[open] summary{color:var(--warn)}
 footer{padding:28px 0 44px;color:var(--muted);font:11px/1.7 var(--mono);letter-spacing:.04em;border-top:1px solid var(--line)}
 
 /* ===================== efectos visuales ===================== */
