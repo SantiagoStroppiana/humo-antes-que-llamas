@@ -26,6 +26,8 @@ Autor: **Santiago Stroppiana** · 2026
 | **Open-Meteo Historical Weather API** (reanálisis ERA5, CC BY 4.0) | 16.526 días de clima de El Bolsón (dic. 1980 – feb. 2026), resumidos por verano. | Procesado una vez e incluido en la página (`CLIMATE`). |
 | **Open-Meteo Historical Weather API** | Clima de los días en que empezaron 4 incendios reales, en su lugar. | Procesado e incluido (`REAL_DAYS`). |
 | **Open-Meteo Forecast API** | Clima de hoy en El Bolsón. | Consulta en vivo al tocar «Hoy (en vivo)». |
+| **Open-Meteo Elevation API** (Copernicus DEM) + **OpenTopoData** (SRTM 90 m) | Relieve sombreado del mapa satelital: grilla de 61 × 87 puntos cada 0,025°. | Procesado e incluido (`ELEV`). OpenTopoData completó los últimos 907 puntos cuando Open-Meteo llegó a su límite por hora. |
+| **OpenStreetMap** vía API Overpass (ODbL) | Lagos, límite Argentina–Chile y rutas principales. | Contornos armados, filtrados (lagos > 0,8 km²), simplificados (Douglas-Peucker) e incluidos (`GEO`). |
 | **NASA EONET v3** (fuentes GDACS y PDC) | 7 eventos de incendio en la zona (2019–2026) con superficie estimada. | Incluidos en la página (`EONET_EVENTS`), más una consulta en vivo de incendios activos. |
 
 Las consultas en vivo son opcionales: sin internet, la página funciona igual con los datos incluidos.
@@ -77,6 +79,7 @@ Los «días de peligro» son un criterio simple propio, no un índice oficial. E
 
 - Los datos históricos y de días reales se **procesaron una vez y se incluyeron en la página**. Así carga rápido, funciona sin internet y no depende de que la API esté disponible. Las consultas en vivo se agregan como complemento.
 - **NASA EONET:** algunos eventos quedan abiertos en su base aunque el fuego ya terminó (por ejemplo, El Bolsón de enero de 2025). La consulta en vivo solo cuenta como activos los eventos de los últimos 30 días y aclara cuántos viejos ignoró.
+- **Mapa propio en vez de una librería de mapas:** usar Leaflet con mosaicos externos rompería la idea de que la página funcione sin conexión. El mapa se dibuja con datos reales de relieve y de OpenStreetMap incluidos en el archivo, con la proporción real a 42° S (124 × 238 km).
 - Las distancias de la tabla satelital se calculan al pueblo de referencia más cercano. Las posiciones son aproximadas.
 - **No se usa NASA FIRMS ni Global Forest Watch** porque requieren una clave personal, que en una página pública quedaría expuesta.
 - Saqué de la versión anterior lo redundante: los escenarios rápidos (los reemplazan los días reales y los retos), el dato de Epuyén 2025 (ya está en la simulación) y las explicaciones repetidas del modelo.
