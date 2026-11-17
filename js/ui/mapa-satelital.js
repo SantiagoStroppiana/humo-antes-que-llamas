@@ -43,11 +43,12 @@ function initEonet() {
   s += `<path d="${GEO.roads}" fill="none" stroke="#7d6c58" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/>`;
   s += `<path d="${GEO.roads}" fill="none" stroke="#fffaf0" stroke-width=".8" stroke-linecap="round" stroke-linejoin="round"/>`;
   s += `<path d="${GEO.border}" fill="none" stroke="#6d4c9c" stroke-width="1.3" stroke-dasharray="4 2.5"/>`;
+  s += '<g id="firmsG"></g>';
   s += lab(40, 330, 'CHILE', 'eo-country') + lab(205, 160, 'ARGENTINA', 'eo-country', 'middle');
   for (const [n, x, y, a] of GEO.labels) s += lab(x, y, n, 'eo-lake', a || 'middle');
   s += PLACES.map(([n, la, lo, side]) => `<rect x="${(eoX(lo) - 2).toFixed(1)}" y="${(eoY(la) - 2).toFixed(1)}" width="4" height="4" fill="#23221f" stroke="#fff" stroke-width=".8"/>` +
     lab(eoX(lo) + (side ? -4.5 : 4.5), eoY(la) + 2.6, n, 'eo-town', side ? 'end' : '')).join('');
-  s += '<g id="firmsG"></g>' + eoCircles(EONET_EVENTS, 'eo') + '<g id="eoLiveG"></g></g>';
+  s += eoCircles(EONET_EVENTS, 'eo') + '<g id="eoLiveG"></g></g>';
   // marco, escala (20 km), norte y atribución
   const km20 = 20 * 240 / 124.1;
   s += `<rect x="10" y="10" width="240" height="460" rx="5" fill="none" stroke="var(--line)"/>`;

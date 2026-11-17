@@ -60,7 +60,7 @@ function selectFirms(i) {
 function firmsGeom(cv) {
   const dpr = Math.min(2, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight;
   if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
-  return { dpr, w, h, l: 48, r: 8, t: 18, b: 26 };
+  return { dpr, w, h, l: 60, r: w < 520 ? 26 : 12, t: 18, b: 26 };
 }
 function drawFirms() {
   const cv = $('firmsChart'); if (!cv || !cv.clientWidth || !FIRMS_SEASONS.length) return;
@@ -81,7 +81,7 @@ function drawFirms() {
     ctx.fillRect(x, y, w, g.t + ph - y);
     if (i === firmsSel) { ctx.fillStyle = ink; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.fillText(o.n.toLocaleString('es-AR'), x + w / 2, y - 3); }
     const every = g.w < 520 ? 3 : 2;
-    if ((FIRMS_SEASONS.length - 1 - i) % every === 0) { ctx.fillStyle = i === firmsSel ? ink : muted; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText(firmsSeasonLabel(o.s), x + w / 2, g.h - g.b + 8); }
+    if ((FIRMS_SEASONS.length - 1 - i) % every === 0) { ctx.fillStyle = i === firmsSel ? ink : muted; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText(g.w < 520 ? `${String(o.s - 1).slice(2)}-${String(o.s).slice(2)}` : firmsSeasonLabel(o.s), x + w / 2, g.h - g.b + 8); }
   });
 }
 // Dibuja los focos de la temporada sobre el mapa satelital (capa raster debajo de los eventos EONET)
