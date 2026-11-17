@@ -68,6 +68,21 @@ header.hero h1 span{color:var(--warn)}
 .tag.verify{color:var(--warn)}
 .tag.ok{color:var(--ok)}
 .tag.ngo{color:var(--muted)}
+/* tipo de afirmación: hecho verificado, interpretación personal, escenario futuro */
+.tag.fact{color:var(--ok)}
+.tag.interp{color:var(--ink2);border-style:dashed}
+.tag.scen{color:var(--noai);border-style:dotted}
+.claimkey{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:12px;font-size:.86rem;color:var(--muted)}
+.claimkey span{display:inline-flex;gap:6px;align-items:center}
+h2 .tag,h3 .tag{font-size:10px;vertical-align:4px;margin-left:6px}
+.who{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px}
+.who h3{font-size:.98rem;margin:0 0 4px}
+.who p{margin:0;font-size:.9rem;color:var(--ink2)}
+.actions{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:12px}
+.actions .card{border-top:2px solid var(--ok)}
+.actions .lvl{font:500 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ok)}
+.actions h3{margin:.4em 0;font-size:1rem}
+.actions p{margin:0;font-size:.9rem;color:var(--ink2)}
 .callout{border-left:2px solid var(--warn);padding:2px 0 2px 16px;margin:28px 0 0;color:var(--ink2);max-width:78ch}
 .callout b{color:var(--ink)}
 
@@ -213,4 +228,7 @@ ol.sources{padding-left:1.4em}
 ol.sources li{margin-bottom:.8em;max-width:92ch}
 ol.sources li::marker{font-family:var(--mono);color:var(--muted)}
 ol.sources .why{color:var(--muted);font-size:.84rem;display:block}
+ol.sources .why b{color:var(--ink2);font-weight:600}
+ul.ctx{padding-left:1.2em;color:var(--muted)}
+ul.ctx li{margin-bottom:.4em;max-width:92ch}
 footer{padding:28px 0 44px;color:var(--muted);font:11px/1.7 var(--mono);letter-spacing:.04em;border-top:1px solid var(--line)}

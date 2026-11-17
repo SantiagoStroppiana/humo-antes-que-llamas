@@ -40,8 +40,8 @@
     <div class="kicker">Comarca andina · El Bolsón · Epuyén · Lago Puelo</div>
     <h1>Ver el <span>humo</span> antes que las llamas</h1>
     <p class="lead">Los veranos de la comarca son cada vez más calurosos y secos, y los incendios, cada vez más grandes. Esta página muestra el problema con datos reales, propone una solución con inteligencia artificial y te deja probarla en una simulación.</p>
-    <p class="byline">Por <b>Santiago Stroppiana</b> · Desafío 2 · Big Data + IA · 2026</p>
-    <div class="tech" aria-label="Fuentes y técnica"><span>Open-Meteo ERA5 1980–2026</span><span>NASA EONET v3</span><span>Autómata celular</span></div>
+    <p class="byline">Por <b>Santiago Stroppiana</b> · Misión 2 · Diseñá un futuro mejor con IA · 2026</p>
+    <div class="tech" aria-label="Fuentes y técnica"><span>Open-Meteo ERA5 1980–2026</span><span>NASA FIRMS 2012–2026</span><span>NASA EONET v3</span><span>Autómata celular</span></div>
     <div class="hero-cta">
       <button type="button" class="primary" id="btnCase">▶ Simular caso real: Mallín Ahogado (30/01/2025)</button>
       <span class="small">Carga el clima real de ese día y arranca la simulación.</span>
@@ -50,6 +50,12 @@
       <b>Ojo:</b>
       <span>Los datos del problema son reales y están citados. La simulación es un <b>modelo ilustrativo</b>: sirve para comparar escenarios, no para predecir.</span>
     </div>
+    <div class="claimkey" role="note" aria-label="Cómo leer las etiquetas">
+      Cada bloque dice qué tipo de afirmación es:
+      <span><span class="tag fact">Hecho</span> dato verificado con fuente</span>
+      <span><span class="tag interp">Interpretación</span> mi lectura de los datos</span>
+      <span><span class="tag scen">Escenario</span> futuro posible, no una predicción</span>
+    </div>
   </div>
 </header>
 
@@ -57,34 +63,43 @@
 <section id="problema">
   <div class="wrap">
     <div class="kicker">01 / El problema</div>
-    <h2>La comarca se quema cada vez más</h2>
+    <h2>La comarca se quema cada vez más <span class="tag fact">Hecho</span></h2>
 
     <div class="grid cards" style="margin-top:20px">
       <article class="card stat">
-        <div class="num">~14.000 ha · 3 muertes</div>
-        <div class="what">Las Golondrinas y Lago Puelo, marzo 2021</div>
-        <p class="small">Un incendio de interfaz que llegó a los barrios en pocas horas. Un reporte oficial citado por la prensa contó 605 viviendas dañadas <span class="tag verify">a verificar</span>.</p>
-        <div class="src">Fuentes [3][4]</div>
+        <div class="num">+13.000 ha</div>
+        <div class="what">Las Golondrinas y El Hoyo, marzo 2021</div>
+        <p class="small">Un incendio de interfase que llegó a los barrios en pocas horas. Hubo víctimas fatales y cientos de viviendas dañadas: el número exacto difiere entre fuentes <span class="tag verify">a verificar</span>.</p>
+        <div class="src">CONICET y Brand et al. [2] <span class="tag ok">científica</span></div>
       </article>
       <article class="card stat">
         <div class="num">3.825 ha</div>
         <div class="what">El Bolsón (Mallín Ahogado), verano 2025</div>
-        <p class="small">Unas 100 viviendas destruidas en los primeros días y un vecino muerto. Número final de viviendas <span class="tag verify">a verificar</span>.</p>
-        <div class="src">Gobierno de Río Negro [1], prensa [2] <span class="tag ok">oficial</span></div>
+        <p class="small">Superficie informada por el Servicio de Prevención y Lucha contra Incendios Forestales de Río Negro. Las viviendas perdidas y la víctima fatal se conocieron por la prensa <span class="tag verify">a verificar</span>.</p>
+        <div class="src">Gobierno de Río Negro [1] <span class="tag ok">oficial</span></div>
       </article>
       <article class="card stat">
-        <div class="num">60.845 ha</div>
-        <div class="what">Bosques andino-patagónicos, temporada 2025-26</div>
-        <p class="small">De ese total, 60.304 ha fueron en Chubut. La peor temporada en seis décadas, según una estimación satelital de Greenpeace.</p>
-        <div class="src">Greenpeace [5] <span class="tag ngo">ONG</span></div>
+        <div class="num">8.746 focos</div>
+        <div class="what">Temporada 2025-26, récord desde 2012</div>
+        <p class="small">Focos de calor detectados por satélite en la zona de la comarca: 2,6 veces la temporada anterior y más que la de 2014-15 (5.915). Análisis propio de los datos de NASA, abajo en detalle.</p>
+        <div class="src">NASA FIRMS [3][4] <span class="tag ok">datos abiertos</span></div>
       </article>
       <article class="card stat">
-        <div class="num">95%</div>
-        <div class="what">de los incendios los empieza una persona</div>
-        <p class="small">Quemas, fogatas, colillas o intencionalidad, según el Servicio Nacional de Manejo del Fuego. Por eso los focos nacen cerca de caminos y casas.</p>
-        <div class="src">SNMF vía Chequeado [6]</div>
+        <div class="num">Casi todos</div>
+        <div class="what">los incendios los empieza una persona</div>
+        <p class="small">En la zona de Bariloche, los incendios se concentran en la interfase urbano-forestal y siguen a las condiciones sociales de cada barrio. A nivel nacional, el Ministerio de Ambiente repite que el 95% es de origen humano, pero no encontré el informe original <span class="tag verify">a verificar</span>.</p>
+        <div class="src">de Torres Curth et al. [5] <span class="tag ok">científica</span></div>
       </article>
     </div>
+
+    <h3 style="margin-top:32px">A quién afecta y para quién es esta página</h3>
+    <div class="grid who">
+      <div class="card"><h3>Vecinos de la interfase</h3><p>Familias que viven entre el bosque y el pueblo (Mallín Ahogado, Las Golondrinas, Lago Puelo): pierden casas, salud por el humo y a veces la vida.</p></div>
+      <div class="card"><h3>Brigadistas</h3><p>Llegan a focos que ya crecieron, con recursos limitados y en jornadas de riesgo.</p></div>
+      <div class="card"><h3>Quienes deciden</h3><p>Municipios y servicios de manejo del fuego que tienen que elegir dónde invertir: detección, brigadas o prevención.</p></div>
+      <div class="card"><h3>El bosque y el agua</h3><p>El fuego cambia la calidad de los arroyos durante años después del incendio [2].</p></div>
+    </div>
+    <p class="small muted" style="margin-top:8px;max-width:78ch">Destinatarios: estudiantes y vecinos de la comarca que quieran entender el problema con datos, y quienes toman decisiones sobre manejo del fuego.</p>
 
     <h3 style="margin-top:40px">Lo que dicen 45 veranos de datos</h3>
     <p class="small muted" style="max-width:75ch">Procesamos <b>16.526 días</b> de clima de El Bolsón (diciembre de 1980 a febrero de 2026) con la API histórica de Open-Meteo (reanálisis ERA5) y resumimos cada verano (diciembre a febrero).</p>
@@ -102,7 +117,7 @@
       <p class="small muted" id="climNote" style="margin:8px 0 0"></p>
       <details><summary>Ver como tabla</summary><div style="overflow-x:auto"><table id="climTable"></table></div></details>
     </div>
-    <p class="small muted" style="margin-top:8px">«Día de peligro»: máxima de 27 °C o más y humedad mínima de 25% o menos (criterio simple de esta página). ERA5 promedia celdas de ~25 km, así que suaviza los extremos locales. El estudio de CONICET (Kitzberger et al., 2022) proyecta que la probabilidad de incendio se duplicaría a mediados de siglo [7][8].</p>
+    <p class="small muted" style="margin-top:8px">«Día de peligro»: máxima de 27 °C o más y humedad mínima de 25% o menos (criterio simple de esta página). ERA5 promedia celdas de ~25 km, así que suaviza los extremos locales. El estudio de CONICET (Kitzberger et al., 2022) proyecta que la probabilidad de incendio se duplicaría a mediados de siglo [6][7].</p>
 
     <h3 style="margin-top:40px">Incendios vistos desde el espacio</h3>
     <p class="small muted" style="max-width:75ch">Eventos registrados por sistemas satelitales internacionales (GDACS y PDC) en la zona, según la API de NASA EONET, sobre un mapa armado con datos reales de relieve y de OpenStreetMap. El tamaño del círculo muestra la superficie estimada.</p>
@@ -126,7 +141,7 @@
       <p class="small muted" id="firmsNote" style="margin:8px 0 0"></p>
     </div>
 
-    <p class="callout"><b>El punto clave:</b> un foco recién nacido ocupa unos metros y se apaga con herramientas manuales. Con viento y bosque seco, a las pocas horas puede tener cientos de hectáreas. <b>El tiempo entre que aparece el humo y que llega la brigada</b> decide si el foco queda en nada o se convierte en una catástrofe.</p>
+    <p class="callout"><span class="tag interp">Interpretación</span> <b>El punto clave:</b> un foco recién nacido ocupa unos metros y se apaga con herramientas manuales. Con viento y bosque seco, a las pocas horas puede tener cientos de hectáreas. <b>El tiempo entre que aparece el humo y que llega la brigada</b> decide si el foco queda en nada o se convierte en una catástrofe.</p>
   </div>
 </section>
 
@@ -134,18 +149,18 @@
 <section id="solucion">
   <div class="wrap">
     <div class="kicker">02 / La solución</div>
-    <h2>Detección temprana con IA</h2>
-    <p class="lead">Una red de cámaras en los cerros, con visión por computadora que reconoce el humo en minutos, apoyada por satélites y siempre con una persona que confirma. No es ciencia ficción: Río Negro presentó un sistema así en 2026 [9] y en Neuquén ya hay cámaras con IA en estancias de la cordillera [10].</p>
+    <h2>Detección temprana con IA <span class="tag interp">Propuesta</span></h2>
+    <p class="lead">Una red de cámaras en los cerros, con visión por computadora que reconoce el humo en minutos, apoyada por satélites y siempre con una persona que confirma. No es ciencia ficción: Río Negro presentó un sistema con cámaras con IA y tecnología satelital en 2026 [8].</p>
     <div class="card" style="margin-top:12px">
       <h3 style="margin:0 0 6px">Lo que ya existe y en qué se diferencia este trabajo</h3>
-      <p class="small" style="margin:0 0 6px">La startup argentina <b>Satellites on Fire</b> nació en 2020 como un trabajo escolar de tres estudiantes de 16 años y hoy detecta incendios cruzando más de diez satélites, cámaras en torres, clima y modelos propios de IA. Opera en 21 países y fue finalista del Earthshot Prize 2026 [16][17]. Junto con los sistemas de Río Negro y Neuquén, muestra que la detección temprana con IA ya es una realidad.</p>
+      <p class="small" style="margin:0 0 6px">La startup argentina <b>Satellites on Fire</b>, fundada en 2020 por tres jóvenes argentinos, detecta incendios combinando imágenes térmicas satelitales, cámaras, drones, clima y modelos de IA. Según el Earthshot Prize, del que es finalista 2026, monitorea 92 millones de hectáreas en 21 países y detecta en promedio 35 minutos antes que el sistema público de NASA [12]. Junto con el sistema de Río Negro, muestra que la detección temprana con IA ya es una realidad.</p>
       <p class="small" style="margin:0">Este trabajo <b>no propone un producto</b>: analiza datos abiertos de la comarca (clima, satélites, relieve) y usa una simulación para preguntarse <b>cuánto cambiaría</b> la detección temprana y <b>qué más hace falta</b> para que funcione.</p>
     </div>
 
     <div class="flow" aria-label="Cómo funciona el sistema">
       <div class="step"><span class="n">1</span><b>Cámaras en torres</b>Vista 360° desde las cimas, una imagen por minuto.</div>
       <div class="step"><span class="n">2</span><b>Visión por computadora</b>Una red neuronal busca columnas de humo que crecen entre imágenes.</div>
-      <div class="step"><span class="n">3</span><b>Satélites</b>Focos de calor VIIRS (375 m) de NASA FIRMS como respaldo [11][12].</div>
+      <div class="step"><span class="n">3</span><b>Satélites</b>Focos de calor VIIRS (375 m) de NASA FIRMS como respaldo [3][4].</div>
       <div class="step"><span class="n">4</span><b>Operador</b>Confirma o descarta la alerta y ubica el foco.</div>
       <div class="step"><span class="n">5</span><b>Brigada</b>Sale la más cercana mientras el foco todavía es chico.</div>
     </div>
@@ -155,28 +170,31 @@
         <h3>Big Data detrás de la IA</h3>
         <ul class="clean small">
           <li><b>Escala:</b> 12 cámaras con una imagen por minuto durante una temporada de 120 días generan <b id="bigImgs">~2 millones de imágenes</b> para analizar en tiempo real.</li>
-          <li><b>Entrenamiento:</b> miles de imágenes etiquetadas como «humo» o «no humo». El dataset público FIgLib reúne unas 25.000 imágenes de 315 incendios reales [13][14]. Habría que sumar imágenes locales: niebla de los valles, nubes bajas, polvo, salamandras.</li>
+          <li><b>Entrenamiento:</b> miles de imágenes etiquetadas como «humo» o «no humo». El dataset público FIgLib reúne unas 25.000 imágenes de 315 incendios reales [9][10]. Habría que sumar imágenes locales: niebla de los valles, nubes bajas, polvo, salamandras.</li>
           <li><b>Contexto:</b> clima histórico como el de arriba y focos satelitales para priorizar alertas en días de peligro.</li>
         </ul>
       </div>
       <div class="card limits">
-        <h3>Sus límites</h3>
+        <h3>Límites, riesgos y consecuencias no deseadas</h3>
         <ul class="clean small">
           <li><b>Falsas alarmas:</b> si la IA confunde niebla con humo muy seguido, hace perder tiempo y se pierde la confianza en el sistema. La simulación te deja probarlo.</li>
           <li><b>Puntos ciegos:</b> laderas, noche y dosel tapan focos.</li>
           <li><b>Costo y conectividad:</b> torres, energía, enlaces en los cerros y monitoreo las 24 horas.</li>
           <li><b>Privacidad:</b> las cámaras también ven casas y personas, así que hacen falta reglas sobre qué se graba y quién accede.</li>
           <li><b>La IA no apaga incendios:</b> sin brigadas cerca, detectar antes solo sirve para enterarse antes.</li>
+          <li><b>Falsa seguridad:</b> si la gente cree que «las cámaras lo resuelven», puede bajar la prevención, que es lo que más importa cuando casi todos los focos son humanos.</li>
+          <li><b>Desigualdad:</b> las zonas sin señal o fuera del ángulo de las cámaras quedan peor protegidas que el centro del pueblo.</li>
+          <li><b>Dependencia:</b> un sistema de una empresa privada o extranjera puede cambiar de precio o dejar de funcionar. Hacen falta datos y capacidades propias.</li>
         </ul>
       </div>
     </div>
 
-    <h3 style="margin-top:28px">Lo que hace falta además de la IA</h3>
+    <h3 style="margin-top:28px">Condiciones necesarias: lo que hace falta además de la IA</h3>
     <div class="grid pillars">
       <div class="card"><h3>Brigadas cerca</h3><p>Bases descentralizadas y presupuesto estable.</p></div>
       <div class="card"><h3>Datos abiertos</h3><p>Partes de incendio e imágenes locales para entrenar modelos propios.</p></div>
       <div class="card"><h3>Menos combustible</h3><p>Manejo de pinos y cortafuegos en la interfaz con las casas.</p></div>
-      <div class="card"><h3>Comunidad</h3><p>Si el 95% de los focos es humano, la prevención es la primera defensa.</p></div>
+      <div class="card"><h3>Comunidad</h3><p>Si casi todos los focos los empieza una persona, la prevención es la primera defensa.</p></div>
     </div>
   </div>
 </section>
@@ -185,7 +203,7 @@
 <section id="simulacion">
   <div class="wrap wide">
     <div class="kicker">03 / Simulación</div>
-    <h2>El mismo foco, dos finales</h2>
+    <h2>El mismo foco, dos finales <span class="tag scen">Escenario</span></h2>
     <p class="lead">Bosque ilustrativo de 18 × 12 km inspirado en la comarca (no es un mapa real). Los dos visores tienen el mismo foco, el mismo clima y el mismo azar: lo único que cambia es <b>cuándo se detecta</b>.</p>
 
     <div class="ops">
@@ -324,7 +342,7 @@
 <section id="futuro">
   <div class="wrap">
     <div class="kicker">04 / Un futuro mejor</div>
-    <h2>La comarca en 2040: dos caminos</h2>
+    <h2>La comarca en 2040: dos caminos <span class="tag scen">Escenario</span></h2>
     <p class="lead">Simulamos 30 focos con tus parámetros para obtener las hectáreas promedio por foco con y sin IA. Después lo proyectamos hasta 2040, con más focos cada año según la <b>tendencia real de días de peligro</b> que medimos arriba.</p>
 
     <div class="grid controls" style="margin-bottom:16px">
@@ -363,7 +381,32 @@
     <div class="letter" style="margin-top:28px">
       <p><b>El Bolsón, 3 de febrero de 2040.</b> Hoy hizo 34 °C con viento del noroeste, el tipo de día que antes nos daba miedo. A las 15:12, la cámara del cerro marcó humo sobre una ladera de pinos. Una operadora lo confirmó con una segunda cámara (esa tarde ya había descartado tres falsas alarmas por niebla y polvo) y la brigada de Mallín Ahogado llegó a los 40 minutos. Era una fogata mal apagada y no pasó de media hectárea.</p>
       <p>Lo que más cambió no fueron las cámaras, sino todo lo que pusimos alrededor: brigadas cerca, menos pinos pegados a las casas y una comunidad que sabe que casi todos los incendios los empezamos nosotros.</p>
-      <p class="sig">— Ficción: una brigadista de la comarca</p>
+      <p class="sig">— Ficción: una brigadista de la comarca · <span class="tag scen">Escenario</span></p>
+    </div>
+
+    <h3 style="margin-top:36px">Mi postura <span class="tag interp">Interpretación</span></h3>
+    <div class="card" style="max-width:820px">
+      <p class="small" style="margin:0 0 8px">Los datos muestran veranos más calurosos y secos y temporadas con cada vez más focos. Creo que la IA puede cambiar <b>una sola parte</b> del problema, el tiempo hasta que alguien se entera, y que esa parte vale mucho: en la simulación, ganar una hora suele ser la diferencia entre unas pocas hectáreas y miles.</p>
+      <p class="small" style="margin:0">Pero no creo que alcance sola. Un futuro mejor y posible para la comarca combina detección temprana, brigadas cerca, menos pinos pegados a las casas y vecinos que no prenden fuego en días de peligro. La IA tiene que ayudar a decidir, no reemplazar a quien decide.</p>
+    </div>
+
+    <h3 style="margin-top:36px">Qué se puede empezar hoy</h3>
+    <div class="grid actions">
+      <div class="card">
+        <div class="lvl">Hoy · cualquier persona</div>
+        <h3>Suscribirse a las alertas de NASA</h3>
+        <p>FIRMS manda un correo gratis cada vez que un satélite detecta un foco dentro de un área. Dibujá la comarca en <a href="https://firms.modaps.eosdis.nasa.gov/alerts/" target="_blank" rel="noopener">firms.modaps.eosdis.nasa.gov/alerts</a> y en minutos quedás suscripto.</p>
+      </div>
+      <div class="card">
+        <div class="lvl">Esta temporada · comunidad</div>
+        <h3>Usar el «día de peligro» como señal</h3>
+        <p>Con máxima de 27 °C o más y humedad de 25% o menos, nada de fuego al aire libre. Se puede consultar el pronóstico gratis en Open-Meteo, como hace esta página.</p>
+      </div>
+      <div class="card">
+        <div class="lvl">Propuesta · municipio</div>
+        <h3>Un piloto con una cámara</h3>
+        <p>Pedir al municipio y al servicio de manejo del fuego un piloto de una temporada: una cámara con IA en un cerro con vista a la interfase, con registro público de cuántas alertas dio, cuántas fueron falsas y cuánto antes llegó la brigada.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -381,33 +424,39 @@
       <li><b>Open-Meteo Elevation API</b> (Copernicus DEM GLO-90) y <b>OpenTopoData</b> (SRTM 90 m): <a href="https://open-meteo.com/en/docs/elevation-api" target="_blank" rel="noopener">Open-Meteo</a> · <a href="https://www.opentopodata.org/" target="_blank" rel="noopener">OpenTopoData</a>. Relieve del mapa: 5.307 puntos de elevación.</li>
       <li><b>OpenStreetMap</b> vía API Overpass (licencia ODbL): <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© colaboradores de OpenStreetMap</a>. Lagos, límite internacional y rutas del mapa, simplificados.</li>
       <li><b>NASA EONET v3</b>: <a href="https://eonet.gsfc.nasa.gov/docs/v3" target="_blank" rel="noopener">documentación</a>. Eventos de incendio con fuentes GDACS y PDC (guardados en la página y también consultables en vivo).</li>
+      <li><b>NASA FIRMS API</b> (VIIRS 375 m): <a href="https://firms.modaps.eosdis.nasa.gov/api/" target="_blank" rel="noopener">documentación</a>. 23.160 focos de calor de la comarca entre 2012 y 2026, descargados con <code>scripts/fetch-firms.mjs</code>.</li>
     </ul>
-    <h3 style="margin-top:16px">Referencias</h3>
+    <h3 style="margin-top:16px">Fuentes académicas e institucionales</h3>
+    <p class="small muted">Son las fuentes en las que se apoya el trabajo. Para cada una, qué aporta y qué límite tiene.</p>
     <ol class="sources small">
-      <li>Gobierno de Río Negro (13/02/2025). <a href="https://rionegro.gov.ar/articulo/52894/el-bolson-avanza-el-combate-de-brigadistas-y-la-lluvia-brinda-un-respiro" target="_blank" rel="noopener">El Bolsón: avanza el combate de brigadistas</a>. <span class="why">3.825 ha según el SPLIF.</span></li>
-      <li>Tiempo Argentino (31/01/2025), <a href="https://www.tiempoar.com.ar/ta_article/el-incendio-de-el-bolson-presenta-un-panorama-desolador/" target="_blank" rel="noopener">El incendio de El Bolsón presenta un panorama desolador</a>, y Diario Río Negro (02/02/2025), <a href="https://www.rionegro.com.ar/?p=3990751" target="_blank" rel="noopener">Quién era el hombre que murió en los incendios de El Bolsón</a>.</li>
-      <li>ANBariloche (09/03/2022). <a href="https://www.anbariloche.com.ar/noticias/2022/03/09/84147-a-un-ano-del-incendio-en-la-comarca-andina-la-situacion-incluso-hasta-esta-peor" target="_blank" rel="noopener">A un año del incendio en la comarca andina</a>. <span class="why">~14.000 ha, 3 víctimas y 605 viviendas dañadas.</span></li>
-      <li>National Geographic (23/03/2021), <a href="https://www.nationalgeographicla.com/medio-ambiente/2021/03/incendios-en-la-patagonia-argentina-como-resurgir-de-las-cenizas" target="_blank" rel="noopener">La Patagonia argentina en llamas</a>, y Cholila Online (13/03/2021), <a href="https://cholilaonline.ar/2021/03/cerca-de-500-viviendas-fueron-afectadas-por-los-incendios-en-la-comarca-andina.html" target="_blank" rel="noopener">Cerca de 500 viviendas fueron afectadas</a>.</li>
-      <li>Greenpeace Argentina (19/05/2026). <a href="https://www.greenpeace.org/argentina/story/problemas/bosques/se-multiplicaron-por-diez-los-bosques-patagonicos-arrasados-por-el-fuego-y-fueron-los-peores-incendios-de-las-ultimas-seis-decadas/" target="_blank" rel="noopener">Se multiplicaron por diez los bosques patagónicos arrasados por el fuego</a>.</li>
-      <li>Chequeado (02/10/2020). <a href="https://chequeado.com/el-explicador/mas-de-la-mitad-de-las-provincias-sufren-incendios-forestales-y-el-95-fueron-causados-por-el-hombre/" target="_blank" rel="noopener">El 95% de los incendios fueron causados por el hombre</a>. <span class="why">Dato del Servicio Nacional de Manejo del Fuego.</span></li>
-      <li>CONICET (05/08/2022). <a href="https://www.conicet.gov.ar/evaluan-los-posibles-efectos-del-cambio-climatico-sobre-la-ocurrencia-de-incendios-en-la-patagonia/" target="_blank" rel="noopener">Evalúan los posibles efectos del cambio climático sobre la ocurrencia de incendios en la Patagonia</a>.</li>
-      <li>Kitzberger, T. et al. (2022). Projections of fire probability and ecosystem vulnerability under 21st century climate across a trans-Andean productivity gradient in Patagonia. <i>Science of the Total Environment</i>, 156303. <a href="https://doi.org/10.1016/j.scitotenv.2022.156303" target="_blank" rel="noopener">doi:10.1016/j.scitotenv.2022.156303</a></li>
-      <li>Gobierno de Río Negro (04/02/2026). <a href="https://rionegro.gov.ar/articulo/57747/camaras-con-ia-y-tecnologia-satelital-para-la-prevencion-de-incendios" target="_blank" rel="noopener">Cámaras con IA y tecnología satelital para la prevención de incendios</a>.</li>
-      <li>Noticias NQN (25/02/2025). <a href="https://www.noticiasnqn.com.ar/noticias/2025/02/25/310077-emergencia-ignea-instalan-camaras-para-la-deteccion-temprana-de-incendios-en-la-cordillera" target="_blank" rel="noopener">Instalan cámaras para la detección temprana de incendios en la cordillera</a>.</li>
-      <li>NASA Earthdata. <a href="https://www.earthdata.nasa.gov/data/instruments/viirs/viirs-i-band-375-m-active-fire-data" target="_blank" rel="noopener">VIIRS I-Band 375 m Active Fire Data</a>.</li>
-      <li>NASA. <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noopener">FIRMS: Fire Information for Resource Management System</a>.</li>
-      <li>Dewangan, A. et al. (2022). FIgLib &amp; SmokeyNet: Dataset and Deep Learning Model for Real-Time Wildland Fire Smoke Detection. <i>Remote Sensing</i> 14(4), 1007. <a href="https://arxiv.org/abs/2112.08598" target="_blank" rel="noopener">arXiv:2112.08598</a></li>
-      <li>HPWREN, UC San Diego. <a href="https://www.hpwren.ucsd.edu/FIgLib/" target="_blank" rel="noopener">Fire Ignition images Library (FIgLib)</a>.</li>
-      <li>López, S. y Madariaga, M. (2021). <a href="https://repositorio.inta.gob.ar/bitstream/handle/20.500.12123/10120/INTA_CRPatagoniaNorte_EEABariloche_Lopez_S_Dinamica_Poblacional_Y_La_Incidencia_De_Incendios_En_La_Comarca_Andina.pdf" target="_blank" rel="noopener">Dinámica poblacional y la incidencia de incendios en la Comarca Andina</a>. INTA EEA Bariloche.</li>
-      <li>Infobae (13/04/2026). <a href="https://www.infobae.com/tendencias/2026/04/13/tiene-22-anos-y-creo-un-sistema-que-detecta-incendios-forestales-antes-que-la-nasa/" target="_blank" rel="noopener">Tiene 22 años y creó un sistema que detecta incendios forestales antes que la NASA</a>. <span class="why">Origen escolar de Satellites on Fire y su tecnología.</span></li>
-      <li>Forbes Argentina (18/09/2026). <a href="https://www.forbesargentina.com/innovacion/la-startup-argentina-detecta-incendios-mejor-nasa-competira-el-oscar-medio-ambiente-n98178" target="_blank" rel="noopener">La startup argentina que detecta incendios mejor que la NASA competirá por «el Oscar del medio ambiente»</a>. <span class="why">Finalista del Earthshot Prize 2026; opera en 21 países.</span></li>
+      <li>Gobierno de Río Negro (13/02/2025). <a href="https://rionegro.gov.ar/articulo/52894/el-bolson-avanza-el-combate-de-brigadistas-y-la-lluvia-brinda-un-respiro" target="_blank" rel="noopener">El Bolsón: avanza el combate de brigadistas y la lluvia brinda un respiro</a>. <span class="why"><b>Aporte:</b> superficie oficial del incendio de Mallín Ahogado (3.825 ha, según el SPLIF). <b>Límite:</b> es un parte de gestión, no un balance final de daños.</span></li>
+      <li>Brand, C., Dromaz, M., Carignano, M. L., Ravasi, C. y Assef, Y. (2025). Impact of forest fires on water quality and nutrient dynamics in burned streams in Patagonia. <i>Science of the Total Environment</i>, 1006, 180887. <a href="https://doi.org/10.1016/j.scitotenv.2025.180887" target="_blank" rel="noopener">doi:10.1016/j.scitotenv.2025.180887</a>. Divulgado por CONICET (30/06/2026): <a href="https://www.conicet.gov.ar/determinan-el-impacto-de-los-incendios-forestales-en-los-cuerpos-de-agua/" target="_blank" rel="noopener">Determinan el impacto de los incendios forestales en los cuerpos de agua</a>. <span class="why"><b>Aporte:</b> el incendio de 2021 en Las Golondrinas y El Hoyo afectó más de 13.000 ha de bosque, y el fuego alteró los arroyos durante más de dos años. <b>Límite:</b> estudia el agua, no la cantidad de viviendas ni víctimas.</span></li>
+      <li>NASA (2026). <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noopener">FIRMS: Fire Information for Resource Management System</a>, producto VIIRS_SNPP_SP. <span class="why"><b>Aporte:</b> 23.160 focos de calor de la comarca entre 2012 y 2026, descargados y analizados para esta página. <b>Límite:</b> un foco no es un incendio ni una superficie quemada; el satélite pasa pocas veces por día y no ve bajo nubes espesas.</span></li>
+      <li>NASA Earthdata. <a href="https://www.earthdata.nasa.gov/data/instruments/viirs/viirs-i-band-375-m-active-fire-data" target="_blank" rel="noopener">VIIRS I-Band 375 m Active Fire Data</a>. <span class="why"><b>Aporte:</b> cómo se detecta un foco (píxel de 375 m, niveles de confianza). <b>Límite:</b> documentación técnica general, no validada para la Patagonia en particular.</span></li>
+      <li>de Torres Curth, M., Biscayart, C., Ghermandi, L. y Pfister, G. (2012). Wildland–urban interface fires and socioeconomic conditions: a case study of a northwestern Patagonia city. <i>Environmental Management</i>, 49, 876–891. <a href="https://doi.org/10.1007/s00267-012-9825-6" target="_blank" rel="noopener">doi:10.1007/s00267-012-9825-6</a>. <span class="why"><b>Aporte:</b> en Bariloche, los incendios se concentran en la interfase urbano-forestal y se relacionan con indicadores sociales: las personas son la principal fuente de ignición. <b>Límite:</b> estudia Bariloche, no la comarca, y datos anteriores a 2010.</span></li>
+      <li>CONICET (05/08/2022). <a href="https://www.conicet.gov.ar/evaluan-los-posibles-efectos-del-cambio-climatico-sobre-la-ocurrencia-de-incendios-en-la-patagonia/" target="_blank" rel="noopener">Evalúan los posibles efectos del cambio climático sobre la ocurrencia de incendios en la Patagonia</a>. <span class="why"><b>Aporte:</b> explicación en castellano del estudio siguiente. <b>Límite:</b> es una nota de divulgación; los números están en el artículo.</span></li>
+      <li>Kitzberger, T. et al. (2022). Projections of fire probability and ecosystem vulnerability under 21st century climate across a trans-Andean productivity gradient in Patagonia. <i>Science of the Total Environment</i>, 839, 156303. <a href="https://doi.org/10.1016/j.scitotenv.2022.156303" target="_blank" rel="noopener">doi:10.1016/j.scitotenv.2022.156303</a>. <span class="why"><b>Aporte:</b> la probabilidad de incendio en el norte de la Patagonia aumentaría fuertemente hacia mediados de siglo. Coincide con lo que medí en ERA5: veranos cada vez más secos. <b>Límite:</b> depende del escenario de emisiones y trabaja a escala regional.</span></li>
+      <li>Gobierno de Río Negro (04/02/2026). <a href="https://rionegro.gov.ar/articulo/57747/camaras-con-ia-y-tecnologia-satelital-para-la-prevencion-de-incendios" target="_blank" rel="noopener">Cámaras con IA y tecnología satelital para la prevención de incendios</a>. <span class="why"><b>Aporte:</b> la solución propuesta ya se está implementando en la provincia: es plausible. <b>Límite:</b> anuncio oficial, todavía sin resultados medidos.</span></li>
+      <li>Dewangan, A. et al. (2022). FIgLib &amp; SmokeyNet: Dataset and Deep Learning Model for Real-Time Wildland Fire Smoke Detection. <i>Remote Sensing</i>, 14(4), 1007. <a href="https://arxiv.org/abs/2112.08598" target="_blank" rel="noopener">arXiv:2112.08598</a>. <span class="why"><b>Aporte:</b> una red neuronal detecta humo en imágenes de cámaras en pocos minutos; base para los tiempos de detección del modelo. <b>Límite:</b> entrenada en California; en la comarca habría que reentrenarla con niebla y nubes locales.</span></li>
+      <li>HPWREN, Universidad de California San Diego. <a href="https://www.hpwren.ucsd.edu/FIgLib/" target="_blank" rel="noopener">Fire Ignition images Library (FIgLib)</a>. <span class="why"><b>Aporte:</b> cuántas imágenes hacen falta para entrenar (unas 25.000 de 315 incendios). <b>Límite:</b> otro paisaje y otras cámaras.</span></li>
+      <li>López, S. y Madariaga, M. (2021). <a href="https://repositorio.inta.gob.ar/bitstream/handle/20.500.12123/10120/INTA_CRPatagoniaNorte_EEABariloche_Lopez_S_Dinamica_Poblacional_Y_La_Incidencia_De_Incendios_En_La_Comarca_Andina.pdf" target="_blank" rel="noopener">Dinámica poblacional y la incidencia de incendios en la Comarca Andina</a>. INTA EEA Bariloche. <span class="why"><b>Aporte:</b> relaciona el crecimiento de la población en la interfase con la incidencia de incendios en la comarca. <b>Límite:</b> informe técnico, no artículo revisado por pares.</span></li>
+      <li>The Earthshot Prize (2026). <a href="https://earthshotprize.org/winners-finalists/satellites-on-fire/" target="_blank" rel="noopener">Satellites on Fire · Finalista 2026</a>. <span class="why"><b>Aporte:</b> antecedente argentino real: detección con satélites, cámaras e IA en 21 países, 35 minutos antes que NASA en promedio. <b>Límite:</b> los números los informa la propia empresa; no encontré una evaluación independiente publicada.</span></li>
     </ol>
+    <h3 style="margin-top:16px">Contexto periodístico</h3>
+    <p class="small muted">Notas de prensa y de ONG que leí para entender los hechos. <b>No se usan como fuente</b> de ningún dato de la página.</p>
+    <ul class="ctx small">
+      <li>Tiempo Argentino (31/01/2025) y Diario Río Negro (02/02/2025): viviendas perdidas y víctima del incendio de Mallín Ahogado.</li>
+      <li>ANBariloche (09/03/2022), National Geographic (23/03/2021) y Cholila Online (13/03/2021): daños del incendio de 2021.</li>
+      <li>Greenpeace Argentina (19/05/2026): estimación satelital de bosque quemado en la temporada 2025-26.</li>
+      <li>Chequeado (02/10/2020): cifra del 95% de incendios de origen humano atribuida al Servicio Nacional de Manejo del Fuego.</li>
+      <li>Infobae (13/04/2026) y Forbes Argentina (18/09/2026): historia de Satellites on Fire.</li>
+    </ul>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    Santiago Stroppiana · Desafío 2 · Big Data + IA. La simulación corre en tu navegador. Las consultas en vivo (clima e incendios activos) son opcionales. Sin cookies ni seguimiento.
+    Santiago Stroppiana · Misión 2 · Diseñá un futuro mejor con IA. La simulación corre en tu navegador. Las consultas en vivo (clima e incendios activos) son opcionales. Sin cookies ni seguimiento.
   </div>
 </footer>
 

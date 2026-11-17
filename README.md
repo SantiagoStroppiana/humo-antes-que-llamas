@@ -1,6 +1,6 @@
 # Humo antes que llamas
 
-Experiencia web interactiva para el **Desafío 2 (Big Data + IA)**: incendios forestales en la comarca andina (El Bolsón, Epuyén, Lago Puelo) y cómo la **detección temprana con IA** podría reducir la superficie quemada.
+Experiencia web interactiva para la **Misión 2 · Diseñá un futuro mejor con IA**: incendios forestales en la comarca andina (El Bolsón, Epuyén, Lago Puelo) y cómo la **detección temprana con IA** podría reducir la superficie quemada.
 
 Autor: **Santiago Stroppiana** · 2026
 

@@ -6,7 +6,7 @@ const CLIM_METRICS = [
   { col: 4, t: 'Días de peligro', unit: 'días', dec: 0, zero: true, note: 'Días con máxima de 27 °C o más y humedad mínima de 25% o menos: calor y aire seco al mismo tiempo.' },
   { col: 2, t: 'Lluvia del verano', unit: 'mm', dec: 0, zero: true, note: 'Lluvia total de diciembre a febrero. Varía mucho de un año a otro y su tendencia es débil.' }
 ];
-const FIRE_SEASONS = { 2021: 'Las Golondrinas', 2025: 'El Bolsón y Epuyén', 2026: 'Chubut, récord' };
+const FIRE_SEASONS = { 2021: 'Las Golondrinas', 2025: 'El Bolsón y Epuyén', 2026: 'récord de focos FIRMS' };
 let climMetric = 0, climHover = -1;
 const seasonLabel = s => `${s - 1}-${String(s).slice(2)}`;
 function decadeAvg(col, a, b) { const r = CLIMATE.filter(x => x[0] >= a && x[0] <= b); return r.reduce((s, x) => s + x[col], 0) / r.length; }
