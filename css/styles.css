@@ -231,4 +231,70 @@ ol.sources .why{color:var(--muted);font-size:.84rem;display:block}
 ol.sources .why b{color:var(--ink2);font-weight:600}
 ul.ctx{padding-left:1.2em;color:var(--muted)}
 ul.ctx li{margin-bottom:.4em;max-width:92ch}
+.ctxbox{margin-top:20px;border:1px solid var(--line);background:rgba(20,23,25,.88);padding:10px 14px;max-width:92ch}
+.ctxbox summary{margin:0}
+.ctxbox[open] summary{color:var(--warn)}
 footer{padding:28px 0 44px;color:var(--muted);font:11px/1.7 var(--mono);letter-spacing:.04em;border-top:1px solid var(--line)}
+
+/* ===================== efectos visuales ===================== */
+/* fondo de incendio: resplandor, llamas difusas, brasas (canvas) y viñeta para que el texto se lea */
+.fire-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
+  background:linear-gradient(180deg,#0B0D0E 0%,#0d0c0c 45%,#1a0d07 75%,#2a1006 100%)}
+.fire-bg .glow{position:absolute;left:50%;bottom:-38vh;width:160vw;height:80vh;transform:translateX(-50%);
+  background:radial-gradient(ellipse at 50% 100%,rgba(255,110,30,.55) 0%,rgba(229,72,30,.28) 35%,rgba(120,30,10,.12) 60%,transparent 75%);
+  animation:glowPulse 6s ease-in-out infinite}
+.fire-bg .flame{position:absolute;bottom:-12vh;width:40vw;height:62vh;border-radius:50% 50% 40% 40%;filter:blur(42px);mix-blend-mode:screen;opacity:.68;
+  background:radial-gradient(ellipse at 50% 85%,#ffb347 0%,#ff6a1f 30%,rgba(200,40,10,.6) 55%,transparent 72%);
+  transform-origin:50% 100%;animation:flicker 3.2s ease-in-out infinite alternate}
+.fire-bg .f1{left:-6vw;animation-duration:3.4s}
+.fire-bg .f2{left:20vw;height:50vh;opacity:.5;animation-duration:2.6s;animation-delay:-1s}
+.fire-bg .f3{left:44vw;height:70vh;animation-duration:3.9s;animation-delay:-2s}
+.fire-bg .f4{left:68vw;height:54vh;opacity:.55;animation-duration:2.9s;animation-delay:-.5s}
+.fire-bg .f5{left:-14vw;bottom:auto;top:-30vh;height:60vh;width:50vw;opacity:.18;transform:rotate(180deg);animation:none;filter:blur(70px)}
+.fire-bg .smoke{position:absolute;inset:-20% -20% 30% -20%;opacity:.35;
+  background:radial-gradient(ellipse at 30% 60%,rgba(90,80,75,.25),transparent 55%),radial-gradient(ellipse at 75% 40%,rgba(80,70,65,.2),transparent 50%);
+  animation:smoke 40s linear infinite alternate}
+.fire-bg canvas{position:absolute;inset:0;width:100%;height:100%}
+.fire-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,9,10,.55) 0%,rgba(8,9,10,.25) 50%,transparent 100%)}
+@keyframes glowPulse{0%,100%{opacity:.85;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.06)}}
+@keyframes flicker{0%{transform:scaleY(1) scaleX(1) skewX(0)}30%{transform:scaleY(1.12) scaleX(.94) skewX(2deg)}60%{transform:scaleY(.94) scaleX(1.04) skewX(-2deg)}100%{transform:scaleY(1.08) scaleX(.97) skewX(1deg)}}
+@keyframes smoke{from{transform:translate(0,0) scale(1)}to{transform:translate(4%,-6%) scale(1.15)}}
+
+/* superficies semitransparentes para que el fuego se vea por detrás */
+nav.top{background:rgba(11,13,14,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.card,.panel,.mapbox,.toolbar,.letter,.disclaimer{background:rgba(20,23,25,.88);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.mstats div{background:rgba(20,23,25,.92)}
+header.hero,section,footer{text-shadow:0 1px 3px rgba(0,0,0,.85),0 0 12px rgba(0,0,0,.6)}
+.card,.panel,.mapbox,.toolbar,canvas,svg{text-shadow:none}
+header.hero h1 span{animation:emberText 3s ease-in-out infinite alternate}
+@keyframes emberText{from{text-shadow:0 0 14px rgba(255,120,40,.35)}to{text-shadow:0 0 30px rgba(255,120,40,.75)}}
+
+/* cards que se iluminan al pasar el mouse (el brillo sigue al cursor) */
+.card,.mapbox,.flow .step{position:relative;transition:border-color .25s,box-shadow .25s,transform .25s,background .25s}
+.card::before,.mapbox::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(255,140,50,.14),transparent 60%)}
+.card>:not(.sr-only):not(.tip),.mapbox>:not(.sr-only):not(.tip){position:relative}
+@media (hover:hover){
+  .card:hover,.mapbox:hover{border-color:rgba(255,140,50,.55);box-shadow:0 0 0 1px rgba(255,140,50,.18),0 8px 32px -6px rgba(255,100,30,.35)}
+  .card:hover::before,.mapbox:hover::before{opacity:1}
+  .card:not(.ctrl):not(.chartcard):hover{transform:translateY(-3px)}
+  .flow .step:hover{background:rgba(40,26,18,.95);box-shadow:inset 0 -2px 0 var(--warn)}
+  button.primary:hover{box-shadow:0 0 18px rgba(255,140,50,.5)}
+}
+
+/* aparición al hacer scroll (solo si hay JS: la clase .fx la pone efectos.js) */
+.fx .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1),border-color .25s,box-shadow .25s,background .25s;transition-delay:var(--d,0s)}
+.fx .reveal.from-left{transform:translateX(-32px)}
+.fx .reveal.in{opacity:1;transform:none;transition-delay:var(--d,0s),var(--d,0s),0s,0s,0s}
+.fx .card.reveal.in:hover{transition-delay:0s}
+.fx section h2::after{content:"";display:block;height:2px;width:64px;margin-top:10px;background:linear-gradient(90deg,var(--warn),transparent);transform:scaleX(0);transform-origin:left;transition:transform .9s .2s ease}
+.fx section h2.in::after{transform:scaleX(1)}
+
+/* barra de progreso de lectura */
+.readbar{position:fixed;top:0;left:0;height:2px;width:100%;z-index:11;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,#ff6a1f,#ffb347);box-shadow:0 0 8px rgba(255,120,40,.7)}
+
+@media (prefers-reduced-motion:reduce){
+  .fire-bg *,header.hero h1 span{animation:none!important}
+  .card,.mapbox,.flow .step{transition:none}
+  .card:hover{transform:none!important}
+}
