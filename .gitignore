@@ -1,0 +1,16 @@
+# Secretos: nunca se suben al repositorio
+.firms_key
+.env
+.env.*
+!.env.example
+*.key
+
+# Dependencias y temporales
+node_modules/
+.cache/
+*.log
+.DS_Store
+Thumbs.db
+
+# Configuración local del editor
+.claude/
