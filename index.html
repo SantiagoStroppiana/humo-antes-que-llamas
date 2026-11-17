@@ -167,6 +167,10 @@ ul.clean li{margin-bottom:.5em}
 ol.sources li{margin-bottom:.8em;max-width:90ch}
 ol.sources .why{color:var(--muted);font-size:.88rem;display:block}
 .byline{color:var(--ink2);font-size:.95rem;margin-top:-.2em}
+.tech{display:inline-flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font:600 .78rem/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--ink2);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:5px 12px;margin:2px 0 14px}
+.tech span+span::before{content:"·";margin-right:8px;color:var(--muted)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 6px}
+.hero-cta .small{color:var(--muted)}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 /* clima */
 .wx{display:grid;grid-template-columns:1fr auto;gap:12px 20px;align-items:center;margin-bottom:16px}
@@ -207,6 +211,11 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
     <h1>Ver el <span>humo</span> antes que las llamas</h1>
     <p class="lead">Los veranos de la comarca son cada vez más calurosos y secos, y los incendios, cada vez más grandes. Esta página muestra el problema con datos reales, propone una solución con inteligencia artificial y te deja probarla en una simulación.</p>
     <p class="byline">Por <b>Santiago Stroppiana</b> · Desafío 2 · Big Data + IA · 2026</p>
+    <div class="tech" aria-label="Fuentes y técnica"><span>Open-Meteo ERA5 1980–2026</span><span>NASA EONET v3</span><span>Autómata celular</span></div>
+    <div class="hero-cta">
+      <button type="button" class="primary" id="btnCase">▶ Simular caso real: Mallín Ahogado (30/01/2025)</button>
+      <span class="small">Carga el clima real de ese día y arranca la simulación.</span>
+    </div>
     <div class="disclaimer" role="note">
       <b>⚠️ Ojo:</b>
       <span>Los datos del problema son reales y están citados. La simulación es un <b>modelo ilustrativo</b>: sirve para comparar escenarios, no para predecir.</span>
@@ -888,7 +897,7 @@ const RETOS = [
   { t: '5 · Demasiadas falsas alarmas', p: { ...PRESETS.tipico, fa: 10 }, ign: DEMO_IGN,
     lesson: 'Con 10 falsas alarmas por día, el operador tarda más en confirmar y la brigada a veces está atendiendo una falsa. La ventaja de la IA casi desaparece: la precisión del modelo importa tanto como su velocidad.' }
 ];
-let activeReto = -1;
+let activeReto = -1, caseNote = null;
 
 // ---------- Colores del mapa ----------
 const BASE_RGB = [[86, 146, 190], [158, 152, 146], [54, 112, 62], [28, 80, 58], [140, 146, 78], [150, 188, 108], [214, 198, 166]];
@@ -1032,6 +1041,7 @@ function updateStats() {
     else msg = 'Con IA se quemó un poco más esta vez: en un modelo con azar, adelantar el combate no siempre gana. Probá otro foco.';
     if (simAi.endReason.startsWith('Sigue')) msg += ' ⚠️ Aun con IA el fuego se escapó: con viento y sequía extremos, la detección temprana sola no alcanza.';
     if (activeReto >= 0 && simNo.ign === RETOS[activeReto].ign) msg += `<div class="lesson">🎓 <b>Lección del reto ${activeReto + 1}:</b> ${RETOS[activeReto].lesson}</div>`;
+    if (caseNote && simNo.ign === DEMO_IGN) msg += `<div class="lesson">📍 <b>Caso real:</b> ${caseNote}</div>`;
     $('summary').innerHTML = msg;
     if (!logged) { logged = true; logRun(a, b); }
     $('mapDesc').textContent = `Resultado. Sin IA: ${fmtHa(a)} quemadas, ${simNo.homes} viviendas alcanzadas, ${statText(simNo).state}. Con IA: ${fmtHa(b)} quemadas, ${simAi.homes} viviendas alcanzadas, ${statText(simAi).state}.`;
@@ -1127,7 +1137,7 @@ function setReto(k) {
   document.querySelectorAll('#retos button').forEach((b, j) => { b.classList.toggle('on', j === k); b.setAttribute('aria-pressed', j === k); });
   $('retoText').textContent = k >= 0 ? 'Reto activo: ' + RETOS[k].t.replace(/^\d · /, '') + '. Mirá qué pasa en los dos mapas y leé la lección al final.' : 'Elegí un reto: configura todo solo y te deja una lección al final.';
 }
-function onParamsChange() { setReto(-1); markDay(-1); syncOutputs(); resetSims(); scheduleProjection(); }
+function onParamsChange() { setReto(-1); markDay(-1); caseNote = null; syncOutputs(); resetSims(); scheduleProjection(); }
 for (const id of ['cams', 'resp', 'wind', 'dry', 'fa']) $(id).addEventListener('input', e => { params[id] = +e.target.value; onParamsChange(); });
 $('windDir').addEventListener('change', e => { params.windDir = e.target.value; onParamsChange(); });
 
@@ -1537,6 +1547,16 @@ $('chart').addEventListener('touchstart', chartHover, { passive: true });
 $('chart').addEventListener('touchmove', chartHover, { passive: true });
 $('chart').addEventListener('mouseleave', chartLeave);
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => { drawChart(); drawLive(); drawClimate(); });
+
+// ---------- Caso real desde el encabezado ----------
+$('btnCase').addEventListener('click', () => {
+  ignition = DEMO_IGN;
+  applyDay(REAL_DAYS[2], 2);   // 30/1/2025, Mallín Ahogado: clima real de Open-Meteo
+  caseNote = 'el 30/01/2025 en Mallín Ahogado hubo 29 °C, 14% de humedad y ráfagas de 53 km/h tras dos semanas casi sin lluvia: un día extremo. Con ese clima, detectar antes reduce el daño pero no evita un incendio grande. El incendio real afectó unas 3.825 ha.';
+  $('speed').value = '3';
+  $('simulacion').scrollIntoView({ behavior: 'smooth' });
+  running = true; $('btnPlay').textContent = '⏸ Pausa';
+});
 
 // ---------- Inicio ----------
 ignition = pickDefaultIgnition();
