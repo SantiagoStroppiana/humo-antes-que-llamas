@@ -83,6 +83,8 @@ Los «días de peligro» son un criterio simple propio, no un índice oficial. E
 - Las distancias de la tabla satelital se calculan al pueblo de referencia más cercano. Las posiciones son aproximadas.
 - **No se usa NASA FIRMS ni Global Forest Watch** porque requieren una clave personal, que en una página pública quedaría expuesta.
 - Saqué de la versión anterior lo redundante: los escenarios rápidos (los reemplazan los días reales y los retos), el dato de Epuyén 2025 (ya está en la simulación) y las explicaciones repetidas del modelo.
+- **Diseño de centro de operaciones:** fondo carbón (#0B0D0E), paneles separados por bordes de 1 px, sin sombras ni esquinas redondeadas, etiquetas técnicas en mayúsculas y colores de estado sobrios: verde (#2EA043) para sistema activo o fuego controlado, ámbar (#D29922) para alertas y detección, y rojo (#E5484D) solo para fuego crítico. La simulación funciona como un tablero: visores con marcas de registro, métricas de la diferencia en vivo y una **consola de eventos** con lo que realmente ocurre en el modelo (ignición, detección, llegada de la brigada, umbrales de hectáreas, control). No se muestran «porcentajes de confianza de la IA» porque el modelo no los calcula.
+- **Tipografías de Google Fonts** (Space Grotesk, IBM Plex Sans y JetBrains Mono). Es la única dependencia externa de diseño: sin internet, la página usa las fuentes del sistema y funciona igual.
 - Sin cookies, seguimiento ni almacenamiento local.
 
 ## Estructura del código

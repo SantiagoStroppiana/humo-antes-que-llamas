@@ -16,189 +16,234 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="es_AR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#c2410c">
+<meta name="theme-color" content="#0B0D0E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3c2 6 9 9 9 17a9 9 0 0 1-18 0c0-5 3-7 4-11 1 3 2 4 3 4 0-4 0-7 2-10z' fill='%23eb6834'/%3E%3C/svg%3E">
 <style>
 :root{
-  --bg:#f6f5f1; --surface:#fcfcfb; --surface2:#efeee9;
-  --ink:#141412; --ink2:#52514e; --muted:#77756f; --line:#dedcd5;
-  --noai:#eb6834; --ai:#2a78d6; --forest:#2f6b3a; --fire:#c2410c;
-  --note-bg:#fff3e0; --note-line:#f0b56a; --verify:#8a5a00; --verify-bg:#fde9b8;
-  --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.05);
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#111110; --surface:#1a1a19; --surface2:#232321;
-    --ink:#f0efec; --ink2:#c3c2b7; --muted:#9a988f; --line:#33322f;
-    --noai:#d95926; --ai:#3987e5; --forest:#6fb07a; --fire:#f08a4b;
-    --note-bg:#2a2116; --note-line:#7a5426; --verify:#f3c463; --verify-bg:#3a2e12;
-    --shadow:none; color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#111110; --surface:#1a1a19; --surface2:#232321;
-  --ink:#f0efec; --ink2:#c3c2b7; --muted:#9a988f; --line:#33322f;
-  --noai:#d95926; --ai:#3987e5; --forest:#6fb07a; --fire:#f08a4b;
-  --note-bg:#2a2116; --note-line:#7a5426; --verify:#f3c463; --verify-bg:#3a2e12;
-  --shadow:none; color-scheme:dark;
+  --bg:#0B0D0E; --surface:#141719; --surface2:#1B1F22; --line:#262B2E; --line2:#3A4145;
+  --ink:#ECEEEF; --ink2:#B4BCC1; --muted:#8A949A;
+  --ok:#2EA043; --warn:#D29922; --crit:#E5484D;
+  --noai:#D29922; --ai:#2EA043; --fire:#D29922; --forest:#2EA043; --reg:#6B757A;
+  --sans:'IBM Plex Sans',system-ui,'Segoe UI',sans-serif;
+  --head:'Space Grotesk','IBM Plex Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,'Courier New',monospace;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:64px}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif;-webkit-text-size-adjust:100%}
-a{color:var(--ai)}
-h1,h2,h3{line-height:1.2;margin:0 0 .5em}
-h2{font-size:clamp(1.5rem,3.5vw,2.1rem);letter-spacing:-.01em}
-h3{font-size:1.1rem}
+html{scroll-behavior:smooth;scroll-padding-top:56px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--sans);-webkit-text-size-adjust:100%}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line2);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--warn);color:var(--warn)}
+h1,h2,h3{font-family:var(--head);line-height:1.15;margin:0 0 .5em;font-weight:600;letter-spacing:-.01em}
+h2{font-size:clamp(1.45rem,3vw,1.95rem)}
+h3{font-size:1rem}
 p{margin:0 0 1em}
-.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
-section{padding:56px 0;border-top:1px solid var(--line)}
-.kicker{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fire);margin-bottom:.4em}
-.lead{font-size:1.1rem;color:var(--ink2);max-width:70ch}
+b,strong{font-weight:600}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.wrap.wide{max-width:1720px}
+section{padding:48px 0;border-top:1px solid var(--line)}
+.lead{font-size:1.02rem;color:var(--ink2);max-width:74ch}
 .muted{color:var(--muted)}
-small,.small{font-size:.85rem}
+small,.small{font-size:.86rem}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-/* nav */
-nav.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-nav.top .wrap{display:flex;align-items:center;gap:16px;height:52px;overflow-x:auto;scrollbar-width:none}
+/* etiquetas técnicas */
+.kicker,.ph,.mstats .k,.kpi .k,.delta .k,.tag,.tech,details summary,.hint,.progress,.params-line{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.kicker{color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.kicker::before{content:"";width:6px;height:6px;background:var(--warn);flex:none}
+.ph{color:var(--muted);padding-bottom:8px;margin:0 0 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px}
+.panel>.ph:not(:first-child){margin-top:22px}
+
+/* barra superior */
+nav.top{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;align-items:center;gap:16px;height:46px;overflow-x:auto;scrollbar-width:none;max-width:1480px}
 nav.top .wrap::-webkit-scrollbar{display:none}
-nav.top .brand{font-weight:800;white-space:nowrap;color:var(--ink);text-decoration:none}
-nav.top .links{display:flex;gap:4px;margin-left:auto}
-nav.top .links a{white-space:nowrap;text-decoration:none;color:var(--ink2);font-size:.9rem;padding:6px 10px;border-radius:8px}
-nav.top .links a:hover{background:var(--surface2);color:var(--ink)}
+nav.top .brand{font:600 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
+nav.top .brand::before{content:"";width:7px;height:7px;background:var(--ok);flex:none}
+nav.top .links{display:flex;margin-left:auto;border-left:1px solid var(--line);height:100%}
+nav.top .links a{display:flex;align-items:center;white-space:nowrap;text-decoration:none;color:var(--muted);font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:0 14px;border-right:1px solid var(--line)}
+nav.top .links a:hover{background:var(--ink);color:var(--bg)}
 
-/* hero */
-header.hero{padding:64px 0 40px}
-header.hero h1{font-size:clamp(2.1rem,6vw,3.6rem);letter-spacing:-.02em;max-width:18ch}
-header.hero h1 span{color:var(--fire)}
-.disclaimer{display:flex;gap:12px;align-items:flex-start;background:var(--note-bg);border:1px solid var(--note-line);border-radius:12px;padding:12px 16px;margin-top:20px;max-width:780px;font-size:.95rem}
-.disclaimer b{white-space:nowrap}
+/* encabezado */
+header.hero{padding:44px 0 40px}
+header.hero h1{font-size:clamp(2rem,5vw,3.3rem);letter-spacing:-.025em;max-width:20ch;font-weight:700;margin-bottom:.4em}
+header.hero h1 span{color:var(--warn)}
+.byline{color:var(--muted);font:12px/1.5 var(--mono);margin:0 0 14px}
+.byline b{color:var(--ink2);font-weight:500}
+.tech{display:inline-flex;flex-wrap:wrap;color:var(--ink2);border:1px solid var(--line);margin:0 0 16px}
+.tech span{padding:6px 10px}
+.tech span+span{border-left:1px solid var(--line)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:0 0 16px}
+.hero-cta .small{color:var(--muted);font:12px/1.4 var(--mono)}
+.disclaimer{display:flex;gap:12px;align-items:baseline;background:var(--surface);border:1px solid var(--line);border-left:2px solid var(--warn);padding:10px 14px;max-width:800px;font-size:.9rem;color:var(--ink2)}
+.disclaimer>b:first-child{font:600 11px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--warn);white-space:nowrap}
 
-/* cards */
-.grid{display:grid;gap:16px}
+/* paneles */
+.grid{display:grid;gap:8px}
 .cards{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
-.stat .num{font-size:2.1rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
-.stat .what{font-weight:600;margin:.3em 0}
-.stat .src{font-size:.82rem;color:var(--muted);margin-top:.6em}
-.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:99px;vertical-align:middle;letter-spacing:.02em}
-.tag.verify{background:var(--verify-bg);color:var(--verify)}
-.tag.ok{background:color-mix(in srgb,var(--forest) 18%,transparent);color:var(--forest)}
-.tag.ngo{background:var(--surface2);color:var(--ink2)}
-.callout{border-left:4px solid var(--fire);padding:4px 0 4px 16px;margin:24px 0;color:var(--ink2);max-width:75ch}
+.card,.panel{background:var(--surface);border:1px solid var(--line);border-radius:2px;padding:16px}
+.stat .num{font:700 1.65rem/1.15 var(--mono);letter-spacing:-.02em}
+.stat .what{font:600 .98rem/1.3 var(--head);margin:.5em 0}
+.stat .src{font:11px/1.5 var(--mono);color:var(--muted);margin-top:.6em}
+.tag{display:inline-block;padding:1px 6px;border:1px solid currentColor;border-radius:2px;vertical-align:1px;font-size:10px}
+.tag.verify{color:var(--warn)}
+.tag.ok{color:var(--ok)}
+.tag.ngo{color:var(--muted)}
+.callout{border-left:2px solid var(--warn);padding:2px 0 2px 16px;margin:28px 0 0;color:var(--ink2);max-width:78ch}
+.callout b{color:var(--ink)}
 
-/* controls */
-.controls{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.ctrl label{display:flex;justify-content:space-between;gap:8px;font-weight:600;align-items:baseline}
-.ctrl output{font-variant-numeric:tabular-nums;color:var(--fire);font-weight:700;white-space:nowrap}
-.ctrl p{font-size:.85rem;color:var(--muted);margin:.4em 0 0}
-input[type=range]{width:100%;accent-color:var(--fire);margin:10px 0 2px;height:28px}
-select{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%;margin-top:8px}
-.presets{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
-button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 14px;font-weight:600;min-height:40px}
-button:hover{background:var(--surface2)}
-button.primary{background:var(--fire);border-color:var(--fire);color:#fff}
-button.primary:hover{filter:brightness(1.08);background:var(--fire)}
-button:focus-visible,input:focus-visible,select:focus-visible,canvas:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+/* controles */
+.ctrl{padding:12px 0;border-top:1px solid var(--line)}
+.ctrl:first-of-type{border-top:0;padding-top:0}
+.ctrl label{display:flex;justify-content:space-between;gap:8px;align-items:baseline;font-size:.86rem;font-weight:500}
+.ctrl output{font:600 12px var(--mono);color:var(--warn);white-space:nowrap}
+.ctrl p{font-size:.8rem;color:var(--muted);margin:.3em 0 0}
+input[type=range]{width:100%;accent-color:var(--warn);margin:8px 0 0;height:22px}
+select{font:12px var(--mono);padding:7px 8px;border-radius:2px;border:1px solid var(--line2);background:var(--bg);color:var(--ink);width:100%;margin-top:8px}
+button{font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-radius:2px;border:1px solid var(--line2);background:var(--surface);color:var(--ink);padding:9px 12px;min-height:36px;transition:none}
+button:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
+button.primary:hover{background:var(--warn);border-color:var(--warn);color:var(--bg)}
+button:disabled{opacity:.4;cursor:default}
+button:focus-visible,input:focus-visible,select:focus-visible,canvas:focus-visible,a:focus-visible{outline:1px solid var(--warn);outline-offset:2px}
+.retos{display:flex;flex-direction:column;gap:4px;margin:0 0 8px}
+.retos button{text-align:left;text-transform:none;letter-spacing:0;font-size:12px;font-weight:400;min-height:32px;padding:7px 10px;background:var(--bg)}
+.retos button.on{border-color:var(--warn);color:var(--warn)}
+.retos button.on:hover{background:var(--warn);color:var(--bg)}
+.wx-vals{display:flex;flex-direction:column;gap:2px;font:12px/1.5 var(--mono);margin:.4em 0;color:var(--ink2)}
+.wx-vals b{color:var(--ink);font-weight:600}
+.note{font-size:.78rem;color:var(--muted);margin:8px 0 0}
 
-/* simulation */
-.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0}
-.toolbar .clock{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:700;font-size:1.05rem}
-.params-line{font-size:.88rem;color:var(--muted)}
-.maps{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.maps{grid-template-columns:1fr}}
-.mapbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
-.mapbox h3{display:flex;align-items:center;gap:8px;margin:0;padding:12px 14px;font-size:1rem}
-.dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex:none}
+/* centro de operaciones (simulación) */
+.ops{display:grid;gap:8px;grid-template-columns:minmax(0,1fr);grid-template-areas:"center" "right" "left";margin-top:20px}
+.ops-left{grid-area:left}
+.ops-center{grid-area:center;min-width:0;display:flex;flex-direction:column;gap:8px}
+.ops-right{grid-area:right;min-width:0}
+@media (min-width:900px){.ops{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"center center" "left right";align-items:start}}
+@media (min-width:1100px){.ops{grid-template-columns:minmax(0,1fr) 330px;grid-template-areas:"center right" "left right"}.ops-left{columns:3 240px;column-gap:28px}.ops-left .ph{break-after:avoid}.ops-left .ctrl,.ops-left .retos,.ops-left #wxBody{break-inside:avoid}.ops-left>.ph:not(:first-child){margin-top:0}}
+@media (min-width:1600px){.ops{grid-template-columns:290px minmax(0,1fr) 340px;grid-template-areas:"left center right"}.ops-left{columns:auto}.ops-left>.ph:not(:first-child){margin-top:22px}}
+.toolbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px;background:var(--surface);border:1px solid var(--line)}
+.toolbar select{width:auto;margin:0}
+.toolbar .clock{margin-left:auto;font:700 15px var(--mono);color:var(--warn);padding:0 6px;letter-spacing:.04em}
+.params-line{color:var(--muted);font-size:10.5px;letter-spacing:.06em;padding:0 2px}
+.maps{display:grid;gap:8px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:700px){.maps{grid-template-columns:minmax(0,1fr)}}
+.mapbox{background:var(--surface);border:1px solid var(--line);border-radius:2px;min-width:0}
+.mapbox h3{display:flex;align-items:center;gap:8px;margin:0;padding:9px 12px;font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.mapbox h3 .muted{font-weight:400;letter-spacing:.04em}
+.dot{width:8px;height:8px;display:inline-block;flex:none}
+.viewer{position:relative;background:#000}
+.viewer::after{content:"";position:absolute;inset:8px;pointer-events:none;background:
+  linear-gradient(var(--reg),var(--reg)) left top/16px 1px no-repeat,
+  linear-gradient(var(--reg),var(--reg)) left top/1px 16px no-repeat,
+  linear-gradient(var(--reg),var(--reg)) right top/16px 1px no-repeat,
+  linear-gradient(var(--reg),var(--reg)) right top/1px 16px no-repeat,
+  linear-gradient(var(--reg),var(--reg)) left bottom/16px 1px no-repeat,
+  linear-gradient(var(--reg),var(--reg)) left bottom/1px 16px no-repeat,
+  linear-gradient(var(--reg),var(--reg)) right bottom/16px 1px no-repeat,
+  linear-gradient(var(--reg),var(--reg)) right bottom/1px 16px no-repeat}
 .mapbox canvas{display:block;width:100%;aspect-ratio:3/2;cursor:crosshair;touch-action:manipulation}
 .mstats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-top:1px solid var(--line)}
-.mstats div{background:var(--surface);padding:8px 14px}
-.mstats .k{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.mstats .v{font-weight:700;font-variant-numeric:tabular-nums}
-.mstats .big{font-size:1.4rem}
-.summary{margin-top:16px;padding:14px 18px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:1.02rem;min-height:56px}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:.85rem;color:var(--ink2)}
+.mstats div{background:var(--surface);padding:7px 12px}
+.mstats .k{color:var(--muted);font-size:10px}
+.mstats .v{font:500 12.5px/1.4 var(--mono)}
+.mstats .big{font:700 1.3rem/1.2 var(--mono)}
+.delta{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.delta div{background:var(--bg);padding:10px 12px;min-width:0}
+.delta .k{color:var(--muted);font-size:10px}
+.delta .v{font:700 1.2rem/1.3 var(--mono)}
+.delta .full{grid-column:1/-1}
+.delta .ok{color:var(--ok)}
+.log{font:11.5px/1.55 var(--mono);background:var(--bg);border:1px solid var(--line);height:250px;overflow:auto;padding:6px 10px}
+.log .ev{display:grid;grid-template-columns:62px 54px minmax(0,1fr);gap:8px;padding:3px 0;border-bottom:1px solid #181c1e}
+.log .t{color:var(--muted)}
+.log .src{color:var(--ink2)}
+.log .crit .msg{color:var(--crit)}
+.log .warn .msg{color:var(--warn)}
+.log .ok .msg{color:var(--ok)}
+.log .info .msg{color:var(--ink2)}
+.log .empty{color:var(--muted);padding:4px 0}
+.summary{font-size:.9rem;color:var(--ink2);min-height:48px}
+.summary b{color:var(--ink)}
+.lesson{margin-top:10px;padding:8px 12px;background:var(--bg);border:1px solid var(--line);border-left:2px solid var(--warn);font-size:.86rem}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:12px;font:11px/1.6 var(--mono);color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
-.legend i{width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.15)}
-.hint{font-size:.85rem;color:var(--muted);min-height:1.4em}
-
-/* projection */
-.kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-.kpi .k{font-size:.8rem;color:var(--muted)}
-.kpi .v{font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-.kpi .s{font-size:.82rem;color:var(--ink2)}
-.chartcard{margin-top:16px}
-.chart-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.9rem;margin-bottom:6px}
-.chart-legend span{display:inline-flex;align-items:center;gap:6px}
-.chart-legend i{width:18px;height:3px;border-radius:2px;display:inline-block}
-.chartwrap{position:relative}
-#chart{display:block;width:100%;height:340px}
-#climChart{display:block;width:100%;height:300px}
-.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.tabs button{min-height:34px;padding:5px 12px;font-size:.88rem;border-radius:99px}
-.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-#eoMap{display:block;width:100%;max-width:380px;height:auto;margin:0 auto}
-#eoMap text{font-family:system-ui,sans-serif;paint-order:stroke;stroke-linejoin:round}
-#eoMap .eo-town{font-size:8.5px;font-weight:600;fill:#23221f;stroke:#fff;stroke-width:2.2px}
-#eoMap .eo-lake{font-size:6.2px;font-style:italic;fill:#2c5f8f;stroke:#e9f2f9;stroke-width:1.6px}
-#eoMap .eo-country{font-size:8px;font-weight:700;letter-spacing:2px;fill:#6d4c9c;stroke:#fff;stroke-width:1.6px;opacity:.85}
-#eoMap .eo-small{font-size:6.5px;font-weight:600;fill:#23221f;stroke:none}
-#eoMap .eo-attr{font-size:5.2px;fill:var(--muted);stroke:none}
-.eo-row-sel td{background:var(--surface2)}
-.tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.85rem;box-shadow:0 4px 16px rgba(0,0,0,.12);display:none;white-space:nowrap;z-index:2}
-.tip .row{display:flex;align-items:center;gap:6px}
-table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
-th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}
-th:first-child,td:first-child{text-align:left}
-details summary{cursor:pointer;color:var(--ink2);font-weight:600;margin-top:12px}
-.progress{font-size:.85rem;color:var(--muted)}
-
-/* IA section */
-.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:20px 0}
-.flow .step{flex:1 1 150px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:.9rem;position:relative}
-.flow .step b{display:block;margin-bottom:4px}
-.flow .step .n{font-size:.72rem;font-weight:800;color:var(--ai);letter-spacing:.06em}
-.two{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-ul.clean{padding-left:1.1em;margin:0}
-ul.clean li{margin-bottom:.5em}
-.limits li b{color:var(--fire)}
-
-/* sources */
-ol.sources li{margin-bottom:.8em;max-width:90ch}
-ol.sources .why{color:var(--muted);font-size:.88rem;display:block}
-.byline{color:var(--ink2);font-size:.95rem;margin-top:-.2em}
-.tech{display:inline-flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font:600 .78rem/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--ink2);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:5px 12px;margin:2px 0 14px}
-.tech span+span::before{content:"·";margin-right:8px;color:var(--muted)}
-.hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 6px}
-.hero-cta .small{color:var(--muted)}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-/* clima */
-.wx{display:grid;grid-template-columns:1fr auto;gap:12px 20px;align-items:center;margin-bottom:16px}
-@media (max-width:640px){.wx{grid-template-columns:1fr}}
-.wx-vals{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem;margin:.4em 0}
-.wx-vals b{font-variant-numeric:tabular-nums}
-/* retos */
-.retos{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
-.retos button{font-size:.9rem;min-height:36px;padding:6px 12px}
-.retos button.on{border-color:var(--fire);background:color-mix(in srgb,var(--fire) 12%,var(--surface))}
-.lesson{margin-top:10px;padding:10px 14px;border-radius:10px;background:var(--note-bg);border:1px solid var(--note-line);font-size:.95rem}
+.legend i{width:10px;height:10px;display:inline-block;border:1px solid rgba(255,255,255,.15)}
+.hint{color:var(--muted);min-height:1.4em;font-size:10.5px;letter-spacing:.06em;padding:0 2px;margin:0}
 #liveChart{display:block;width:100%;height:190px}
 .histwrap{overflow-x:auto}
 .histwrap td:nth-child(2),.histwrap th:nth-child(2){text-align:left;white-space:normal;min-width:160px}
-/* futuro mejor */
-.letter{font-family:Georgia,"Times New Roman",serif;font-size:1.08rem;line-height:1.7;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow);max-width:760px}
-.letter .sig{text-align:right;color:var(--ink2);font-style:italic;margin:0}
-.pillars{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:20px}
-.pillars .card h3{font-size:1rem}
-.pillars .card p{font-size:.9rem;color:var(--ink2);margin:0}
-footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+
+/* proyección y gráficos */
+.kpis{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.kpi .k{color:var(--muted);display:flex;align-items:center;gap:8px}
+.kpi .v{font:700 1.55rem/1.3 var(--mono);letter-spacing:-.01em;margin:4px 0}
+.kpi .s{font-size:.8rem;color:var(--ink2)}
+.chartcard{margin-top:8px}
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap;font:11px/1.6 var(--mono);color:var(--ink2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.chart-legend span{display:inline-flex;align-items:center;gap:6px}
+.chart-legend i{width:16px;height:2px;display:inline-block}
+.chartwrap{position:relative}
+#chart{display:block;width:100%;height:340px}
+#climChart{display:block;width:100%;height:300px}
+.tabs{display:flex;flex-wrap:wrap;gap:0;margin-bottom:12px;border:1px solid var(--line2);width:max-content;max-width:100%}
+.tabs button{border:0;border-right:1px solid var(--line2);border-radius:0;min-height:32px;padding:6px 12px;background:transparent;color:var(--muted)}
+.tabs button:last-child{border-right:0}
+.tabs button:hover{background:var(--surface2);color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.tip{position:absolute;pointer-events:none;background:var(--bg);border:1px solid var(--line2);border-radius:2px;padding:7px 10px;font:12px/1.5 var(--mono);display:none;white-space:nowrap;z-index:2}
+.tip .row{display:flex;align-items:center;gap:6px}
+table{border-collapse:collapse;width:100%;font:12.5px/1.45 var(--mono)}
+th{font:500 10px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+details summary{cursor:pointer;color:var(--ink2);margin-top:14px}
+details summary:hover{color:var(--warn)}
+.progress{color:var(--muted);margin-top:6px}
+#eoMap{display:block;width:100%;max-width:380px;height:auto;margin:0 auto}
+#eoMap text{font-family:'Space Grotesk','IBM Plex Sans',system-ui,sans-serif;paint-order:stroke;stroke-linejoin:round}
+#eoMap .eo-town{font-size:8.5px;font-weight:600;fill:#16191b;stroke:#fff;stroke-width:2.2px}
+#eoMap .eo-lake{font-size:6.2px;font-style:italic;fill:#2c5f8f;stroke:#e9f2f9;stroke-width:1.6px}
+#eoMap .eo-country{font-size:8px;font-weight:700;letter-spacing:2px;fill:#5b3f86;stroke:#fff;stroke-width:1.6px;opacity:.85}
+#eoMap .eo-small{font-size:6.5px;font-weight:600;fill:#16191b;stroke:none}
+#eoMap .eo-attr{font-family:'JetBrains Mono',monospace;font-size:4.8px;fill:var(--muted);stroke:none}
+.eo-row-sel td{background:var(--surface2);color:var(--warn)}
+
+/* solución */
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:20px 0}
+.flow .step{background:var(--surface);padding:12px 14px;font-size:.86rem;color:var(--ink2)}
+.flow .step b{display:block;margin:2px 0 4px;color:var(--ink);font-family:var(--head)}
+.flow .step .n{font:600 11px var(--mono);color:var(--warn);letter-spacing:.08em}
+.two{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+ul.clean{padding-left:1.1em;margin:0}
+ul.clean li{margin-bottom:.5em}
+ul.clean li::marker{color:var(--muted)}
+.limits li b{color:var(--warn)}
+.pillars{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px}
+.pillars .card h3{font-size:.95rem}
+.pillars .card p{font-size:.86rem;color:var(--ink2);margin:0}
+
+/* 2040 */
+.letter{font-size:1rem;line-height:1.75;background:var(--surface);border:1px solid var(--line);border-left:2px solid var(--ok);padding:20px 22px;max-width:780px;color:var(--ink2)}
+.letter b{color:var(--ink)}
+.letter .sig{color:var(--muted);font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;margin:0}
+
+/* fuentes y pie */
+ol.sources{padding-left:1.4em}
+ol.sources li{margin-bottom:.8em;max-width:92ch}
+ol.sources li::marker{font-family:var(--mono);color:var(--muted)}
+ol.sources .why{color:var(--muted);font-size:.84rem;display:block}
+footer{padding:28px 0 44px;color:var(--muted);font:11px/1.7 var(--mono);letter-spacing:.04em;border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
 
 <nav class="top" aria-label="Secciones">
   <div class="wrap">
-    <a class="brand" href="#inicio">🔥 Humo antes que llamas</a>
+    <a class="brand" href="#inicio">Humo antes que llamas</a>
     <div class="links">
       <a href="#problema">Problema</a><a href="#solucion">Solución</a><a href="#simulacion">Simulación</a><a href="#futuro">2040</a><a href="#fuentes">Fuentes</a>
     </div>
@@ -217,7 +262,7 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
       <span class="small">Carga el clima real de ese día y arranca la simulación.</span>
     </div>
     <div class="disclaimer" role="note">
-      <b>⚠️ Ojo:</b>
+      <b>Ojo:</b>
       <span>Los datos del problema son reales y están citados. La simulación es un <b>modelo ilustrativo</b>: sirve para comparar escenarios, no para predecir.</span>
     </div>
   </div>
@@ -226,7 +271,7 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
 <!-- ============ 1. EL PROBLEMA ============ -->
 <section id="problema">
   <div class="wrap">
-    <div class="kicker">1 · El problema</div>
+    <div class="kicker">01 / El problema</div>
     <h2>La comarca se quema cada vez más</h2>
 
     <div class="grid cards" style="margin-top:20px">
@@ -256,7 +301,7 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
       </article>
     </div>
 
-    <h3 style="margin-top:40px">📈 Lo que dicen 45 veranos de datos</h3>
+    <h3 style="margin-top:40px">Lo que dicen 45 veranos de datos</h3>
     <p class="small muted" style="max-width:75ch">Procesamos <b>16.526 días</b> de clima de El Bolsón (diciembre de 1980 a febrero de 2026) con la API histórica de Open-Meteo (reanálisis ERA5) y resumimos cada verano (diciembre a febrero).</p>
     <div class="grid kpis" style="margin:12px 0">
       <div class="card kpi"><div class="k">Temperatura máxima media del verano</div><div class="v" id="ck-tx">—</div><div class="s" id="ck-tx-s"></div></div>
@@ -274,14 +319,14 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
     </div>
     <p class="small muted" style="margin-top:8px">«Día de peligro»: máxima de 27 °C o más y humedad mínima de 25% o menos (criterio simple de esta página). ERA5 promedia celdas de ~25 km, así que suaviza los extremos locales. El estudio de CONICET (Kitzberger et al., 2022) proyecta que la probabilidad de incendio se duplicaría a mediados de siglo [7][8].</p>
 
-    <h3 style="margin-top:40px">🛰️ Incendios vistos desde el espacio</h3>
+    <h3 style="margin-top:40px">Incendios vistos desde el espacio</h3>
     <p class="small muted" style="max-width:75ch">Eventos registrados por sistemas satelitales internacionales (GDACS y PDC) en la zona, según la API de NASA EONET, sobre un mapa armado con datos reales de relieve y de OpenStreetMap. El tamaño del círculo muestra la superficie estimada.</p>
     <div class="grid two" style="align-items:start">
       <div class="card" style="padding:8px"><svg id="eoMap" viewBox="0 0 260 488" role="img" aria-label="Mapa de eventos de incendio satelitales en la región"></svg></div>
       <div>
         <div class="histwrap"><table id="eoTable"></table></div>
         <p class="small" id="eoSum" style="margin-top:10px"></p>
-        <button type="button" id="btnEoLive" style="margin-top:4px">🔴 Consultar incendios activos ahora</button>
+        <button type="button" id="btnEoLive" style="margin-top:4px">Consultar incendios activos ahora</button>
         <p class="small muted" id="eoLive" aria-live="polite" style="margin-top:8px"></p>
       </div>
     </div>
@@ -293,26 +338,26 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
 <!-- ============ 2. LA SOLUCIÓN ============ -->
 <section id="solucion">
   <div class="wrap">
-    <div class="kicker">2 · La solución</div>
+    <div class="kicker">02 / La solución</div>
     <h2>Detección temprana con IA</h2>
     <p class="lead">Una red de cámaras en los cerros, con visión por computadora que reconoce el humo en minutos, apoyada por satélites y siempre con una persona que confirma. No es ciencia ficción: Río Negro presentó un sistema así en 2026 [9] y en Neuquén ya hay cámaras con IA en estancias de la cordillera [10].</p>
     <div class="card" style="margin-top:12px">
-      <h3 style="margin:0 0 6px">🧭 Lo que ya existe y en qué se diferencia este trabajo</h3>
+      <h3 style="margin:0 0 6px">Lo que ya existe y en qué se diferencia este trabajo</h3>
       <p class="small" style="margin:0 0 6px">La startup argentina <b>Satellites on Fire</b> nació en 2020 como un trabajo escolar de tres estudiantes de 16 años y hoy detecta incendios cruzando más de diez satélites, cámaras en torres, clima y modelos propios de IA. Opera en 21 países y fue finalista del Earthshot Prize 2026 [16][17]. Junto con los sistemas de Río Negro y Neuquén, muestra que la detección temprana con IA ya es una realidad.</p>
       <p class="small" style="margin:0">Este trabajo <b>no propone un producto</b>: analiza datos abiertos de la comarca (clima, satélites, relieve) y usa una simulación para preguntarse <b>cuánto cambiaría</b> la detección temprana y <b>qué más hace falta</b> para que funcione.</p>
     </div>
 
     <div class="flow" aria-label="Cómo funciona el sistema">
-      <div class="step"><span class="n">1</span><b>📷 Cámaras en torres</b>Vista 360° desde las cimas, una imagen por minuto.</div>
-      <div class="step"><span class="n">2</span><b>🧠 Visión por computadora</b>Una red neuronal busca columnas de humo que crecen entre imágenes.</div>
-      <div class="step"><span class="n">3</span><b>🛰️ Satélites</b>Focos de calor VIIRS (375 m) de NASA FIRMS como respaldo [11][12].</div>
-      <div class="step"><span class="n">4</span><b>🧑‍💻 Operador</b>Confirma o descarta la alerta y ubica el foco.</div>
-      <div class="step"><span class="n">5</span><b>🚒 Brigada</b>Sale la más cercana mientras el foco todavía es chico.</div>
+      <div class="step"><span class="n">1</span><b>Cámaras en torres</b>Vista 360° desde las cimas, una imagen por minuto.</div>
+      <div class="step"><span class="n">2</span><b>Visión por computadora</b>Una red neuronal busca columnas de humo que crecen entre imágenes.</div>
+      <div class="step"><span class="n">3</span><b>Satélites</b>Focos de calor VIIRS (375 m) de NASA FIRMS como respaldo [11][12].</div>
+      <div class="step"><span class="n">4</span><b>Operador</b>Confirma o descarta la alerta y ubica el foco.</div>
+      <div class="step"><span class="n">5</span><b>Brigada</b>Sale la más cercana mientras el foco todavía es chico.</div>
     </div>
 
     <div class="grid two">
       <div class="card">
-        <h3>📚 Big Data detrás de la IA</h3>
+        <h3>Big Data detrás de la IA</h3>
         <ul class="clean small">
           <li><b>Escala:</b> 12 cámaras con una imagen por minuto durante una temporada de 120 días generan <b id="bigImgs">~2 millones de imágenes</b> para analizar en tiempo real.</li>
           <li><b>Entrenamiento:</b> miles de imágenes etiquetadas como «humo» o «no humo». El dataset público FIgLib reúne unas 25.000 imágenes de 315 incendios reales [13][14]. Habría que sumar imágenes locales: niebla de los valles, nubes bajas, polvo, salamandras.</li>
@@ -320,7 +365,7 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
         </ul>
       </div>
       <div class="card limits">
-        <h3>🚧 Sus límites</h3>
+        <h3>Sus límites</h3>
         <ul class="clean small">
           <li><b>Falsas alarmas:</b> si la IA confunde niebla con humo muy seguido, hace perder tiempo y se pierde la confianza en el sistema. La simulación te deja probarlo.</li>
           <li><b>Puntos ciegos:</b> laderas, noche y dosel tapan focos.</li>
@@ -333,130 +378,140 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
 
     <h3 style="margin-top:28px">Lo que hace falta además de la IA</h3>
     <div class="grid pillars">
-      <div class="card"><h3>🚒 Brigadas cerca</h3><p>Bases descentralizadas y presupuesto estable.</p></div>
-      <div class="card"><h3>📊 Datos abiertos</h3><p>Partes de incendio e imágenes locales para entrenar modelos propios.</p></div>
-      <div class="card"><h3>🌲 Menos combustible</h3><p>Manejo de pinos y cortafuegos en la interfaz con las casas.</p></div>
-      <div class="card"><h3>🏘️ Comunidad</h3><p>Si el 95% de los focos es humano, la prevención es la primera defensa.</p></div>
+      <div class="card"><h3>Brigadas cerca</h3><p>Bases descentralizadas y presupuesto estable.</p></div>
+      <div class="card"><h3>Datos abiertos</h3><p>Partes de incendio e imágenes locales para entrenar modelos propios.</p></div>
+      <div class="card"><h3>Menos combustible</h3><p>Manejo de pinos y cortafuegos en la interfaz con las casas.</p></div>
+      <div class="card"><h3>Comunidad</h3><p>Si el 95% de los focos es humano, la prevención es la primera defensa.</p></div>
     </div>
   </div>
 </section>
 
 <!-- ============ 3. SIMULACIÓN ============ -->
 <section id="simulacion">
-  <div class="wrap">
-    <div class="kicker">3 · Simulación</div>
-    <h2>Probalo vos: el mismo foco, dos finales</h2>
-    <p class="lead">Un bosque de 18 × 12 km inspirado en la comarca (no es un mapa real). El mismo foco arranca en los dos mapas con el mismo clima. Lo único que cambia es <b>cuándo se detecta</b>.</p>
+  <div class="wrap wide">
+    <div class="kicker">03 / Simulación</div>
+    <h2>El mismo foco, dos finales</h2>
+    <p class="lead">Bosque ilustrativo de 18 × 12 km inspirado en la comarca (no es un mapa real). Los dos visores tienen el mismo foco, el mismo clima y el mismo azar: lo único que cambia es <b>cuándo se detecta</b>.</p>
 
-    <div class="card" style="margin-top:8px">
-      <h3 style="margin:0">🌦️ Elegí el clima de un día real</h3>
-      <div class="retos" id="realDays" role="group" aria-label="Días reales"></div>
-      <div class="small" id="wxBody" aria-live="polite">Elegí un día: el viento y la sequedad salen de los datos de Open-Meteo de ese día y ese lugar.</div>
-      <p class="small muted" style="margin:6px 0 0">Viento efectivo = promedio entre el viento máximo y la ráfaga máxima del día. Sequedad = índice simple de lluvia de 14 días, humedad mínima y temperatura (no es el índice oficial).</p>
-    </div>
+    <div class="ops">
+      <aside class="panel ops-left" aria-label="Parámetros de la simulación">
+        <div class="ph"><span>Clima de un día real</span><span>Open-Meteo</span></div>
+        <div class="retos" id="realDays" role="group" aria-label="Días reales"></div>
+        <div class="small muted" id="wxBody" aria-live="polite">Elegí un día: el viento y la sequedad salen de los datos de ese día y ese lugar.</div>
+        <p class="note">Viento efectivo = promedio entre el viento máximo y la ráfaga máxima. Sequedad = índice simple de lluvia de 14 días, humedad mínima y temperatura (no es el índice oficial).</p>
 
-    <div class="grid controls" style="margin-top:16px">
-      <div class="card ctrl">
-        <label for="cams">📷 Cámaras con IA <output id="o-cams"></output></label>
-        <input type="range" id="cams" min="0" max="12" step="1" value="6">
-        <p>Se ubican en las cimas que más bosque ven. Cada una vigila ~3 km.</p>
-      </div>
-      <div class="card ctrl">
-        <label for="resp">🚒 Respuesta de la brigada <output id="o-resp"></output></label>
-        <input type="range" id="resp" min="15" max="180" step="5" value="60">
-        <p>Del aviso al primer combate: despacho, acceso y caminata.</p>
-      </div>
-      <div class="card ctrl">
-        <label for="fa">🚨 Falsas alarmas de la IA <output id="o-fa"></output></label>
-        <input type="range" id="fa" min="0" max="10" step="1" value="2">
-        <p>Más alertas para revisar y riesgo de tener a la brigada ocupada.</p>
-      </div>
-      <div class="card ctrl">
-        <label for="wind">💨 Viento <output id="o-wind"></output></label>
-        <input type="range" id="wind" min="0" max="70" step="5" value="30">
-        <select id="windDir" aria-label="Dirección del viento">
-          <option value="O">Del Oeste</option>
-          <option value="NO">Del Noroeste</option>
-          <option value="N">Del Norte</option>
-          <option value="S">Del Sur</option>
-          <option value="E">Del Este</option>
-        </select>
-      </div>
-      <div class="card ctrl">
-        <label for="dry">🍂 Sequedad del bosque <output id="o-dry"></output></label>
-        <input type="range" id="dry" min="1" max="5" step="1" value="4">
-        <p>Depende de la lluvia acumulada, el calor y la humedad.</p>
-      </div>
-    </div>
+        <div class="ph"><span>Parámetros</span></div>
+        <div class="ctrl">
+          <label for="cams">Cámaras con IA <output id="o-cams"></output></label>
+          <input type="range" id="cams" min="0" max="12" step="1" value="6">
+          <p>En las cimas que más bosque ven. Cada una vigila ~3 km.</p>
+        </div>
+        <div class="ctrl">
+          <label for="resp">Respuesta de la brigada <output id="o-resp"></output></label>
+          <input type="range" id="resp" min="15" max="180" step="5" value="60">
+          <p>Del aviso al primer combate.</p>
+        </div>
+        <div class="ctrl">
+          <label for="fa">Falsas alarmas de la IA <output id="o-fa"></output></label>
+          <input type="range" id="fa" min="0" max="10" step="1" value="2">
+          <p>Más alertas para revisar y riesgo de brigada ocupada.</p>
+        </div>
+        <div class="ctrl">
+          <label for="wind">Viento <output id="o-wind"></output></label>
+          <input type="range" id="wind" min="0" max="70" step="5" value="30">
+          <select id="windDir" aria-label="Dirección del viento">
+            <option value="O">Del Oeste</option>
+            <option value="NO">Del Noroeste</option>
+            <option value="N">Del Norte</option>
+            <option value="S">Del Sur</option>
+            <option value="E">Del Este</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <label for="dry">Sequedad del bosque <output id="o-dry"></output></label>
+          <input type="range" id="dry" min="1" max="5" step="1" value="4">
+        </div>
 
-    <div class="card" style="margin-top:16px">
-      <h3 style="margin:0">🎯 Retos: cinco experimentos con lección</h3>
-      <div class="retos" id="retos" role="group" aria-label="Retos guiados"></div>
-      <div class="small muted" id="retoText">Cada reto configura todo solo y al final te deja una conclusión.</div>
-    </div>
+        <div class="ph"><span>Retos</span><span>5</span></div>
+        <div class="retos" id="retos" role="group" aria-label="Retos guiados"></div>
+        <div class="note" id="retoText">Cada reto configura todo solo y al final deja una conclusión.</div>
+      </aside>
 
-    <p class="hint" id="mapHint" style="margin-top:12px">👆 Tocá cualquier punto del bosque para elegir dónde empieza el fuego.</p>
+      <div class="ops-center">
+        <div class="toolbar">
+          <button type="button" class="primary" id="btnPlay">▶ Iniciar</button>
+          <button type="button" id="btnReset">↺ Reiniciar</button>
+          <button type="button" id="btnRandom">Foco al azar</button>
+          <select id="speed" aria-label="Velocidad">
+            <option value="1">Vel. ×1</option>
+            <option value="3" selected>Vel. ×3</option>
+            <option value="8">Vel. ×8</option>
+          </select>
+          <button type="button" id="btnShare" title="Copia un link que abre la página con este mismo escenario">Compartir</button>
+          <span class="clock" id="clock" aria-live="off">T + 0 min</span>
+        </div>
+        <div class="params-line" id="paramsLine"></div>
 
-    <div class="toolbar">
-      <button type="button" class="primary" id="btnPlay">▶ Iniciar</button>
-      <button type="button" id="btnReset">↺ Reiniciar</button>
-      <button type="button" id="btnRandom">🎲 Foco al azar</button>
-      <select id="speed" aria-label="Velocidad" style="width:auto;margin:0">
-        <option value="1">Velocidad lenta</option>
-        <option value="3" selected>Velocidad normal</option>
-        <option value="8">Velocidad rápida</option>
-      </select>
-      <button type="button" id="btnShare" title="Copia un link que abre la página con este mismo escenario">🔗 Compartir</button>
-      <span class="clock" id="clock" aria-live="off">T + 0 min</span>
-    </div>
-    <div class="params-line" id="paramsLine"></div>
+        <div class="maps">
+          <div class="mapbox">
+            <h3><span class="dot" style="background:var(--noai)"></span>Visor A · Sin IA <span class="muted">/ aviso de vecinos</span></h3>
+            <div class="viewer"><canvas id="mapNo" tabindex="0" aria-label="Mapa de simulación sin IA"></canvas></div>
+            <div class="mstats">
+              <div><div class="k">Superficie quemada</div><div class="v big" id="no-ha">0 ha</div></div>
+              <div><div class="k">Detección</div><div class="v" id="no-det">—</div></div>
+              <div><div class="k">Ataque inicial</div><div class="v" id="no-arr">—</div></div>
+              <div><div class="k">Viviendas alcanzadas</div><div class="v" id="no-homes">0</div></div>
+              <div style="grid-column:1/-1"><div class="k">Estado</div><div class="v" id="no-state">Listo para empezar</div></div>
+            </div>
+          </div>
+          <div class="mapbox">
+            <h3><span class="dot" style="background:var(--ai)"></span>Visor B · Con IA <span class="muted">/ cámaras + satélite</span></h3>
+            <div class="viewer"><canvas id="mapAi" tabindex="0" aria-label="Mapa de simulación con IA"></canvas></div>
+            <div class="mstats">
+              <div><div class="k">Superficie quemada</div><div class="v big" id="ai-ha">0 ha</div></div>
+              <div><div class="k">Detección</div><div class="v" id="ai-det">—</div></div>
+              <div><div class="k">Ataque inicial</div><div class="v" id="ai-arr">—</div></div>
+              <div><div class="k">Viviendas alcanzadas</div><div class="v" id="ai-homes">0</div></div>
+              <div style="grid-column:1/-1"><div class="k">Estado</div><div class="v" id="ai-state">Listo para empezar</div></div>
+            </div>
+          </div>
+        </div>
+        <p class="hint" id="mapHint">Tocá cualquier punto del bosque para elegir dónde empieza el fuego.</p>
 
-    <div class="grid maps" style="margin-top:12px">
-      <div class="mapbox">
-        <h3><span class="dot" style="background:var(--noai)"></span>Sin IA <span class="muted small" style="font-weight:400">· aviso de vecinos</span></h3>
-        <canvas id="mapNo" tabindex="0" aria-label="Mapa de simulación sin IA"></canvas>
-        <div class="mstats">
-          <div><div class="k">Superficie quemada</div><div class="v big" id="no-ha">0 ha</div></div>
-          <div><div class="k">Detección</div><div class="v" id="no-det">—</div></div>
-          <div><div class="k">Ataque inicial</div><div class="v" id="no-arr">—</div></div>
-          <div><div class="k">Viviendas alcanzadas</div><div class="v" id="no-homes">0</div></div>
-          <div style="grid-column:1/-1"><div class="k">Estado</div><div class="v" id="no-state">Listo para empezar</div></div>
+        <div class="panel">
+          <div class="ph"><span>Superficie quemada en el tiempo</span><span class="chart-legend" style="margin:0"><span><i style="background:var(--noai)"></i>Sin IA</span><span><i style="background:var(--ai)"></i>Con IA</span><span>▲ detección · ● brigada</span></span></div>
+          <canvas id="liveChart" role="img" aria-label="Gráfico de hectáreas quemadas en el tiempo, con y sin IA"></canvas>
         </div>
       </div>
-      <div class="mapbox">
-        <h3><span class="dot" style="background:var(--ai)"></span>Con IA <span class="muted small" style="font-weight:400">· cámaras + satélite</span></h3>
-        <canvas id="mapAi" tabindex="0" aria-label="Mapa de simulación con IA"></canvas>
-        <div class="mstats">
-          <div><div class="k">Superficie quemada</div><div class="v big" id="ai-ha">0 ha</div></div>
-          <div><div class="k">Detección</div><div class="v" id="ai-det">—</div></div>
-          <div><div class="k">Ataque inicial</div><div class="v" id="ai-arr">—</div></div>
-          <div><div class="k">Viviendas alcanzadas</div><div class="v" id="ai-homes">0</div></div>
-          <div style="grid-column:1/-1"><div class="k">Estado</div><div class="v" id="ai-state">Listo para empezar</div></div>
+
+      <aside class="panel ops-right" aria-label="Métricas y eventos">
+        <div class="ph"><span>Diferencia en vivo</span><span>B vs A</span></div>
+        <div class="delta">
+          <div><div class="k">Bosque salvado</div><div class="v ok" id="d-ha">—</div></div>
+          <div><div class="k">Reducción</div><div class="v" id="d-pct">—</div></div>
+          <div><div class="k">Detección A / B</div><div class="v" id="d-det">—</div></div>
+          <div><div class="k">Viviendas salvadas</div><div class="v" id="d-homes">—</div></div>
         </div>
-      </div>
+
+        <div class="ph"><span>Consola de eventos</span><span id="evCount">0</span></div>
+        <div class="log" id="evlog" role="log" aria-live="polite"><div class="empty">Esperando inicio…</div></div>
+
+        <div class="ph"><span>Resumen</span></div>
+        <div class="summary" id="summary" aria-live="polite">Apretá <b>▶ Iniciar</b> para ver qué pasa.</div>
+        <p class="sr-only" id="mapDesc" aria-live="polite"></p>
+      </aside>
     </div>
 
     <div class="legend" id="mapLegend"></div>
-    <div class="summary" id="summary" aria-live="polite">Apretá <b>▶ Iniciar</b> para ver qué pasa.</div>
-    <p class="sr-only" id="mapDesc" aria-live="polite"></p>
 
-    <div class="card" style="margin-top:16px">
-      <h3 style="margin-bottom:4px">Superficie quemada en el tiempo</h3>
-      <div class="chart-legend"><span><i style="background:var(--noai)"></i>Sin IA</span><span><i style="background:var(--ai)"></i>Con IA</span><span class="muted">▲ detección · ● llegada de la brigada</span></div>
-      <canvas id="liveChart" role="img" aria-label="Gráfico de hectáreas quemadas en el tiempo, con y sin IA"></canvas>
-    </div>
-
-    <div class="card" style="margin-top:16px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-        <h3 style="margin:0">📋 Tus corridas</h3>
-        <button type="button" id="btnClearHist" style="min-height:32px;padding:4px 10px;font-size:.85rem">Borrar</button>
-      </div>
-      <div class="histwrap"><table id="histTable" style="margin-top:8px"><thead><tr><th>#</th><th>Escenario</th><th>Sin IA</th><th>Con IA</th><th>Diferencia</th></tr></thead><tbody><tr><td colspan="5" class="muted" style="text-align:left">Cada simulación que termines aparece acá para comparar.</td></tr></tbody></table></div>
+    <div class="panel" style="margin-top:16px">
+      <div class="ph"><span>Tus corridas</span><button type="button" id="btnClearHist" style="min-height:24px;padding:3px 8px;font-size:10px">Borrar</button></div>
+      <div class="histwrap"><table id="histTable"><thead><tr><th>#</th><th>Escenario</th><th>Sin IA</th><th>Con IA</th><th>Diferencia</th></tr></thead><tbody><tr><td colspan="5" class="muted" style="text-align:left">Cada simulación que termines aparece acá para comparar.</td></tr></tbody></table></div>
     </div>
 
     <details>
-      <summary>¿Cómo funciona el modelo?</summary>
-      <div class="card" style="margin-top:10px">
+      <summary>Cómo funciona el modelo</summary>
+      <div class="panel" style="margin-top:10px">
         <ul class="clean small">
           <li><b>Autómata celular:</b> grilla de 90 × 60 celdas de 4 ha. Cada paso equivale a 10 minutos y la simulación corta a las 72 h.</li>
           <li><b>Propagación:</b> una celda en llamas enciende vecinas con más probabilidad si hay sequedad, viento a favor, pendiente hacia arriba o pino. Con viento fuerte saltan brasas.</li>
@@ -473,13 +528,13 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
 <!-- ============ 4. 2040 ============ -->
 <section id="futuro">
   <div class="wrap">
-    <div class="kicker">4 · Un futuro mejor</div>
+    <div class="kicker">04 / Un futuro mejor</div>
     <h2>La comarca en 2040: dos caminos</h2>
     <p class="lead">Simulamos 30 focos con tus parámetros para obtener las hectáreas promedio por foco con y sin IA. Después lo proyectamos hasta 2040, con más focos cada año según la <b>tendencia real de días de peligro</b> que medimos arriba.</p>
 
     <div class="grid controls" style="margin-bottom:16px">
       <div class="card ctrl">
-        <label for="focos">🔥 Focos por temporada en 2026 <output id="o-focos"></output></label>
+        <label for="focos">Focos por temporada en 2026 <output id="o-focos"></output></label>
         <input type="range" id="focos" min="2" max="20" step="1" value="6">
         <p>Supuesto ilustrativo: igniciones que requieren combate. Bosque de partida: 150.000 ha (supuesto), sin regeneración.</p>
         <div class="progress" id="mcProgress" aria-live="polite"></div>
@@ -494,7 +549,7 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
     <div class="grid kpis">
       <div class="card kpi"><div class="k"><span class="dot" style="background:var(--noai)"></span> Quemado 2026–2040 sin IA</div><div class="v" id="k-no">—</div><div class="s" id="k-no-s"></div></div>
       <div class="card kpi"><div class="k"><span class="dot" style="background:var(--ai)"></span> Quemado 2026–2040 con IA</div><div class="v" id="k-ai">—</div><div class="s" id="k-ai-s"></div></div>
-      <div class="card kpi"><div class="k">🌲 Bosque que se salva</div><div class="v" id="k-diff">—</div><div class="s" id="k-diff-s"></div></div>
+      <div class="card kpi"><div class="k">Bosque que se salva</div><div class="v" id="k-diff">—</div><div class="s" id="k-diff-s"></div></div>
     </div>
 
     <div class="card chartcard">
@@ -521,7 +576,7 @@ footer{padding:32px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px so
 <!-- ============ 5. FUENTES ============ -->
 <section id="fuentes">
   <div class="wrap">
-    <div class="kicker">5 · Fuentes</div>
+    <div class="kicker">05 / Fuentes</div>
     <h2>Fuentes y datos</h2>
     <p class="small muted">Consultadas en noviembre de 2026. Cuando las fuentes no coinciden o no hay un balance oficial final, el dato está marcado como <span class="tag verify">a verificar</span>.</p>
     <h3 style="margin-top:16px">APIs de datos reales</h3>
@@ -924,7 +979,7 @@ $('mapLegend').innerHTML = [
   [BASE_RGB[TOWN], 'Casas (interfaz)'], [BASE_RGB[WATER], 'Agua'], [BASE_RGB[ROCK], 'Roca'],
   [[255, 150, 30], 'Ardiendo'], [[48, 38, 34], 'Quemado'], [[96, 112, 150], 'Apagado por brigada']
 ].map(([c, t]) => `<span><i style="background:rgb(${c})"></i>${t}</span>`).join('') +
-  '<span>📷 Cámara y su radio de visión (solo en «Con IA»)</span>';
+  '<span>Cámara y su radio de visión (solo en «Con IA»)</span>';
 
 // ---------- Estado de la simulación visible ----------
 let ignition = 0, simNo, simAi, running = false, frameN = 0;
@@ -943,6 +998,7 @@ function pickDefaultIgnition() {
 function resetSims() {
   simNo = newSim({ ...params }, false, ignition);
   simAi = newSim({ ...params }, true, ignition);
+  evReset();
   running = false;
   $('btnPlay').textContent = '▶ Iniciar';
   $('summary').innerHTML = 'Apretá <b>▶ Iniciar</b> para ver qué pasa.';
@@ -984,13 +1040,13 @@ function drawMap(v, s) {
     for (let k = 0; k < s.p.cams; k++) {
       const c = CAMS[k], px = (c.x + 0.5) * sx, py = (c.y + 0.5) * sy;
       ctx.beginPath(); ctx.arc(px, py, MODEL.CAM_R * sx, 0, Math.PI * 2);
-      ctx.fillStyle = k === s.camIdx ? 'rgba(57,135,229,0.22)' : 'rgba(57,135,229,0.08)'; ctx.fill();
+      ctx.fillStyle = k === s.camIdx ? 'rgba(46,160,67,0.24)' : 'rgba(46,160,67,0.07)'; ctx.fill();
       ctx.setLineDash([4 * dpr, 4 * dpr]); ctx.lineWidth = 1 * dpr; ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.stroke(); ctx.setLineDash([]);
     }
     for (let k = 0; k < s.p.cams; k++) {
       const c = CAMS[k], px = (c.x + 0.5) * sx, py = (c.y + 0.5) * sy, r = 6 * dpr;
       ctx.beginPath(); ctx.moveTo(px, py - r); ctx.lineTo(px + r * 0.9, py + r * 0.6); ctx.lineTo(px - r * 0.9, py + r * 0.6); ctx.closePath();
-      ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 2 * dpr; ctx.strokeStyle = '#2a78d6'; ctx.stroke();
+      ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 2 * dpr; ctx.strokeStyle = '#2EA043'; ctx.stroke();
     }
   }
   // foco inicial
@@ -999,7 +1055,7 @@ function drawMap(v, s) {
   ctx.beginPath(); ctx.arc(ix, iy, 9 * dpr, 0, Math.PI * 2); ctx.lineWidth = 1 * dpr; ctx.strokeStyle = 'rgba(0,0,0,.6)'; ctx.stroke();
 
   // rótulos
-  ctx.font = `600 ${11 * dpr}px system-ui,sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = `600 ${11 * dpr}px "JetBrains Mono",Consolas,monospace`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   const label = (t, x, y) => { ctx.lineWidth = 3 * dpr; ctx.strokeStyle = 'rgba(0,0,0,.55)'; ctx.strokeText(t, x, y); ctx.fillStyle = '#fff'; ctx.fillText(t, x, y); };
   for (const tw of TOWNS) label(tw.name, tw.x * sx, (tw.y - tw.ry - 1.2) * sy);
   label('Lago', LAKE.x * sx, LAKE.y * sy);
@@ -1012,7 +1068,7 @@ function drawMap(v, s) {
   ctx.strokeStyle = '#fff'; ctx.fillStyle = '#fff'; ctx.lineWidth = 2 * dpr;
   if (s.p.wind > 0) { ctx.beginPath(); ctx.moveTo(-L, 0); ctx.lineTo(L - 3 * dpr, 0); ctx.stroke(); ctx.beginPath(); ctx.moveTo(L, 0); ctx.lineTo(L - 6 * dpr, -4 * dpr); ctx.lineTo(L - 6 * dpr, 4 * dpr); ctx.closePath(); ctx.fill(); }
   ctx.restore();
-  ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = `600 ${11 * dpr}px system-ui,sans-serif`;
+  ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = `600 ${11 * dpr}px "JetBrains Mono",Consolas,monospace`;
   ctx.fillText(s.p.wind > 0 ? s.p.wind + ' km/h' : 'calma', bx + 32 * dpr, ay);
 }
 function drawAll() { drawMap(views[0], simNo); drawMap(views[1], simAi); }
@@ -1026,7 +1082,39 @@ function statText(s) {
   else if (s.t > 0) state = s.arriveAt >= 0 && s.t >= s.arriveAt ? 'En combate' : 'Avanzando sin control';
   return { ha: fmtHa(s.burned * CELL_HA), det, arr, homes: s.homes.toLocaleString('es-AR'), state };
 }
+// ---------- Consola de eventos (datos reales de la simulación) ----------
+let evCount = 0;
+const tstamp = m => 'T+' + String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+function evReset() { evCount = 0; const L = $('evlog'); if (L) { L.innerHTML = '<div class="empty">Esperando inicio…</div>'; $('evCount').textContent = '0'; } }
+function evPush(min, src, level, msg) {
+  const L = $('evlog'); if (!L) return;
+  if (!evCount) L.innerHTML = '';
+  evCount++; $('evCount').textContent = evCount;
+  const d = document.createElement('div'); d.className = 'ev ' + level;
+  d.innerHTML = `<span class="t">${tstamp(min)}</span><span class="src">${src}</span><span class="msg">${msg}</span>`;
+  L.appendChild(d); L.scrollTop = L.scrollHeight;
+}
+function evCheck(s, src) {
+  const L = s.evl || (s.evl = {});
+  if (src === 'SIN IA' && !L.ign && s.t >= 1) { L.ign = 1; evPush(0, 'AMBOS', 'crit', `IGNICIÓN · CELDA ${s.ign % W},${(s.ign / W) | 0} · ${TYPE_NAME[type[s.ign]].toUpperCase()}`); }
+  if (!L.det && s.detectedAt >= 0) { L.det = 1; evPush(s.detectedAt * STEP_MIN, src, 'warn', 'DETECCIÓN · ' + s.detectBy.toUpperCase()); }
+  if (!L.arr && s.arriveAt >= 0 && s.t >= s.arriveAt) { L.arr = 1; evPush(s.arriveAt * STEP_MIN, src, 'ok', 'BRIGADA EN EL FRENTE' + (s.faExtra ? ` · +${s.faExtra} MIN POR FALSAS ALARMAS` : '')); }
+  for (const th of [100, 1000]) { const key = 'h' + th; if (!L[key] && s.burned * CELL_HA >= th) { L[key] = 1; evPush(s.t * STEP_MIN, src, 'crit', `SUPERA ${th.toLocaleString('es-AR')} HA`); } }
+  if (!L.home && s.homes > 0) { L.home = 1; evPush(s.t * STEP_MIN, src, 'crit', 'FUEGO EN ZONA DE VIVIENDAS'); }
+  if (!L.end && s.ended) { L.end = 1; const esc = s.endReason.startsWith('Sigue'); evPush(s.endT * STEP_MIN, src, esc ? 'crit' : 'ok', `${s.endReason.toUpperCase()} · ${(s.burned * CELL_HA).toLocaleString('es-AR')} HA`); }
+}
+function updateDelta() {
+  if (!simNo || !$('d-ha')) return;
+  if (!simNo.t) { ['d-ha', 'd-pct', 'd-det', 'd-homes'].forEach(id => $(id).textContent = '—'); return; }
+  const a = simNo.burned * CELL_HA, b = simAi.burned * CELL_HA, diff = a - b;
+  $('d-ha').textContent = diff > 0 ? fmtHa(diff) : '0 ha';
+  $('d-pct').textContent = a ? (diff > 0 ? '−' : '') + Math.round(Math.abs(diff) / a * 100) + '%' : '—';
+  const dm = s => s.detectedAt >= 0 ? s.detectedAt * STEP_MIN + "'" : '…';
+  $('d-det').textContent = dm(simNo) + ' / ' + dm(simAi);
+  $('d-homes').textContent = Math.max(0, simNo.homes - simAi.homes).toLocaleString('es-AR');
+}
 function updateStats() {
+  updateDelta();
   for (const [s, p] of [[simNo, 'no'], [simAi, 'ai']]) {
     const t = statText(s);
     $(p + '-ha').textContent = t.ha; $(p + '-det').textContent = t.det; $(p + '-arr').textContent = t.arr;
@@ -1037,18 +1125,18 @@ function updateStats() {
     const a = simNo.burned * CELL_HA, b = simAi.burned * CELL_HA, diff = a - b;
     const dNo = simNo.detectedAt * STEP_MIN, dAi = simAi.detectedAt * STEP_MIN;
     let msg;
-    if (simNo.endReason === 'Se apagó solo' && simAi.endReason === 'Se apagó solo') msg = '🍃 Este foco se apagó solo antes de crecer: cayó en un lugar con poco combustible o el azar no lo ayudó. Probá con otro punto o con más sequedad.';
-    else if (Math.abs(diff) < a * 0.05) msg = `😐 Casi el mismo resultado (diferencia de ${fmtHa(Math.abs(diff))}). ` + (simAi.cam < 0
+    if (simNo.endReason === 'Se apagó solo' && simAi.endReason === 'Se apagó solo') msg = 'Este foco se apagó solo antes de crecer: cayó en un lugar con poco combustible o el azar no lo ayudó. Probá con otro punto o con más sequedad.';
+    else if (Math.abs(diff) < a * 0.05) msg = `Casi el mismo resultado (diferencia de ${fmtHa(Math.abs(diff))}). ` + (simAi.cam < 0
       ? 'El foco quedó fuera del alcance de las cámaras y el sistema dependió del satélite o de los vecinos.'
       : 'En estas condiciones, detectar antes no alcanzó para frenar el fuego.');
-    else if (diff > 0) msg = `🌲 Con IA el foco se detectó en <b>${fmtMin(dAi)}</b> (contra ${fmtMin(dNo)} sin IA) y se quemaron <b>${fmtHa(diff)} menos</b> (−${Math.round(diff / a * 100)}%). Son ${Math.round(diff / 100).toLocaleString('es-AR')} km² de bosque en pie` + (simNo.homes > simAi.homes ? ` y ${(simNo.homes - simAi.homes).toLocaleString('es-AR')} viviendas menos alcanzadas.` : '.');
+    else if (diff > 0) msg = `Con IA el foco se detectó en <b>${fmtMin(dAi)}</b> (contra ${fmtMin(dNo)} sin IA) y se quemaron <b>${fmtHa(diff)} menos</b> (−${Math.round(diff / a * 100)}%). Son ${Math.round(diff / 100).toLocaleString('es-AR')} km² de bosque en pie` + (simNo.homes > simAi.homes ? ` y ${(simNo.homes - simAi.homes).toLocaleString('es-AR')} viviendas menos alcanzadas.` : '.');
     else if (diff === 0) msg = simAi.cam < 0 && simAi.detectBy.indexOf('Satélite') < 0
-      ? '😐 Mismo resultado: el foco quedó fuera del alcance de las cámaras. Probá sumar cámaras o elegir otro lugar.'
-      : '😐 Mismo resultado: en estas condiciones detectar antes no cambió el final.';
+      ? 'Mismo resultado: el foco quedó fuera del alcance de las cámaras. Probá sumar cámaras o elegir otro lugar.'
+      : 'Mismo resultado: en estas condiciones detectar antes no cambió el final.';
     else msg = 'Con IA se quemó un poco más esta vez: en un modelo con azar, adelantar el combate no siempre gana. Probá otro foco.';
-    if (simAi.endReason.startsWith('Sigue')) msg += ' ⚠️ Aun con IA el fuego se escapó: con viento y sequía extremos, la detección temprana sola no alcanza.';
-    if (activeReto >= 0 && simNo.ign === RETOS[activeReto].ign) msg += `<div class="lesson">🎓 <b>Lección del reto ${activeReto + 1}:</b> ${RETOS[activeReto].lesson}</div>`;
-    if (caseNote && simNo.ign === DEMO_IGN) msg += `<div class="lesson">📍 <b>Caso real:</b> ${caseNote}</div>`;
+    if (simAi.endReason.startsWith('Sigue')) msg += ' Aun con IA el fuego se escapó: con viento y sequía extremos, la detección temprana sola no alcanza.';
+    if (activeReto >= 0 && simNo.ign === RETOS[activeReto].ign) msg += `<div class="lesson"><b>Lección del reto ${activeReto + 1}:</b> ${RETOS[activeReto].lesson}</div>`;
+    if (caseNote && simNo.ign === DEMO_IGN) msg += `<div class="lesson"><b>Caso real:</b> ${caseNote}</div>`;
     $('summary').innerHTML = msg;
     if (!logged) { logged = true; logRun(a, b); }
     $('mapDesc').textContent = `Resultado. Sin IA: ${fmtHa(a)} quemadas, ${simNo.homes} viviendas alcanzadas, ${statText(simNo).state}. Con IA: ${fmtHa(b)} quemadas, ${simAi.homes} viviendas alcanzadas, ${statText(simAi).state}.`;
@@ -1085,7 +1173,7 @@ function drawLive() {
   const max = niceMax(Math.max(40, ...simNo.hist, ...simAi.hist) * 1.05);
   const l = 64, r = w < 480 ? 12 : 60, t = 10, b = 26, pw = w - l - r, ph = h - t - b;
   const X = i => l + i / (n - 1) * pw, Y = v => t + ph - v / max * ph;
-  ctx.font = '12px system-ui,sans-serif'; ctx.textBaseline = 'middle';
+  ctx.font = '12px "JetBrains Mono",Consolas,monospace'; ctx.textBaseline = 'middle';
   const lead = max / 10 ** Math.floor(Math.log10(max)), ticks = (lead === 2.5 || lead === 5) ? 5 : 4;
   for (let k = 0; k <= ticks; k++) {
     const v = max * k / ticks, y = Math.round(Y(v)) + 0.5;
@@ -1110,7 +1198,7 @@ function drawLive() {
   if (r >= 50) {
     let y1 = Y(simNo.hist[simNo.hist.length - 1]), y2 = Y(simAi.hist[simAi.hist.length - 1]);
     if (Math.abs(y1 - y2) < 15) { const m = (y1 + y2) / 2; y1 = m - 8; y2 = m + 8; }
-    ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = ink2; ctx.font = '600 12px system-ui,sans-serif';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = ink2; ctx.font = '600 12px "JetBrains Mono",Consolas,monospace';
     ctx.fillText('Sin IA', w - r + 8, y1); ctx.fillText('Con IA', w - r + 8, y2);
   }
 }
@@ -1119,7 +1207,7 @@ function loop() {
   frameN++;
   if (running) {
     const k = +$('speed').value;
-    for (let i = 0; i < k; i++) { stepSim(simNo); stepSim(simAi); }
+    for (let i = 0; i < k; i++) { stepSim(simNo); stepSim(simAi); evCheck(simNo, 'SIN IA'); evCheck(simAi, 'CON IA'); }
     if (simNo.ended && simAi.ended) { running = false; $('btnPlay').textContent = '▶ Repetir'; }
     updateStats(); drawLive();
   }
@@ -1175,7 +1263,7 @@ function readScenarioFromURL() {
 }
 $('btnShare').addEventListener('click', () => {
   const url = scenarioURL(), btn = $('btnShare');
-  const done = () => { btn.textContent = '✅ Link copiado'; setTimeout(() => btn.textContent = '🔗 Compartir escenario', 2000); };
+  const done = () => { btn.textContent = 'Link copiado'; setTimeout(() => btn.textContent = 'Compartir', 2000); };
   if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, () => window.prompt('Copiá este link:', url));
   else window.prompt('Copiá este link:', url);
 });
@@ -1211,9 +1299,9 @@ function applyDay(d, k, live) {
   const eff = (d.wmax + d.gust) / 2;
   const sug = { wind: Math.min(70, Math.round(eff / 5) * 5), windDir: windDirFromDeg(d.dir), dry: dryFromWeather(d.tmax, d.rh, d.rain) };
   Object.assign(params, sug); setControls(); onParamsChange(); markDay(k);
-  $('wxBody').innerHTML = `<div class="wx-vals"><span>📍 <b>${d.place}</b></span><span>🌡️ Máx. <b>${fmt1(d.tmax)} °C</b></span><span>💧 Humedad mín. <b>${Math.round(d.rh)}%</b></span>` +
-    `<span>💨 Viento máx. ${fmt1(d.wmax)} km/h, ráfagas ${fmt1(d.gust)} → <b>${sug.wind} km/h ${WIND_LABEL[sug.windDir]}</b></span>` +
-    `<span>🌧️ Lluvia 14 días previos: <b>${fmt1(d.rain)} mm</b></span><span>🍂 Sequedad: <b>${sug.dry} · ${DRY_LABEL[sug.dry - 1]}</b></span></div>` +
+  $('wxBody').innerHTML = `<div class="wx-vals"><span><b>${d.place}</b></span><span>Máx. <b>${fmt1(d.tmax)} °C</b></span><span>Humedad mín. <b>${Math.round(d.rh)}%</b></span>` +
+    `<span>Viento máx. ${fmt1(d.wmax)} km/h, ráfagas ${fmt1(d.gust)} → <b>${sug.wind} km/h ${WIND_LABEL[sug.windDir]}</b></span>` +
+    `<span>Lluvia 14 días previos: <b>${fmt1(d.rain)} mm</b></span><span>Sequedad: <b>${sug.dry} · ${DRY_LABEL[sug.dry - 1]}</b></span></div>` +
     (live ? 'Pronóstico de hoy en El Bolsón, consultado en vivo a Open-Meteo.' : 'Clima real del día en que empezó el incendio (Open-Meteo, ERA5). Ya está cargado en los controles: apretá ▶ Iniciar.');
 }
 function markDay(k) { document.querySelectorAll('#realDays button').forEach((b, j) => { b.classList.toggle('on', j === k); b.setAttribute('aria-pressed', j === k); }); }
@@ -1230,7 +1318,7 @@ async function loadToday(k) {
     box.textContent = 'No se pudo consultar el clima de hoy (puede que no haya conexión). Los días reales y los controles funcionan igual.';
   }
 }
-$('realDays').innerHTML = REAL_DAYS.map((d, k) => `<button type="button" aria-pressed="false">${d.label}</button>`).join('') + '<button type="button" aria-pressed="false">📡 Hoy (en vivo)</button>';
+$('realDays').innerHTML = REAL_DAYS.map((d, k) => `<button type="button" aria-pressed="false">${d.label}</button>`).join('') + '<button type="button" aria-pressed="false">Hoy (en vivo)</button>';
 document.querySelectorAll('#realDays button').forEach((b, k) => b.addEventListener('click', () => k < REAL_DAYS.length ? applyDay(REAL_DAYS[k], k) : loadToday(k)));
 
 // ---------- Clima histórico: KPIs, gráfico y tabla ----------
@@ -1266,7 +1354,7 @@ function initClimate() {
     const g = climGeom(cv), i = Math.max(0, Math.min(CLIMATE.length - 1, Math.round((x - g.l) / (g.w - g.l - g.r) * (CLIMATE.length - 1))));
     climHover = i; drawClimate();
     const m = CLIM_METRICS[climMetric], row = CLIMATE[i], tip = $('climTip');
-    tip.innerHTML = `<b>Verano ${seasonLabel(row[0])}</b><div>${m.t}: <b>${m.dec ? fmt1(row[m.col]) : row[m.col]} ${m.unit}</b></div>` + (FIRE_SEASONS[row[0]] ? `<div class="muted">🔥 ${FIRE_SEASONS[row[0]]}</div>` : '');
+    tip.innerHTML = `<b>Verano ${seasonLabel(row[0])}</b><div>${m.t}: <b>${m.dec ? fmt1(row[m.col]) : row[m.col]} ${m.unit}</b></div>` + (FIRE_SEASONS[row[0]] ? `<div class="muted">${FIRE_SEASONS[row[0]]}</div>` : '');
     tip.style.display = 'block';
     const px = g.l + i / (CLIMATE.length - 1) * (g.w - g.l - g.r), tw = tip.offsetWidth;
     tip.style.left = Math.max(0, Math.min(g.w - tw, px + 12 > g.w - tw ? px - tw - 12 : px + 12)) + 'px'; tip.style.top = '8px';
@@ -1289,7 +1377,7 @@ function drawClimate() {
   let lo = m.zero ? 0 : Math.floor(Math.min(...ys)), hi = m.zero ? niceMax(Math.max(...ys) * 1.08) : Math.ceil(Math.max(...ys) + 0.3);
   const pw = g.w - g.l - g.r, ph = g.h - g.t - g.b;
   const X = i => g.l + i / (xs.length - 1) * pw, Y = v => g.t + ph - (v - lo) / (hi - lo) * ph;
-  ctx.font = '12px system-ui,sans-serif'; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+  ctx.font = '12px "JetBrains Mono",Consolas,monospace'; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
   const nT = m.zero ? 4 : hi - lo;
   for (let k = 0; k <= nT; k++) {
     const v = lo + (hi - lo) * k / nT, y = Math.round(Y(v)) + 0.5;
@@ -1306,14 +1394,14 @@ function drawClimate() {
   ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.beginPath();
   ys.forEach((v, i) => i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v))); ctx.stroke();
   // veranos con grandes incendios
-  ctx.textBaseline = 'bottom'; ctx.font = '600 11px system-ui,sans-serif';
+  ctx.textBaseline = 'bottom'; ctx.font = '600 11px "JetBrains Mono",Consolas,monospace';
   xs.forEach((s, i) => {
     if (!FIRE_SEASONS[s] && i !== climHover) return;
     ctx.beginPath(); ctx.arc(X(i), Y(ys[i]), FIRE_SEASONS[s] ? 5 : 4, 0, Math.PI * 2); ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = surf; ctx.stroke();
-    if (FIRE_SEASONS[s] && g.w >= 480 && s !== 2026) { ctx.fillStyle = ink2; ctx.textAlign = 'center'; ctx.fillText('🔥 ' + s, X(i), Y(ys[i]) - 8); }
+    if (FIRE_SEASONS[s] && g.w >= 480 && s !== 2026) { ctx.fillStyle = ink2; ctx.textAlign = 'center'; ctx.fillText(s, X(i), Y(ys[i]) - 8); }
   });
   if (climHover >= 0) { ctx.strokeStyle = muted; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(Math.round(X(climHover)) + 0.5, g.t); ctx.lineTo(Math.round(X(climHover)) + 0.5, g.t + ph); ctx.stroke(); }
-  $('climNote').innerHTML = `${m.note} Línea punteada: tendencia lineal (${fit.b >= 0 ? '+' : ''}${fmt1(fit.b * 10)} ${m.unit} por década). 🔥 = veranos con grandes incendios en la comarca.`;
+  $('climNote').innerHTML = `${m.note} Línea punteada: tendencia lineal (${fit.b >= 0 ? '+' : ''}${fmt1(fit.b * 10)} ${m.unit} por década). Puntos marcados = veranos con grandes incendios en la comarca.`;
 }
 
 // ---------- Incendios satelitales (NASA EONET) ----------
@@ -1409,8 +1497,8 @@ $('btnEoLive').addEventListener('click', async () => {
     $('eoLiveG').innerHTML = eoCircles(recent, 'eolive');
     const where = e => { const p = nearestPlace(e.lat, e.lon); return p.includes(' km ') ? 'a ' + p : 'en ' + p; };
     out.innerHTML = (recent.length
-      ? `🔴 Hay <b>${recent.length}</b> incendio(s) activo(s) registrado(s) en la zona: ` + recent.map(e => `desde el ${fmtDate(e.d)} ${where(e)}${e.ha ? ' (' + e.ha.toLocaleString('es-AR') + ' ha)' : ''}`).join('; ') + '.'
-      : '✅ En este momento NASA EONET no registra incendios activos recientes en la zona.') +
+      ? `Hay <b>${recent.length}</b> incendio(s) activo(s) registrado(s) en la zona: ` + recent.map(e => `desde el ${fmtDate(e.d)} ${where(e)}${e.ha ? ' (' + e.ha.toLocaleString('es-AR') + ' ha)' : ''}`).join('; ') + '.'
+      : 'En este momento NASA EONET no registra incendios activos recientes en la zona.') +
       (stale ? ` <span class="muted">(Además figura${stale > 1 ? 'n' : ''} ${stale} evento${stale > 1 ? 's' : ''} viejo${stale > 1 ? 's' : ''} sin cerrar en la base, que no contamos.)</span>` : '') +
       ` <span class="muted">Consultado: ${new Date().toLocaleString('es-AR')}.</span>`;
   } catch (e) { out.textContent = 'No se pudo consultar NASA EONET (puede que no haya conexión). Los datos guardados de arriba siguen disponibles.'; }
@@ -1439,11 +1527,11 @@ for (const v of views) {
     if (i < 0) return;
     if (FUEL[type[i]] === 0) { $('mapHint').textContent = `Ahí hay ${TYPE_NAME[type[i]].toLowerCase()}: no hay nada que arda. Elegí otro punto.`; return; }
     ignition = i; resetSims(); running = true; $('btnPlay').textContent = '⏸ Pausa';
-    $('mapHint').textContent = `🔥 Foco en ${TYPE_NAME[type[i]].toLowerCase()}. Tocá otro punto para probar de nuevo.`;
+    $('mapHint').textContent = `Foco en ${TYPE_NAME[type[i]].toLowerCase()}. Tocá otro punto para probar de nuevo.`;
   });
   v.cv.addEventListener('mousemove', e => {
     const i = cellFromEvent(v.cv, e);
-    if (i >= 0 && !running) $('mapHint').textContent = `${TYPE_NAME[type[i]]} · a ${(distTown[i] * 0.2).toFixed(1).replace('.', ',')} km de las casas` + (v.ai ? (cameraFor(i, params.cams) >= 0 ? ' · 📷 visible por una cámara' : ' · fuera del alcance de las cámaras') : '');
+    if (i >= 0 && !running) $('mapHint').textContent = `${TYPE_NAME[type[i]]} · a ${(distTown[i] * 0.2).toFixed(1).replace('.', ',')} km de las casas` + (v.ai ? (cameraFor(i, params.cams) >= 0 ? ' · visible por una cámara' : ' · fuera del alcance de las cámaras') : '');
   });
   v.cv.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('btnPlay').click(); } });
 }
@@ -1509,7 +1597,7 @@ function drawChart() {
   const max = niceMax(Math.max(...projRows.map(r => r.no)) * 1.05);
   const pw = g.w - g.l - g.r, ph = g.h - g.t - g.b;
   const X = i => g.l + i / (projRows.length - 1) * pw, Y = v => g.t + ph - v / max * ph;
-  ctx.font = '12px system-ui,sans-serif'; ctx.textBaseline = 'middle';
+  ctx.font = '12px "JetBrains Mono",Consolas,monospace'; ctx.textBaseline = 'middle';
   for (let k = 0; k <= 4; k++) {
     const v = max * k / 4, y = Y(v);
     ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(g.l, Math.round(y) + 0.5); ctx.lineTo(g.w - g.r, Math.round(y) + 0.5); ctx.stroke();
@@ -1530,7 +1618,7 @@ function drawChart() {
     const last = projRows[projRows.length - 1];
     let yNo = Y(last.no), yAi = Y(last.ai);
     if (Math.abs(yNo - yAi) < 16) { const m = (yNo + yAi) / 2; yNo = m - 8; yAi = m + 8; }
-    ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = ink2; ctx.font = '600 12px system-ui,sans-serif';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = ink2; ctx.font = '600 12px "JetBrains Mono",Consolas,monospace';
     ctx.fillText('Sin IA', g.w - g.r + 10, yNo); ctx.fillText('Con IA', g.w - g.r + 10, yAi);
   }
 }
@@ -1565,11 +1653,13 @@ $('btnCase').addEventListener('click', () => {
   running = true; $('btnPlay').textContent = '⏸ Pausa';
 });
 
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { drawAll(); drawChart(); drawLive(); drawClimate(); });
+
 // ---------- Inicio ----------
 ignition = pickDefaultIgnition();
 const fromURL = readScenarioFromURL();
 setControls(); syncOutputs(); resetSims(); scheduleProjection(); initClimate(); initEonet();
-if (fromURL) { $('mapHint').textContent = '🔗 Abriste un escenario compartido. Apretá ▶ Iniciar para verlo.'; setTimeout(() => $('simulacion').scrollIntoView(), 50); }
+if (fromURL) { $('mapHint').textContent = 'Abriste un escenario compartido. Apretá ▶ Iniciar para verlo.'; setTimeout(() => $('simulacion').scrollIntoView(), 50); }
 requestAnimationFrame(loop);
 </script>
 </body>
